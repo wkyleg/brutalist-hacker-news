@@ -18,16 +18,14 @@
 <body>
   <div class="title-content">
     <h1 id="title">hn</h1>
-    <div class="navigation-buttons">
-      <a class="text-link-button">[TOP]</a>
-      <a class="text-link-button">[NEW]</a>
-      <a class="text-link-button">[BEST]</a>
-      <a class="text-link-button">[ASK]</a>
-      <a class="text-link-button">[SHOW]</a>
-      <a class="text-link-button">[JOB]</a>
-      <a class="text-link-button">[FAVORITES]</a>
-      <a class="text-link-button">[SETTINGS]</a>
-    </div>
+    <a class="text-link-button" aria-label="Top">[&#128285;]</a>
+    <a class="text-link-button" aria-label="New">[&#10561;]</a>
+    <a class="text-link-button" aria-label="Best">[&#9812;]</a>
+    <a class="text-link-button" aria-label="Ask">[?]</a>
+    <a class="text-link-button" aria-label="Show">[&#10547;]</a>
+    <a class="text-link-button" aria-label="Job">[$]</a>
+    <a class="text-link-button" aria-label="Favorites">[&hearts;]</a>
+    <a class="text-link-button" aria-label="Settings">[⚙]</a>
   </div>
   <div class="main-content">
     <div id="stories-container" class="use-gpu-rendering"></div>
@@ -75,6 +73,11 @@ terciary
     --size-xl: 3rem;
     --size-xxl: 6rem;
 
+    /* Breakpoints */
+    --breakpoint-mobile: 600px;
+    --breakpoint-tablet: 1100px;
+    --breakpoint-desktop: 1600px;
+
     /* Misc */
     --top-level-padding-side: 5%;
   }
@@ -94,7 +97,7 @@ terciary
   }
 
   ::-webkit-scrollbar {
-    width: var(--size-xl);
+    width: var(--size-lg);
   }
 
   ::-webkit-scrollbar-track {
@@ -133,7 +136,7 @@ terciary
   }
 
   h1 {
-    font-size: var(--size-lg);
+    font-size: var(--size-md);
     text-align: center;
     color: transparent;
     text-shadow: var(--text-shadow-highlight);
@@ -173,6 +176,7 @@ terciary
     border: var(--color-primary) 3px solid;
     resize: both;
     box-shadow: var(--box-shadow-highlight);
+    z-index: 15;
   }
 
   .modal-window-title {
@@ -194,17 +198,12 @@ terciary
     background-color: var(--color-secondary);
   }
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 1100px) {
     .modal-window-title {
       flex-direction: column;
       height: fit-content;
       text-align: center;
-      font-size: var(--size-xs);
-    }
-  }
-
-  @media screen and (max-width: 1100px) {
-    .modal-window-title {
+      align-items: center;
       font-size: var(--size-xs);
     }
   }
@@ -214,6 +213,13 @@ terciary
     text-decoration: none;
     cursor: pointer;
     transition: text-indent 0.5s;
+    font-size: var(--size-sm);
+  }
+
+  @media screen and (max-width: 600px) {
+    .text-link-button {
+      font-size: var(--size-sm);
+    }
   }
 
   .text-link-button--selected {
@@ -239,7 +245,7 @@ terciary
 
   .title-content {
     position: absolute;
-    height: var(--size-xl);
+    height: var(--size-lg);
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -247,7 +253,7 @@ terciary
     align-items: baseline;
     padding-left: var(--top-level-padding-side);
     background: var(--color-accent-1);
-    width: calc(100vw - var(--top-level-padding-side) - var(--size-xl));
+    width: calc(100vw - var(--top-level-padding-side) - var(--size-lg));
     z-index: 10;
   }
 
@@ -256,7 +262,7 @@ terciary
   }
 
   .title-content h1 {
-    margin: 0 1rem 0 0;
+    margin: 0 var(--size-xs) 0 0;
   }
 
   .main-content {
@@ -266,7 +272,7 @@ terciary
     height: 100vh;
     max-height: 100vh;
     overflow-y: scroll;
-    padding-top: var(--size-xl);
+    padding-top: var(--size-lg);
   }
 
   .stories-container {
@@ -481,17 +487,6 @@ terciary
     return loadingStrings;
   }
 
-  // function fetchStories() {
-  //   return fetch(`${HACKER_NEWS_API_URL}topstories.json`)
-  //     .then((response) => response.json())
-  //     .catch((error) => console.error(error));
-  // }
-
-  // function getStory(storyId) {
-  //   return fetch(`${HACKER_NEWS_API_URL}item/${storyId}.json`)
-  //     .then((response) => response.json())
-  //     .catch((error) => console.error(error));
-  // }
 
   async function main() {
     // Precompute loading strings first
