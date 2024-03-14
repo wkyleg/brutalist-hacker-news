@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>minimal hn</title>
+    <meta
+      name="viewport"
+      content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <link rel="icon" type="image/x-icon" href="assets/icon/favicon.ico" />
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#4e8ef7" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  </head>
+
+  <body>
+    <div class="title-content">
+      <h1 id="title">hn</h1>
+      <div class="navigation-buttons">
+        <a class="text-link-button text-link-button--selected">[TOP]</a>
+        <a class="text-link-button">[NEW]</a>
+        <a class="text-link-button">[BEST]</a>
+        <a class="text-link-button">[ASK]</a>
+        <a class="text-link-button">[SHOW]</a>
+        <a class="text-link-button">[JOB]</a>
+        <a class="text-link-button">[FAVORITES]</a>
+        <a class="text-link-button">[SETTINGS]</a>
+      </div>
+    </div>
+    <div class="main-content">
+      <div id="stories-container" class="use-gpu-rendering"></div>
+    </div>
+    <div id="modal" class="modal use-gpu-rendering">
+      <div class="modal-window-title">
+        <a id="open-link" href="" target="_blank" rel="noopener noreferrer"
+          >[OPEN IN NEW TAB]</a
+        >
+        <a id="poster-name" href="" target="_blank" rel="noopener noreferrer"
+          >[VIEW POSTER PROFILE]</a
+        >
+        <a id="close-button" class="close-button">[CLOSE WINDOW]</a>
+      </div>
+      <div class="modal-content">
+        <iframe id="story-iframe" src="https://news.ycombinator.com"></iframe>
+      </div>
+    </div>
+  </body>
+  terciary
+  <style>
+    :root {
+      /* Default olor scheme inspired by brutalist design and cyberpunk */
+      --color-primary: rgba(227, 6, 19, 0.8);
+      --color-secondary: rgba(255, 237, 0, 1);
+      --color-tertiary: #f6d365;
+      --color-accent-1: #f6d365;
+      --color-accent-2: #fda085;
+      --color-dark: rgba(0, 0, 0, 0.4);
+      --color-light: white;
+      --color-text-main: darkslategrey;
+
+      /* Shading Utilities */
+      --text-shadow-highlight: 1px 1px var(--color-primary),
+        -1px -1px var(--color-secondary);
+      --box-shadow-highlight: 5px 5px var(--color-primary),
+        -5px -5px var(--color-secondary);
+      --backgound-linear-gradient: linear-gradient(
+        120deg,
+        var(--color-accent-1) 0%,
+        var(--color-accent-2) 100%
+      );
+
+      /* Sizing utilities */
+      --size-xxs: 0.5rem;
+      --size-xs: 0.75rem;
+      --size-sm: 1rem;
+      --size-md: 1.5rem;
+      --size-lg: 2rem;
+      --size-xl: 3rem;
+      --size-xxl: 6rem;
+    }
+
+    * {
+      font-family: Menlo, monospace;
+    }
+
+    @keyframes fade-to-black {
+      100% {
+        background: var(--color-dark);
+      }
+    }
+
+    .use-fade-to-black {
+      animation: fade-to-black 10s infinite;
+    }
+
+    ::-webkit-scrollbar {
+      width: var(--size-lg);
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--color-tertiary);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--color-primary);
+      border-radius: 0px;
+      min-height: var(--size-xxl);
+    }
+
+    ::-webkit-scrollbar-track:active {
+      background: var(--color-secondary);
+    }
+
+    ::-webkit-scrollbar-track:hover {
+      background: var(--color-secondary);
+    }
+
+    ::-webkit-scrollbar-thumb:active {
+      box-shadow: 1px 3px var(--text-color);
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      box-shadow: 1px 3px var(--color-text-main);
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    h1 {
+      font-size: var(--size-xl);
+      text-align: center;
+      color: transparent;
+      text-shadow: 1px 1px var(--color-primary),
+        -1px -1px var(--color-secondary);
+      font-weight: bold;
+    }
+
+    .use-gpu-rendering {
+      -webkit-transform: translate3d(0, 0, 0);
+      -moz-transform: translate3d(0, 0, 0);
+      -ms-transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0);
+      -webkit-backface-visibility: hidden;
+      -moz-backface-visibility: hidden;
+      -ms-backface-visibility: hidden;
+      backface-visibility: hidden;
+      -webkit-perspective: 1000;
+      -moz-perspective: 1000;
+      -ms-perspective: 1000;
+      perspective: 1000;
+      -webkit-transform: translateZ(0);
+      -moz-transform: translateZ(0);
+      -ms-transform: translateZ(0);
+      -o-transform: translateZ(0);
+    }
+
+    /* The Modal for viewing articles */
+    .modal {
+      display: none;
+      flex-direction: column;
+      position: absolute;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 50%;
+      height: 50%;
+      overflow: auto;
+      background-color: var(--color-dark);
+      border: var(--color-primary) 3px solid;
+      resize: both;
+      box-shadow: 5px 5px var(--color-primary), -5px -5px var(--color-secondary);
+    }
+
+    .modal-window-title {
+      cursor: move;
+      height: var(--size-md);
+      font-size: var(--size-sm);
+      display: flex;
+      align-items: left;
+      background-color: var(--color-tertiary);
+      color: var(--color-text-main);
+      padding: var(--size-xxs);
+      color: var(--color-primary);
+      justify-content: space-evenly;
+      border-bottom: var(--color-primary) 3px solid;
+      box-shadow: 5px 5px var(--color-primary), -5px -5px var(--color-secondary);
+    }
+
+    @media screen and (max-width: 600px) {
+      .modal-window-title {
+        flex-direction: column;
+        height: fit-content;
+        text-align: center;
+        font-size: var(--size-xs);
+      }
+    }
+
+    @media screen and (max-width: 1100px) {
+      .modal-window-title {
+        font-size: var(--size-xs);
+      }
+    }
+
+    .text-link-button {
+        color: var(--text-color);
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .text-link-button:hover {
+        color: var(--color-primary);
+        text-shadow: var(--text-shadow-highlight);
+    }
+
+    .text-link-button--selected {
+        color: var(--color-primary);
+        font-weight: bolder;
+    }
+
+    .modal-window-title a {
+      color: var(--color-primary);
+      text-decoration: none;
+      cursor: pointer;
+      font-weight: bolder;
+    }
+
+    .modal-content {
+      flex-grow: 1;
+      overflow: hidden;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      background: var(--color-white);
+    }
+
+    .title-content {
+      position: absolute;
+      height: 10vh;
+      text-align: center;
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: baseline;
+      /* padding-left: 5%; */
+    }
+
+    .title-content h1 {
+      margin: 0 1rem 0 0;
+    }
+
+    .main-content {
+      background-image: var(--backgound-linear-gradient);
+      padding-left: 5%;
+      padding-right: 5%;
+      height: 100vh;
+      max-height: 100vh;
+      overflow-y: scroll;
+      padding-top: var(--size-xl);
+    }
+
+    .stories-container {
+      width: 100%;
+      height: 100%;
+    }
+
+    .story-container {
+      margin-top: var(--size-xxs);
+      margin-bottom: var(--size-xxs);
+    }
+
+    .story-container span {
+      color: var(--color-text-main);
+      font-size: var(--size-sm);
+      cursor: pointer;
+    }
+    .story-container span:hover {
+      color: transparent;
+      font-weight: bold;
+      text-indent: 5px;
+      transition: text-indent 0.5s;
+      text-shadow: var(--text-shadow-highlight);
+    }
+    .story-container span:hover::before {
+      display: inline-block;
+      content: "->";
+    }
+  </style>
+
+  <script type="text/javascript">
+    const HACKER_NEWS_API_URL = "https://hacker-news.firebaseio.com/v0/";
+    const HACKER_NEWS_USER_PROFILE_URL =
+      "https://news.ycombinator.com/user?id=";
+
+    const itemCache = new Map();
+
+    const API = {
+      topStories: () => {
+        return fetch(`${HACKER_NEWS_API_URL}topstories.json`)
+          .then((response) => response.json())
+          .catch((error) => console.error(error));
+      },
+      newStories: () => {
+        return fetch(`${HACKER_NEWS_API_URL}newstories.json`)
+          .then((response) => response.json())
+          .catch((error) => console.error(error));
+      },
+      bestStories: () => {
+        return fetch(`${HACKER_NEWS_API_URL}beststories.json`)
+          .then((response) => response.json())
+          .catch((error) => console.error(error));
+      },
+      askStories: () => {
+        return fetch(`${HACKER_NEWS_API_URL}askstories.json`)
+          .then((response) => response.json())
+          .catch((error) => console.error(error));
+      },
+      showStories: () => {
+        return fetch(`${HACKER_NEWS_API_URL}showstories.json`)
+          .then((response) => response.json())
+          .catch((error) => console.error(error));
+      },
+      jobStories: () => {
+        return fetch(`${HACKER_NEWS_API_URL}jobstories.json`)
+          .then((response) => response.json())
+          .catch((error) => console.error(error));
+      },
+      /**
+       * Stories, comments, jobs, Ask HNs and even polls are just items. They're 
+       * identified by their ids, which are unique integers, and live under 
+       * /v0/item/<id>.
+       * 
+       * All items have some of the following properties:
+            [Field]     [Description]
+            id	        The item's unique id.
+            deleted	    true if the item is deleted.
+            type    	The type of item. One of "job", "story", "comment", "poll", or "pollopt".
+            by	        The username of the item's author.
+            time	    Creation date of the item, in Unix Time.
+            text    	The comment, story or poll text. HTML.
+            dead	    true if the item is dead.
+            parent  	The comment's parent: either another comment or the relevant story.
+            poll	    The pollopt's associated poll.
+            kids	    The ids of the item's comments, in ranked display order.
+            url     	The URL of the story.
+            score	    The story's score, or the votes for a pollopt.
+            title	    The title of the story, poll or job. HTML.
+            parts	    A list of related pollopts, in display order.
+            descendants	In the case of stories or polls, the total comment count.
+        *
+        * For example, a story: https://hacker-news.firebaseio.com/v0/item/8863.json?print=pretty
+        * 
+        * 
+        * @param {number} id
+        *
+        */
+      item: (id) => {
+        if (itemCache.has(id)) return Promise.resolve(itemCache.get(id));
+        return fetch(`${HACKER_NEWS_API_URL}item/${id}.json`)
+          .then((response) => response.json())
+          .then((item) => {
+            itemCache.set(id, item);
+            return item;
+          })
+          .catch((error) => console.error(error));
+      },
+      user: (id) => {
+        return fetch(`${HACKER_NEWS_API_URL}user/${id}.json`)
+          .then((response) => response.json())
+          .catch((error) => console.error(error));
+      },
+    };
+  </script>
+
+  <script type="text/javascript">
+    const ARTICLE_MIN_DELAY_SECONDS = 0.001;
+    const ARTICLE_MAX_DELAY_SECONDS = 3;
+    const MILLISECONDS_IN_SECOND = 1_000;
+    const TOTAL_ANIMATION_STRINGS = 100;
+    const LOADING_STRING_MIN_LENGTH = 33;
+    const LOADING_STRING_MAX_LENGTH = 55;
+    const MOBILE_DEVICE_MAX_WIDTH = 600;
+
+    /**
+     * Generate random delay for article title animation
+     */
+    function getArticleTitleAnimationDelay() {
+      return (
+        Math.floor(
+          Math.random() * ARTICLE_MAX_DELAY_SECONDS + ARTICLE_MIN_DELAY_SECONDS
+        ) * MILLISECONDS_IN_SECOND
+      );
+    }
+
+    function wait(timeInMs) {
+      return new Promise((resolve) => {
+        setTimeout(resolve, timeInMs);
+      });
+    }
+
+    function getHackerNewsPosterURLFromId(id) {
+      return `${HACKER_NEWS_USER_PROFILE_URL}${id}`;
+    }
+
+    function dragElement(elmnt) {
+      let pos1 = 0,
+        pos2 = 0,
+        pos3 = 0,
+        pos4 = 0;
+
+      document.querySelector(".modal-window-title").onmousedown = dragMouseDown;
+
+      function dragMouseDown(e) {
+        e = e || window.event;
+        e.preventDefault();
+        // get the mouse cursor position at startup:
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        document.onmouseup = closeDragElement;
+        // call a function whenever the cursor moves:
+        document.onmousemove = elementDrag;
+      }
+
+      function elementDrag(e) {
+        e = e || window.event;
+        e.preventDefault();
+        // calculate the new cursor position:
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        // set the element's new position:
+        elmnt.style.top = elmnt.offsetTop - pos2 + "px";
+        elmnt.style.left = elmnt.offsetLeft - pos1 + "px";
+      }
+
+      function closeDragElement() {
+        // stop moving when mouse button is released:
+        document.onmouseup = null;
+        document.onmousemove = null;
+      }
+    }
+
+    function generateLoadingString(length) {
+      // Expanded character set to include symbols fitting Matrix, brutalist, cyberpunk aesthetics, and programming
+      const characters =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+=-[]{}|;:,.<>?♥♦♣♠•◘○◆☻☺♂♀♪♫☼►◄↕‼¶§▬↨↑↓→←∟↔▲▼ァアィイゥウェエォオカガキギクゲゴサザシジスゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャユョヨラリルレロヮワヰヱヲン々〆〤￥「」『』【】〒〓─━│┃┄┅┆┇┈┉┊┋┌┍┎┏┐┑┒┓└┕┖┗┘┙┚┛├┝┞┟┠┡┢┣┤┥┦┧┨┩┪┫┬┭┮┯┰┱┲┳┴┵┶┷┸┹┺┻┼┽┾┿╀╁╂╃╄╅╆╇╈╉╊╋╌╍╎╏═║╒╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡╢╣╤╥╦╧╨╩╪╫╬§¶☊☋☌☍ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθικλμνξοπρςστυφχψω←↑→↓↔↕↖↗↘↙↚↛↜↝↞↟↠↡↢↣↤↥↦↧↨↩↪↫↬↭↮↯↰↱↲↳↴↵↶↷↸↹↺↻↼↽↾↿⇀⇁⇂⇃⇄⇅⇆⇇⇈⇉⇊⇋⇌⇍⇎⇏⇐⇑⇒⇓⇔⇕⇖⇗⇘⇙⇚⇛⇜⇝⇞⇟⇠⇡⇢⇣⇤⇥⇦⇧⇨⇩⇪⌨";
+      let result = "";
+      for (let i = 0; i < length; i++) {
+        result += characters.charAt(
+          Math.floor(Math.random() * characters.length)
+        );
+      }
+      return result;
+    }
+
+    // Generates 300 loading strings in parallel, with length randomly varying from 22-55 characters
+    async function precomputeLoadingStrings() {
+      const loadingStrings = [];
+      for (let i = 0; i < TOTAL_ANIMATION_STRINGS; i++) {
+        loadingStrings.push(
+          generateLoadingString(
+            Math.random() *
+              (LOADING_STRING_MAX_LENGTH - LOADING_STRING_MIN_LENGTH) +
+              LOADING_STRING_MIN_LENGTH
+          )
+        );
+      }
+      return loadingStrings;
+    }
+
+    // function fetchStories() {
+    //   return fetch(`${HACKER_NEWS_API_URL}topstories.json`)
+    //     .then((response) => response.json())
+    //     .catch((error) => console.error(error));
+    // }
+
+    // function getStory(storyId) {
+    //   return fetch(`${HACKER_NEWS_API_URL}item/${storyId}.json`)
+    //     .then((response) => response.json())
+    //     .catch((error) => console.error(error));
+    // }
+
+    async function main() {
+      // Precompute loading strings first
+      const loadingStrings = await precomputeLoadingStrings();
+      const getRandomLoadingString = () =>
+        loadingStrings[Math.floor(Math.random() * TOTAL_ANIMATION_STRINGS)];
+
+      // References to DOM elements
+      const $mainContent = document.querySelector(".main-content");
+      const $storiesContainerElement =
+        document.getElementById("stories-container");
+      const $modalElement = document.getElementById("modal");
+      const $storyIframeElement = document.getElementById("story-iframe");
+      const $modalStoryTitleElement = document.getElementById("article-name");
+      const $modalOpenLinkButtonElement = document.getElementById("open-link");
+      const $modalCloseButtonElement = document.querySelector(".close-button");
+      const $modalPosterNameElement = document.getElementById("poster-name");
+
+      dragElement($modalElement);
+
+      const blurMainContent = () => {
+        document.querySelector(".main-content").style.filter = "blur(5px)";
+      };
+      const unblurMainContent = () => {
+        document.querySelector(".main-content").style.filter = "none";
+      };
+
+      const showModal = () => ($modalElement.style.display = "flex");
+      const hideModal = () => {
+        $modalElement.style.display = "none";
+        unblurMainContent();
+      };
+      $modalCloseButtonElement.addEventListener("click", hideModal);
+
+      function StoryListElement(storyId) {
+        // Create html element for story
+        const storyContainer = document.createElement("div");
+        storyContainer.id = storyId;
+        storyContainer.classList.add("story-container");
+
+        // Assign random string for loading effect
+        storyContainer.innerHTML = `<span>${getRandomLoadingString()}}</span>`;
+
+        API.item(storyId).then(async (story) => {
+          // and again
+          await wait(getArticleTitleAnimationDelay());
+          storyContainer.innerHTML = `<span>${getRandomLoadingString()}}</span>`;
+
+          // ... and again
+          await wait(getArticleTitleAnimationDelay());
+          storyContainer.innerHTML = `<span>${getRandomLoadingString()}}</span>`;
+
+          // Now assign actual data and event listeners
+          storyContainer.firstChild.textContent = story.title;
+          storyContainer.addEventListener("click", () => {
+            $storyIframeElement.src = story.url;
+            $modalOpenLinkButtonElement.href = story.url;
+            $modalPosterNameElement.href = getHackerNewsPosterURLFromId(
+              story.by
+            );
+            showModal();
+          });
+        });
+
+        return storyContainer;
+      }
+
+      function handleModalSizing() {
+        if (window.innerWidth < MOBILE_DEVICE_MAX_WIDTH) {
+          $modalElement.style.width = "90%";
+          $modalElement.style.height = "99%";
+          return;
+        }
+        $modalElement.style.width = "50%";
+        $modalElement.style.height = "50%";
+      }
+
+      function handleModalPosition() {
+        if (window.innerWidth < MOBILE_DEVICE_MAX_WIDTH) {
+          $modalElement.style.top = "0";
+          $modalElement.style.left = "0";
+          return;
+        }
+        $modalElement.style.top = "25%";
+        $modalElement.style.left = "25%";
+      }
+
+      const loadData = () => {
+        $mainContent.classList.add("use-fade-to-black");
+        API.topStories()
+          .then((storyIds) => {
+            storyIds.map((storyId) =>
+              $storiesContainerElement.appendChild(
+                new StoryListElement(storyId)
+              )
+            );
+          })
+          .catch((error) => {
+            console.error(error);
+          })
+          .finally(() => {
+            $mainContent.classList.remove("use-fade-to-black");
+          });
+      };
+
+      loadData();
+      handleModalSizing();
+      handleModalPosition();
+    }
+
+    document.onreadystatechange = () => {
+      if (document.readyState === "complete") main();
+    };
+  </script>
+</html>
