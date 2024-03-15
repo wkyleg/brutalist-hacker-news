@@ -365,6 +365,20 @@
     }
   </style>
 
+  <!-- Constants -->
+  <script type="text/javascript">
+    const MILLISECONDS_IN_SECOND = 1_000;
+    const TOTAL_ANIMATION_STRINGS = 100;
+    const LOADING_STRING_MIN_LENGTH = 5;
+    const LOADING_STRING_MAX_LENGTH = 80;
+    const MOBILE_DEVICE_MAX_WIDTH = 600;
+    const LOADING_ANIMATION_NUMBER_OF_ROWS = 50;
+    const ANIMATION_CHARACTERS_STRING =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+=-[]{}|;:,.<>?♥♦♣♠•◘○◆☻☺♂♀♪♫☼►◄↕‼¶§▬↨↑↓→←∟↔▲▼ァアィイゥウェエォオカガキギクゲゴサザシジスゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャユョヨラリルレロヮワヰヱヲン々〆〤￥「」『』【】〒〓─━│┃┄┅┆┇┈┉┊┋┌┍┎┏┐┑┒┓└┕┖┗┘┙┚┛├┝┞┟┠┡┢┣┤┥┦┧┨┩┪┫┬┭┮┯┰┱┲┳┴┵┶┷┸┹┺┻┼┽┾┿╀╁╂╃╄╅╆╇╈╉╊╋╌╍╎╏═║╒╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡╢╣╤╥╦╧╨╩╪╫╬§¶☊☋☌☍ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθικλμνξοπρςστυφχψω←↑→↓↔↕↖↗↘↙↚↛↜↝↞↟↠↡↢↣↤↥↦↧↨↩↪↫↬↭↮↯↰↱↲↳↴↵↶↷↸↹↺↻↼↽↾↿⇀⇁⇂⇃⇄⇅⇆⇇⇈⇉⇊⇋⇌⇍⇎⇏⇐⇑⇒⇓⇔⇕⇖⇗⇘⇙⇚⇛⇜⇝⇞⇟⇠⇡⇢⇣⇤⇥⇦⇧⇨⇩⇪⌨";
+    // TODO: add more of these incase of future alteration
+  </script>
+
+  <!-- API -->
   <script type="text/javascript">
     const HACKER_NEWS_API_URL = "https://hacker-news.firebaseio.com/v0/";
     const HACKER_NEWS_USER_PROFILE_URL =
@@ -452,15 +466,14 @@
     };
   </script>
 
+  <!-- Utils -->
   <script type="text/javascript">
-    const ARTICLE_MIN_DELAY_SECONDS = 0.001;
-    const ARTICLE_MAX_DELAY_SECONDS = 3;
-    const MILLISECONDS_IN_SECOND = 1_000;
-    const TOTAL_ANIMATION_STRINGS = 100;
-    const LOADING_STRING_MIN_LENGTH = 33;
-    const LOADING_STRING_MAX_LENGTH = 55;
-    const MOBILE_DEVICE_MAX_WIDTH = 600;
-
+    /**
+     * Loop utility, does `callback` `times` times
+     * @param {number} times
+     * @param {function} callback
+     * @returns {void}
+     */
     const loop = (times, callback) => {
       for (let i = 0; i < times; i++) {
         callback(i);
@@ -468,26 +481,152 @@
     };
 
     /**
-     * Generate random delay for article title animation
+     * Wait utility, returns a promise that resolves after `timeInMs` milliseconds
+     * @param {number} timeInMs
+     * @returns {Promise<void>}
      */
-    function getArticleTitleAnimationDelay() {
-      return (
-        Math.floor(
-          Math.random() * ARTICLE_MAX_DELAY_SECONDS + ARTICLE_MIN_DELAY_SECONDS
-        ) * MILLISECONDS_IN_SECOND
-      );
-    }
-
     function wait(timeInMs) {
       return new Promise((resolve) => {
         setTimeout(resolve, timeInMs);
       });
     }
 
+    /**
+     * Returns a random number between `min` and `max`
+     * @param {number} min
+     * @param {number} max
+     * @returns {number}
+     */
+    const getRandomNumberBetween = (min, max) =>
+      Math.floor(Math.random() * (max - min + 1) + min);
+
     function getHackerNewsPosterURLFromId(id) {
       return `${HACKER_NEWS_USER_PROFILE_URL}${id}`;
     }
 
+    /**
+     * Utility for handling state and side effects, listening for changes
+     * @param {any} initialState
+     * @param {function} sideEffect
+     * @returns {object}
+     */
+    function reactive(initialState, sideEffect) {
+      let state = initialState;
+      const current = () => state;
+
+      const update = (newState) => {
+        state = newState;
+        sideEffect(state);
+      };
+
+      const observers = [];
+      const subscribe = (observer) => observers.push(observer);
+
+      const notify = () => {
+        observers.forEach((observer) => observer(state));
+      };
+
+      return {
+        current,
+        update,
+        subscribe,
+        notify,
+      };
+    }
+  </script>
+
+  <!-- Navigation -->
+  <script type="text/javascript">
+    /**
+     * Navigation options
+     */
+    const NAVIGATION_OPTIONS = {
+      TOP: "top",
+      NEW: "new",
+      BEST: "best",
+      ASK: "ask",
+      SHOW: "show",
+      JOB: "job",
+      FAVORITES: "favorites",
+      SETTINGS: "settings",
+    };
+
+    /**
+     * Updates the DOM for the selected section
+     * @param {string} option
+     * @returns {void}
+     */
+    function updateDOMForNavigationOption(option) {
+      Object.entries(NAVIGATION_OPTIONS).forEach(([key, value]) => {
+        if (value === option) {
+          document
+            .querySelector(`#nav-button-${value}`)
+            .classList.add("text-link-button--selected");
+        } else {
+          document
+            .querySelector(`#nav-button-${value}`)
+            .classList.remove("text-link-button--selected");
+        }
+        document.querySelector(`#${value}-outlet`).style.display =
+          value === option ? "block" : "none";
+      });
+    }
+
+    /**
+     * Attaches click listeners to navigation buttons
+     * @returns {void}
+     */
+    function attachNavigationButtonClickListeners() {
+      document
+        .querySelector("#nav-button-top")
+        .addEventListener("click", () => {
+          selectedSection.update(NAVIGATION_OPTIONS.TOP);
+        });
+      document
+        .querySelector("#nav-button-new")
+        .addEventListener("click", () => {
+          selectedSection.update(NAVIGATION_OPTIONS.NEW);
+        });
+      document
+        .querySelector("#nav-button-best")
+        .addEventListener("click", () => {
+          selectedSection.update(NAVIGATION_OPTIONS.BEST);
+        });
+      document
+        .querySelector("#nav-button-ask")
+        .addEventListener("click", () => {
+          selectedSection.update(NAVIGATION_OPTIONS.ASK);
+        });
+      document
+        .querySelector("#nav-button-show")
+        .addEventListener("click", () => {
+          selectedSection.update(NAVIGATION_OPTIONS.SHOW);
+        });
+      document
+        .querySelector("#nav-button-job")
+        .addEventListener("click", () => {
+          selectedSection.update(NAVIGATION_OPTIONS.JOB);
+        });
+      document
+        .querySelector("#nav-button-favorites")
+        .addEventListener("click", () => {
+          selectedSection.update(NAVIGATION_OPTIONS.FAVORITES);
+        });
+      document
+        .querySelector("#nav-button-settings")
+        .addEventListener("click", () => {
+          selectedSection.update(NAVIGATION_OPTIONS.SETTINGS);
+        });
+    }
+  </script>
+
+  <!-- Animations -->
+  <script type="text/javascript">
+    /**
+     * Makes a modal draggable
+     * @param {HTMLElement} element
+     * @returns {void}
+     */
     function makeModalDragable(element) {
       let pos1 = 0,
         pos2 = 0,
@@ -527,227 +666,59 @@
       }
     }
 
-    function generateLoadingString(length) {
-      const characters =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+=-[]{}|;:,.<>?♥♦♣♠•◘○◆☻☺♂♀♪♫☼►◄↕‼¶§▬↨↑↓→←∟↔▲▼ァアィイゥウェエォオカガキギクゲゴサザシジスゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャユョヨラリルレロヮワヰヱヲン々〆〤￥「」『』【】〒〓─━│┃┄┅┆┇┈┉┊┋┌┍┎┏┐┑┒┓└┕┖┗┘┙┚┛├┝┞┟┠┡┢┣┤┥┦┧┨┩┪┫┬┭┮┯┰┱┲┳┴┵┶┷┸┹┺┻┼┽┾┿╀╁╂╃╄╅╆╇╈╉╊╋╌╍╎╏═║╒╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡╢╣╤╥╦╧╨╩╪╫╬§¶☊☋☌☍ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθικλμνξοπρςστυφχψω←↑→↓↔↕↖↗↘↙↚↛↜↝↞↟↠↡↢↣↤↥↦↧↨↩↪↫↬↭↮↯↰↱↲↳↴↵↶↷↸↹↺↻↼↽↾↿⇀⇁⇂⇃⇄⇅⇆⇇⇈⇉⇊⇋⇌⇍⇎⇏⇐⇑⇒⇓⇔⇕⇖⇗⇘⇙⇚⇛⇜⇝⇞⇟⇠⇡⇢⇣⇤⇥⇦⇧⇨⇩⇪⌨";
-      let result = "";
-      for (let i = 0; i < length; i++) {
-        result += characters.charAt(
-          Math.floor(Math.random() * characters.length)
-        );
-      }
-      return result;
-    }
-
-    // Generates loading strings with length randomly varying from 22-55 characters
-    async function precomputeLoadingStrings() {
-      const loadingStrings = [];
-      for (let i = 0; i < TOTAL_ANIMATION_STRINGS; i++) {
-        loadingStrings.push(
-          generateLoadingString(
-            Math.random() *
-              (LOADING_STRING_MAX_LENGTH - LOADING_STRING_MIN_LENGTH) +
-              LOADING_STRING_MIN_LENGTH
-          )
-        );
-      }
-      return loadingStrings;
-    }
-
-    const NAVIGATION_OPTIONS = {
-      TOP: "top",
-      NEW: "new",
-      BEST: "best",
-      ASK: "ask",
-      SHOW: "show",
-      JOB: "job",
-      FAVORITES: "favorites",
-      SETTINGS: "settings",
-    };
-
-    function updateDOMForNavigationOption(option) {
-      Object.entries(NAVIGATION_OPTIONS).forEach(([key, value]) => {
-        if (value === option) {
-          document
-            .querySelector(`#nav-button-${value}`)
-            .classList.add("text-link-button--selected");
-        } else {
-          document
-            .querySelector(`#nav-button-${value}`)
-            .classList.remove("text-link-button--selected");
-        }
-        document.querySelector(`#${value}-outlet`).style.display =
-          value === option ? "block" : "none";
-      });
+    /**
+     * Scrolls to the top of the page
+     * @returns {void}
+     */
+    function scrollToTop() {
+      window.scrollTo(0, 0);
     }
 
     /**
-     * Utility for handling state and side effects, listening for changes
+     * Shows the loading animation
+     * @returns {void}
      */
-    function reactive(initialState, sideEffect) {
-      let state = initialState;
-      const current = () => state;
-
-      const update = (newState) => {
-        state = newState;
-        sideEffect(state);
-      };
-
-      const observers = [];
-      const subscribe = (observer) => observers.push(observer);
-
-      const notify = () => {
-        observers.forEach((observer) => observer(state));
-      };
-
-      return {
-        current,
-        update,
-        subscribe,
-        notify,
-      };
+    function showLoadingAnimation() {
+      scrollToTop();
+      document.querySelector("#loading-outlet").style.display = "block";
     }
 
-    const topStoryElements = reactive([], (newState) => {
-      console.log("Top story elements:", newState);
-      document.querySelector("#top-outlet").innerHTML = "";
-      newState.forEach((storyElement) => {
-        document.querySelector("#top-outlet").appendChild(storyElement);
+    /**
+     * Hides the loading animation
+     * @returns {void}
+     */
+    function hideLoadingAnimation() {
+      scrollToTop();
+      document.querySelector("#loading-outlet").style.display = "none";
+    }
+
+    /**
+     * Returns a random loading string
+     * @returns {string}
+     */
+    const getRandomLoadingString = () =>
+      loadingStrings[Math.floor(Math.random() * TOTAL_ANIMATION_STRINGS)];
+
+    /**
+     * Initializes the loading animation
+     * @returns {void}
+     */
+    function initializeLoadingAnimation() {
+      loop(LOADING_ANIMATION_NUMBER_OF_ROWS, (i) => {
+        document
+          .querySelector("#loading-outlet")
+          .appendChild(new LoadingStoryElement());
       });
-    });
+    }
+  </script>
 
-    const topStoryIds = reactive([], (newState) => {
-      console.log("Top story ids:", newState);
-      topStoryElements.update(
-        newState.map((storyId) => new StoryListElement(storyId))
-      );
-    });
-
-    const newStoryElements = reactive([], (newState) => {
-      console.log("New story elements:", newState);
-      document.querySelector("#new-outlet").innerHTML = "";
-      newState.forEach((storyElement) => {
-        document.querySelector("#new-outlet").appendChild(storyElement);
-      });
-    });
-
-    const newStoryIds = reactive([], (newState) => {
-      console.log("New story ids:", newState);
-      newStoryElements.update(
-        newState.map((storyId) => new StoryListElement(storyId))
-      );
-    });
-
-    const bestStoryElements = reactive([], (newState) => {
-      console.log("Best story elements:", newState);
-      document.querySelector("#best-outlet").innerHTML = "";
-      newState.forEach((storyElement) => {
-        document.querySelector("#best-outlet").appendChild(storyElement);
-      });
-    });
-
-    const bestStoryIds = reactive([], (newState) => {
-      console.log("Best story ids:", newState);
-      bestStoryElements.update(
-        newState.map((storyId) => new StoryListElement(storyId))
-      );
-    });
-
-    const askStoryElements = reactive([], (newState) => {
-      console.log("Ask story elements:", newState);
-      document.querySelector("#ask-outlet").innerHTML = "";
-      newState.forEach((storyElement) => {
-        document.querySelector("#ask-outlet").appendChild(storyElement);
-      });
-    });
-
-    const askStoryIds = reactive([], (newState) => {
-      console.log("Ask story ids:", newState);
-      askStoryElements.update(
-        newState.map((storyId) => new StoryListElement(storyId))
-      );
-    });
-
-    const showStoryElements = reactive([], (newState) => {
-      console.log("Show story elements:", newState);
-      document.querySelector("#show-outlet").innerHTML = "";
-      newState.forEach((storyElement) => {
-        document.querySelector("#show-outlet").appendChild(storyElement);
-      });
-    });
-
-    const showStoryIds = reactive([], (newState) => {
-      console.log("Show story ids:", newState);
-      showStoryElements.update(
-        newState.map((storyId) => new StoryListElement(storyId))
-      );
-    });
-
-    const jobStoryElements = reactive([], (newState) => {
-      console.log("Job story elements:", newState);
-      document.querySelector("#job-outlet").innerHTML = "";
-      newState.forEach((storyElement) => {
-        document.querySelector("#job-outlet").appendChild(storyElement);
-      });
-    });
-
-    const jobStoryIds = reactive([], (newState) => {
-      console.log("Job story ids:", newState);
-      jobStoryElements.update(
-        newState.map((storyId) => new StoryListElement(storyId))
-      );
-    });
-
-    const favorites = reactive([], (newState) => {
-      console.log("Favorites:", newState);
-    });
-
-    const selectedSection = reactive(NAVIGATION_OPTIONS.TOP, (newState) => {
-      updateDOMForNavigationOption(newState);
-
-      switch (newState) {
-        case NAVIGATION_OPTIONS.TOP:
-          console.log("inside switch");
-          API.topStories().then((storyIds) => {
-            topStoryIds.update(storyIds);
-          });
-          break;
-        case NAVIGATION_OPTIONS.NEW:
-          API.newStories().then((storyIds) => {
-            newStoryIds.update(storyIds);
-          });
-          break;
-        case NAVIGATION_OPTIONS.BEST:
-          API.bestStories().then((storyIds) => {
-            bestStoryIds.update(storyIds);
-          });
-          break;
-        case NAVIGATION_OPTIONS.ASK:
-          API.askStories().then((storyIds) => {
-            askStoryIds.update(storyIds);
-          });
-          break;
-        case NAVIGATION_OPTIONS.SHOW:
-          API.showStories().then((storyIds) => {
-            showStoryIds.update(storyIds);
-          });
-          break;
-        case NAVIGATION_OPTIONS.JOB:
-          API.jobStories().then((storyIds) => {
-            jobStoryIds.update(storyIds);
-          });
-          break;
-        case NAVIGATION_OPTIONS.FAVORITES:
-          console.log("complete me");
-          break;
-        case NAVIGATION_OPTIONS.SETTINGS:
-          console.log("complete me");
-          break;
-        default:
-          console.error("Invalid navigation option");
-      }
-    });
-
+  <!-- Custom Elements -->
+  <script type="text/javascript">
+    /**
+     * Story list element for a hacker news story
+     * @param {number} storyId
+     * @returns {HTMLElement}
+     */
     function StoryListElement(storyId) {
       // Create html element for story
       const storyContainer = document.createElement("div");
@@ -767,6 +738,12 @@
       return storyContainer;
     }
 
+    /**
+     * Modal that shows iframe of hacker news story and perform other actions
+     * regarding story.
+     * @param {object} story
+     * @returns {HTMLElement}
+     */
     function StoryModal(story) {
       const modal = document.createElement("div");
       modal.classList.add("modal");
@@ -829,23 +806,10 @@
       return modal;
     }
 
-    function launchStoryModal(story) {
-      const node = document.body.appendChild(new StoryModal(story));
-      // TODO: find a way to make modal dragable in constructor
-      makeModalDragable(node);
-    }
-
-    let loadingStrings = ["loading..."];
-    precomputeLoadingStrings().then((strings) => {
-      loadingStrings = strings;
-    });
-
-    const getRandomLoadingString = () =>
-      loadingStrings[Math.floor(Math.random() * TOTAL_ANIMATION_STRINGS)];
-
-    const getRandomNumberBetween = (min, max) =>
-      Math.floor(Math.random() * (max - min + 1) + min);
-
+    /**
+     * Loading version of normal story element that produces text glitch effect
+     * @returns {HTMLElement}
+     */
     function LoadingStoryElement() {
       const loadingContainer = document.createElement("div");
       loadingContainer.classList.add("story-container");
@@ -869,78 +833,255 @@
 
       return loadingContainer;
     }
+  </script>
 
-    function attachNavigationButtonClickListeners() {
-      document
-        .querySelector("#nav-button-top")
-        .addEventListener("click", () => {
-          selectedSection.update(NAVIGATION_OPTIONS.TOP);
-        });
-      document
-        .querySelector("#nav-button-new")
-        .addEventListener("click", () => {
-          selectedSection.update(NAVIGATION_OPTIONS.NEW);
-        });
-      document
-        .querySelector("#nav-button-best")
-        .addEventListener("click", () => {
-          selectedSection.update(NAVIGATION_OPTIONS.BEST);
-        });
-      document
-        .querySelector("#nav-button-ask")
-        .addEventListener("click", () => {
-          selectedSection.update(NAVIGATION_OPTIONS.ASK);
-        });
-      document
-        .querySelector("#nav-button-show")
-        .addEventListener("click", () => {
-          selectedSection.update(NAVIGATION_OPTIONS.SHOW);
-        });
-      document
-        .querySelector("#nav-button-job")
-        .addEventListener("click", () => {
-          selectedSection.update(NAVIGATION_OPTIONS.JOB);
-        });
-      document
-        .querySelector("#nav-button-favorites")
-        .addEventListener("click", () => {
-          selectedSection.update(NAVIGATION_OPTIONS.FAVORITES);
-        });
-      document
-        .querySelector("#nav-button-settings")
-        .addEventListener("click", () => {
-          selectedSection.update(NAVIGATION_OPTIONS.SETTINGS);
-        });
+  <script type="text/javascript">
+    /**
+     * Generates a random loading string with length `length` from
+     * `ANIMATION_CHARACTERS_STRING` character set.
+     * @param {number} length
+     * @returns {string}
+     */
+    function generateLoadingString(length) {
+      let result = "";
+      for (let i = 0; i < length; i++) {
+        result += ANIMATION_CHARACTERS_STRING.charAt(
+          Math.floor(Math.random() * ANIMATION_CHARACTERS_STRING.length)
+        );
+      }
+      return result;
     }
 
-    function initializeLoadingAnimation() {
-      loop(50, (i) => {
-        document
-          .querySelector("#loading-outlet")
-          .appendChild(new LoadingStoryElement());
+    /**
+     * Precomputes loading strings for the loading animation
+     * @returns {Promise<string[]>}
+     */
+    async function precomputeLoadingStrings() {
+      const loadingStrings = [];
+      for (let i = 0; i < TOTAL_ANIMATION_STRINGS; i++) {
+        loadingStrings.push(
+          generateLoadingString(
+            Math.random() *
+              (LOADING_STRING_MAX_LENGTH - LOADING_STRING_MIN_LENGTH) +
+              LOADING_STRING_MIN_LENGTH
+          )
+        );
+      }
+      return loadingStrings;
+    }
+
+    /*
+     * Precomputed loading strings
+     */
+    let loadingStrings = ["loading..."];
+    // Assign precomputed loading strings to `loadingStrings` when ready
+    precomputeLoadingStrings().then((strings) => {
+      loadingStrings = strings;
+    });
+
+    /**
+     * DOM elements for top stories list
+     */
+    const topStoryElements = reactive([], (newState) => {
+      document.querySelector("#top-outlet").innerHTML = "";
+      newState.forEach((storyElement) => {
+        document.querySelector("#top-outlet").appendChild(storyElement);
       });
+    });
+
+    /**
+     * Ids corresponding to top stories. Will recompute `topStoryElements` in
+     * memory whenever it changes.
+     */
+    const topStoryIds = reactive([], (newState) => {
+      topStoryElements.update(
+        newState.map((storyId) => new StoryListElement(storyId))
+      );
+    });
+
+    /**
+     * DOM elements for stories sorted by new
+     */
+    const newStoryElements = reactive([], (newState) => {
+      document.querySelector("#new-outlet").innerHTML = "";
+      newState.forEach((storyElement) => {
+        document.querySelector("#new-outlet").appendChild(storyElement);
+      });
+    });
+
+    /**
+     * Ids corresponding to new stories. Will recompute `newStoryElements` in
+     * memory whenever it changes.
+     */
+    const newStoryIds = reactive([], (newState) => {
+      newStoryElements.update(
+        newState.map((storyId) => new StoryListElement(storyId))
+      );
+    });
+
+    /**
+     * DOM elements for stories sorted by best
+     */
+    const bestStoryElements = reactive([], (newState) => {
+      document.querySelector("#best-outlet").innerHTML = "";
+      newState.forEach((storyElement) => {
+        document.querySelector("#best-outlet").appendChild(storyElement);
+      });
+    });
+
+    /**
+     * Ids corresponding to best stories. Will recompute `bestStoryElements` in
+     * memory whenever it changes.
+     */
+    const bestStoryIds = reactive([], (newState) => {
+      bestStoryElements.update(
+        newState.map((storyId) => new StoryListElement(storyId))
+      );
+    });
+
+    /**
+     * DOM elements for stories sorted by ask
+     */
+    const askStoryElements = reactive([], (newState) => {
+      document.querySelector("#ask-outlet").innerHTML = "";
+      newState.forEach((storyElement) => {
+        document.querySelector("#ask-outlet").appendChild(storyElement);
+      });
+    });
+
+    /**
+     * Ids corresponding to ask stories. Will recompute `askStoryElements` in
+     * memory whenever it changes.
+     */
+    const askStoryIds = reactive([], (newState) => {
+      askStoryElements.update(
+        newState.map((storyId) => new StoryListElement(storyId))
+      );
+    });
+
+    /**
+     * DOM elements for stories sorted by show
+     */
+    const showStoryElements = reactive([], (newState) => {
+      document.querySelector("#show-outlet").innerHTML = "";
+      newState.forEach((storyElement) => {
+        document.querySelector("#show-outlet").appendChild(storyElement);
+      });
+    });
+
+    /**
+     * Ids corresponding to show stories. Will recompute `showStoryElements` in
+     * memory whenever it changes.
+     */
+    const showStoryIds = reactive([], (newState) => {
+      showStoryElements.update(
+        newState.map((storyId) => new StoryListElement(storyId))
+      );
+    });
+
+    /**
+     * DOM elements for stories sorted by job
+     */
+    const jobStoryElements = reactive([], (newState) => {
+      document.querySelector("#job-outlet").innerHTML = "";
+      newState.forEach((storyElement) => {
+        document.querySelector("#job-outlet").appendChild(storyElement);
+      });
+    });
+
+    /**
+     * Ids corresponding to job stories. Will recompute `jobStoryElements` in
+     * memory whenever it changes.
+     */
+    const jobStoryIds = reactive([], (newState) => {
+      jobStoryElements.update(
+        newState.map((storyId) => new StoryListElement(storyId))
+      );
+    });
+
+    /**
+     * DOM elements for stories marked as favorites
+     */
+    const favorites = reactive([], (newState) => {
+      console.log("Favorites:", newState);
+    });
+
+    /**
+     * Reactive store for section selected to rended. Will change the section.
+     * This also triggers recomputation of all cascading sections from their own
+     * respective reactive stores.
+     *
+     * @param {string} initialState
+     * @param {function} sideEffect
+     */
+    const selectedSection = reactive(NAVIGATION_OPTIONS.TOP, (newState) => {
+      updateDOMForNavigationOption(newState);
+
+      switch (newState) {
+        case NAVIGATION_OPTIONS.TOP:
+          console.log("inside switch");
+          API.topStories().then((storyIds) => {
+            topStoryIds.update(storyIds);
+          });
+          break;
+        case NAVIGATION_OPTIONS.NEW:
+          API.newStories().then((storyIds) => {
+            newStoryIds.update(storyIds);
+          });
+          break;
+        case NAVIGATION_OPTIONS.BEST:
+          API.bestStories().then((storyIds) => {
+            bestStoryIds.update(storyIds);
+          });
+          break;
+        case NAVIGATION_OPTIONS.ASK:
+          API.askStories().then((storyIds) => {
+            askStoryIds.update(storyIds);
+          });
+          break;
+        case NAVIGATION_OPTIONS.SHOW:
+          API.showStories().then((storyIds) => {
+            showStoryIds.update(storyIds);
+          });
+          break;
+        case NAVIGATION_OPTIONS.JOB:
+          API.jobStories().then((storyIds) => {
+            jobStoryIds.update(storyIds);
+          });
+          break;
+        case NAVIGATION_OPTIONS.FAVORITES:
+          console.log("complete me");
+          break;
+        case NAVIGATION_OPTIONS.SETTINGS:
+          console.log("complete me");
+          break;
+        default:
+          console.error("Invalid navigation option");
+      }
+    });
+
+    /**
+     * Launches a modal for a story
+     * @param {object} story
+     * @returns {void}
+     */
+    function launchStoryModal(story) {
+      const node = document.body.appendChild(new StoryModal(story));
+      // TODO: find a way to make modal dragable in constructor
+      makeModalDragable(node);
     }
 
-    function scrollToTop() {
-      window.scrollTo(0, 0);
-    }
-
-    function showLoadingAnimation() {
-      scrollToTop();
-      document.querySelector("#loading-outlet").style.display = "block";
-    }
-
-    function hideLoadingAnimation() {
-      scrollToTop();
-      document.querySelector("#loading-outlet").style.display = "none";
-    }
-
+    /**
+     * Launches root logic of page
+     * @returns {void}
+     */
     async function main() {
       initializeLoadingAnimation();
       attachNavigationButtonClickListeners();
       selectedSection.update(NAVIGATION_OPTIONS.TOP);
     }
 
+    // Call main when other data loaded
     document.onreadystatechange = () => {
       if (document.readyState === "complete") main();
     };
