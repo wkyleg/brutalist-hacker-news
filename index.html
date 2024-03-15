@@ -104,34 +104,7 @@
         style="display: none"
       ></section>
     </main>
-    <div id="modal" class="modal use-gpu-rendering">
-      <div class="modal-window-title">
-        <button
-          id="open-link"
-          class="text-link-button"
-          href=""
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          [OPEN IN NEW TAB]
-        </button>
-        <button
-          id="poster-name"
-          class="text-link-button"
-          href=""
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          [VIEW POSTER PROFILE]
-        </button>
-        <button id="close-button" class="close-button text-link-button">
-          [CLOSE WINDOW]
-        </button>
-      </div>
-      <div class="modal-content">
-        <iframe id="story-iframe" src="https://news.ycombinator.com"></iframe>
-      </div>
-    </div>
+    <section id="modal-outlet" class="use-gpu-rendering"></section>
   </body>
 
   <style>
@@ -256,7 +229,7 @@
     }
 
     .modal {
-      display: none;
+      display: block;
       flex-direction: column;
       position: absolute;
       z-index: 1;
@@ -403,7 +376,7 @@
     const HACKER_NEWS_USER_PROFILE_URL =
       "https://news.ycombinator.com/user?id=";
 
-      // TODO: remove coupling with DOM state
+    // TODO: remove coupling with DOM state
     async function getRequestWithLoadingAnimation(url) {
       showLoadingAnimation();
       let response;
@@ -521,13 +494,14 @@
       return `${HACKER_NEWS_USER_PROFILE_URL}${id}`;
     }
 
-    function dragElement(elmnt) {
+    function makeModalDragable(element) {
       let pos1 = 0,
         pos2 = 0,
         pos3 = 0,
         pos4 = 0;
 
-      document.querySelector(".modal-window-title").onmousedown = dragMouseDown;
+      // Only drag from the title bar
+      element.querySelector(".modal-window-title").onmousedown = dragMouseDown;
 
       function dragMouseDown(e) {
         e = e || window.event;
@@ -548,8 +522,8 @@
         pos2 = pos4 - e.clientY;
         pos3 = e.clientX;
         pos4 = e.clientY;
-        elmnt.style.top = elmnt.offsetTop - pos2 + "px";
-        elmnt.style.left = elmnt.offsetLeft - pos1 + "px";
+        element.style.top = element.offsetTop - pos2 + "px";
+        element.style.left = element.offsetLeft - pos1 + "px";
       }
 
       function closeDragElement() {
@@ -792,14 +766,79 @@
       API.item(storyId).then(async (story) => {
         storyContainer.firstChild.textContent = story.title;
         storyContainer.addEventListener("click", () => {
-          $storyIframeElement.src = story.url;
-          $modalOpenLinkButtonElement.href = story.url;
-          $modalPosterNameElement.href = getHackerNewsPosterURLFromId(story.by);
-          showModal();
+          launchStoryModal(story);
         });
       });
 
       return storyContainer;
+    }
+
+    function StoryModal(story) {
+      const modal = document.createElement("div");
+      modal.classList.add("modal");
+      modal.classList.add("use-gpu-rendering");
+      modal.innerHTML = `<div class="modal-window-title">
+        <button
+          id="open-link-${story.id}"
+          class="text-link-button"
+        >
+          [OPEN IN NEW TAB]
+        </button>
+        <button
+          id="poster-name-${story.id}"
+          class="text-link-button"
+        >
+          [VIEW POSTER PROFILE]
+        </button>
+        <button id="close-button-${story.id}" class="close-button text-link-button">
+          [CLOSE WINDOW]
+        </button>
+      </div>
+      <div class="modal-content">
+        <iframe id="story-iframe-${story.id}" src="${story.url}"></iframe>
+      </div>`;
+
+      if (window.innerWidth < MOBILE_DEVICE_MAX_WIDTH) {
+        modal.style.width = "90%";
+        modal.style.height = "99%";
+      } else {
+        modal.style.width = "50%";
+        modal.style.height = "50%";
+      }
+
+      if (window.innerWidth < MOBILE_DEVICE_MAX_WIDTH) {
+        modal.style.top = "0";
+        modal.style.left = "0";
+      } else {
+        modal.style.top = "25%";
+        modal.style.left = "25%";
+      }
+
+      modal
+        .querySelector(`#open-link-${story.id}`)
+        .addEventListener("click", () => {
+          window.open(story.url, "_blank");
+        });
+
+      modal
+        .querySelector(`#poster-name-${story.id}`)
+        .addEventListener("click", () => {
+          window.open(getHackerNewsPosterURLFromId(story.by), "_blank");
+        });
+
+      modal
+        .querySelector(`#close-button-${story.id}`)
+        .addEventListener("click", () => {
+          modal.remove();
+        });
+
+      return modal;
+    }
+
+    function launchStoryModal(story) {
+      const node = document.body.appendChild(new StoryModal(story));
+      // TODO: find a way to make modal dragable in constructor
+      makeModalDragable(node);
     }
 
     let loadingStrings = ["loading..."];
@@ -902,7 +941,6 @@
       document.querySelector("#loading-outlet").style.display = "none";
     }
 
-
     async function main() {
       initializeLoadingAnimation();
       // References to DOM elements
@@ -916,7 +954,7 @@
       window.$modalCloseButtonElement = document.querySelector(".close-button");
       window.$modalPosterNameElement = document.getElementById("poster-name");
 
-      dragElement($modalElement);
+      makeModalDragable($modalElement);
 
       const blurMainContent = () => {
         document.querySelector(".main-content").style.filter = "blur(1px)";
