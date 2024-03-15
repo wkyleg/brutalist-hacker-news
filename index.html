@@ -52,7 +52,12 @@
         [⚙]
       </nav>
     </header>
-    <div class="main-content">
+    <main class="main-content">
+      <section
+        id="loading-outlet"
+        class="use-gpu-rendering"
+        style="display: none"
+      ></section>
       <section
         id="stories-outlet"
         class="use-gpu-rendering"
@@ -98,7 +103,7 @@
         class="use-gpu-rendering"
         style="display: none"
       ></section>
-    </div>
+    </main>
     <div id="modal" class="modal use-gpu-rendering">
       <div class="modal-window-title">
         <button
@@ -398,39 +403,22 @@
     const HACKER_NEWS_USER_PROFILE_URL =
       "https://news.ycombinator.com/user?id=";
 
+    async function get(url) {
+      const response = await fetch(url);
+      if (!response.ok)
+        throw new Error(`HTTP error! status: ${response.status}`);
+      return response.json();
+    }
+
     const itemCache = new Map();
 
     const API = {
-      topStories: () => {
-        return fetch(`${HACKER_NEWS_API_URL}topstories.json`)
-          .then((response) => response.json())
-          .catch((error) => console.error(error));
-      },
-      newStories: () => {
-        return fetch(`${HACKER_NEWS_API_URL}newstories.json`)
-          .then((response) => response.json())
-          .catch((error) => console.error(error));
-      },
-      bestStories: () => {
-        return fetch(`${HACKER_NEWS_API_URL}beststories.json`)
-          .then((response) => response.json())
-          .catch((error) => console.error(error));
-      },
-      askStories: () => {
-        return fetch(`${HACKER_NEWS_API_URL}askstories.json`)
-          .then((response) => response.json())
-          .catch((error) => console.error(error));
-      },
-      showStories: () => {
-        return fetch(`${HACKER_NEWS_API_URL}showstories.json`)
-          .then((response) => response.json())
-          .catch((error) => console.error(error));
-      },
-      jobStories: () => {
-        return fetch(`${HACKER_NEWS_API_URL}jobstories.json`)
-          .then((response) => response.json())
-          .catch((error) => console.error(error));
-      },
+      topStories: () => get(`${HACKER_NEWS_API_URL}topstories.json`),
+      newStories: () => get(`${HACKER_NEWS_API_URL}newstories.json`),
+      bestStories: () => get(`${HACKER_NEWS_API_URL}beststories.json`),
+      askStories: () => get(`${HACKER_NEWS_API_URL}askstories.json`),
+      showStories: () => get(`${HACKER_NEWS_API_URL}showstories.json`),
+      jobStories: () => get(`${HACKER_NEWS_API_URL}jobstories.json`),
       /**
      * Stories, comments, jobs, Ask HNs and even polls are just items. They're 
      * identified by their ids, which are unique integers, and live under 
@@ -470,11 +458,7 @@
           })
           .catch((error) => console.error(error));
       },
-      user: (id) => {
-        return fetch(`${HACKER_NEWS_API_URL}user/${id}.json`)
-          .then((response) => response.json())
-          .catch((error) => console.error(error));
-      },
+      user: (id) => get(`${HACKER_NEWS_API_URL}user/${id}.json`),
     };
   </script>
 
@@ -516,39 +500,37 @@
 
       document.querySelector(".modal-window-title").onmousedown = dragMouseDown;
 
-      function dragMouseDown(e) {
+      const dragMouseDown = (e) => {
         e = e || window.event;
         e.preventDefault();
-        // get the mouse cursor position at startup:
+        // Get the mouse cursor position at startup:
         pos3 = e.clientX;
         pos4 = e.clientY;
         document.onmouseup = closeDragElement;
-        // call a function whenever the cursor moves:
+        // Call a function whenever the cursor moves:
         document.onmousemove = elementDrag;
-      }
+      };
 
-      function elementDrag(e) {
+      const elementDrag = (e) => {
         e = e || window.event;
         e.preventDefault();
-        // calculate the new cursor position:
+        // Calculate the new cursor position:
         pos1 = pos3 - e.clientX;
         pos2 = pos4 - e.clientY;
         pos3 = e.clientX;
         pos4 = e.clientY;
-        // set the element's new position:
         elmnt.style.top = elmnt.offsetTop - pos2 + "px";
         elmnt.style.left = elmnt.offsetLeft - pos1 + "px";
-      }
+      };
 
       function closeDragElement() {
-        // stop moving when mouse button is released:
+        // Stop moving when mouse button is released:
         document.onmouseup = null;
         document.onmousemove = null;
       }
     }
 
     function generateLoadingString(length) {
-      // Expanded character set to include symbols fitting Matrix, brutalist, cyberpunk aesthetics, and programming
       const characters =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+=-[]{}|;:,.<>?♥♦♣♠•◘○◆☻☺♂♀♪♫☼►◄↕‼¶§▬↨↑↓→←∟↔▲▼ァアィイゥウェエォオカガキギクゲゴサザシジスゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャユョヨラリルレロヮワヰヱヲン々〆〤￥「」『』【】〒〓─━│┃┄┅┆┇┈┉┊┋┌┍┎┏┐┑┒┓└┕┖┗┘┙┚┛├┝┞┟┠┡┢┣┤┥┦┧┨┩┪┫┬┭┮┯┰┱┲┳┴┵┶┷┸┹┺┻┼┽┾┿╀╁╂╃╄╅╆╇╈╉╊╋╌╍╎╏═║╒╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡╢╣╤╥╦╧╨╩╪╫╬§¶☊☋☌☍ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθικλμνξοπρςστυφχψω←↑→↓↔↕↖↗↘↙↚↛↜↝↞↟↠↡↢↣↤↥↦↧↨↩↪↫↬↭↮↯↰↱↲↳↴↵↶↷↸↹↺↻↼↽↾↿⇀⇁⇂⇃⇄⇅⇆⇇⇈⇉⇊⇋⇌⇍⇎⇏⇐⇑⇒⇓⇔⇕⇖⇗⇘⇙⇚⇛⇜⇝⇞⇟⇠⇡⇢⇣⇤⇥⇦⇧⇨⇩⇪⌨";
       let result = "";
@@ -560,7 +542,7 @@
       return result;
     }
 
-    // Generates 300 loading strings in parallel, with length randomly varying from 22-55 characters
+    // Generates loading strings with length randomly varying from 22-55 characters
     async function precomputeLoadingStrings() {
       const loadingStrings = [];
       for (let i = 0; i < TOTAL_ANIMATION_STRINGS; i++) {
