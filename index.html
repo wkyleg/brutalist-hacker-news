@@ -59,11 +59,6 @@
         style="display: none"
       ></section>
       <section
-        id="stories-outlet"
-        class="use-gpu-rendering"
-        style="display: none"
-      ></section>
-      <section
         id="top-outlet"
         class="use-gpu-rendering"
         style="display: none"
@@ -104,7 +99,6 @@
         style="display: none"
       ></section>
     </main>
-    <section id="modal-outlet" class="use-gpu-rendering"></section>
   </body>
 
   <style>
@@ -943,59 +937,9 @@
 
     async function main() {
       initializeLoadingAnimation();
-      // References to DOM elements
-      window.$mainContent = document.querySelector(".main-content");
-      window.$storiesContainerElement =
-        document.getElementById("stories-outlet");
-      window.$modalElement = document.getElementById("modal");
-      window.$storyIframeElement = document.getElementById("story-iframe");
-      window.$modalStoryTitleElement = document.getElementById("article-name");
-      window.$modalOpenLinkButtonElement = document.getElementById("open-link");
-      window.$modalCloseButtonElement = document.querySelector(".close-button");
-      window.$modalPosterNameElement = document.getElementById("poster-name");
-
-      makeModalDragable($modalElement);
-
-      const blurMainContent = () => {
-        document.querySelector(".main-content").style.filter = "blur(1px)";
-      };
-      const unblurMainContent = () => {
-        document.querySelector(".main-content").style.filter = "none";
-      };
-
-      window.showModal = () => ($modalElement.style.display = "flex");
-      window.hideModal = () => {
-        $modalElement.style.display = "none";
-        unblurMainContent();
-      };
-      $modalCloseButtonElement.addEventListener("click", hideModal);
-
-      function handleModalSizing() {
-        if (window.innerWidth < MOBILE_DEVICE_MAX_WIDTH) {
-          $modalElement.style.width = "90%";
-          $modalElement.style.height = "99%";
-          return;
-        }
-        $modalElement.style.width = "50%";
-        $modalElement.style.height = "50%";
-      }
-
-      function handleModalPosition() {
-        if (window.innerWidth < MOBILE_DEVICE_MAX_WIDTH) {
-          $modalElement.style.top = "0";
-          $modalElement.style.left = "0";
-          return;
-        }
-        $modalElement.style.top = "25%";
-        $modalElement.style.left = "25%";
-      }
-
-      handleModalSizing();
-      handleModalPosition();
       attachNavigationButtonClickListeners();
+      selectedSection.update(NAVIGATION_OPTIONS.TOP);
     }
-
-    selectedSection.update(NAVIGATION_OPTIONS.TOP);
 
     document.onreadystatechange = () => {
       if (document.readyState === "complete") main();
