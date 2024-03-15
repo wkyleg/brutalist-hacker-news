@@ -334,8 +334,8 @@
       background-image: var(--backgound-linear-gradient);
       padding-left: var(--top-level-padding-side);
       padding-right: var(--top-level-padding-side);
-      height: 100vh;
-      max-height: 100vh;
+      height: calc(100vh - var(--size-lg));
+      max-height: calc(100vh - var(--size-lg));
       overflow-y: scroll;
       padding-top: var(--size-lg);
     }
@@ -1078,6 +1078,7 @@
     async function main() {
       initializeLoadingAnimation();
       attachNavigationButtonClickListeners();
+      // This triggers root propagation of state changes
       selectedSection.update(NAVIGATION_OPTIONS.TOP);
     }
 
