@@ -1,349 +1,437 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>minimal hn</title>
+    <meta
+      name="viewport"
+      content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <link rel="icon" type="image/x-icon" href="assets/icon/favicon.ico" />
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#4e8ef7" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <title>minimal hn</title>
-  <meta name="viewport"
-    content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="format-detection" content="telephone=no" />
-  <meta name="msapplication-tap-highlight" content="no" />
-  <link rel="icon" type="image/x-icon" href="assets/icon/favicon.ico" />
-  <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#4e8ef7" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-</head>
-
-<body>
-  <div class="title-content">
-    <h1 id="title">hn</h1>
-    <a class="text-link-button" aria-label="Top">[&#128285;]</a>
-    <a class="text-link-button" aria-label="New">[&#10561;]</a>
-    <a class="text-link-button" aria-label="Best">[&#9812;]</a>
-    <a class="text-link-button" aria-label="Ask">[?]</a>
-    <a class="text-link-button" aria-label="Show">[&#10547;]</a>
-    <a class="text-link-button" aria-label="Job">[$]</a>
-    <a class="text-link-button" aria-label="Favorites">[&hearts;]</a>
-    <a class="text-link-button" aria-label="Settings">[⚙]</a>
-  </div>
-  <div class="main-content">
-    <div id="stories-container" class="use-gpu-rendering"></div>
-  </div>
-  <div id="modal" class="modal use-gpu-rendering">
-    <div class="modal-window-title">
-      <a id="open-link" class="text-link-button" href="" target="_blank" rel="noopener noreferrer">[OPEN IN NEW TAB]</a>
-      <a id="poster-name" class="text-link-button" href="" target="_blank" rel="noopener noreferrer">[VIEW POSTER
-        PROFILE]</a>
-      <a id="close-button" class="close-button text-link-button">[CLOSE WINDOW]</a>
+  <body>
+    <header class="title-content">
+      <h1 id="title">hn</h1>
+      <nav id="nav-button-top" class="text-link-button" aria-label="Top">
+        [&#128285;]
+      </nav>
+      <nav id="nav-button-new" class="text-link-button" aria-label="New">
+        [&#10561;]
+      </nav>
+      <nav id="nav-button-best" class="text-link-button" aria-label="Best">
+        [&#9812;]
+      </nav>
+      <nav id="nav-button-ask" class="text-link-button" aria-label="Ask">
+        [?]
+      </nav>
+      <nav id="nav-button-show" class="text-link-button" aria-label="Show">
+        [&#10547;]
+      </nav>
+      <nav id="nav-button-job" class="text-link-button" aria-label="Job">
+        [$]
+      </nav>
+      <nav
+        id="nav-button-favorites"
+        class="text-link-button"
+        aria-label="Favorites"
+      >
+        [&hearts;]
+      </nav>
+      <nav
+        id="nav-button-settings"
+        class="text-link-button"
+        aria-label="Settings"
+      >
+        [⚙]
+      </nav>
+    </header>
+    <div class="main-content">
+      <section
+        id="stories-outlet"
+        class="use-gpu-rendering"
+        style="display: none"
+      ></section>
+      <section
+        id="top-outlet"
+        class="use-gpu-rendering"
+        style="display: none"
+      ></section>
+      <section
+        id="new-outlet"
+        class="use-gpu-rendering"
+        style="display: none"
+      ></section>
+      <section
+        id="best-outlet"
+        class="use-gpu-rendering"
+        style="display: none"
+      ></section>
+      <section
+        id="ask-outlet"
+        class="use-gpu-rendering"
+        style="display: none"
+      ></section>
+      <section
+        id="show-outlet"
+        class="use-gpu-rendering"
+        style="display: none"
+      ></section>
+      <section
+        id="job-outlet"
+        class="use-gpu-rendering"
+        style="display: none"
+      ></section>
+      <section
+        id="favorites-outlet"
+        class="use-gpu-rendering"
+        style="display: none"
+      ></section>
+      <section
+        id="settings-outlet"
+        class="use-gpu-rendering"
+        style="display: none"
+      ></section>
     </div>
-    <div class="modal-content">
-      <iframe id="story-iframe" src="https://news.ycombinator.com"></iframe>
+    <div id="modal" class="modal use-gpu-rendering">
+      <div class="modal-window-title">
+        <button
+          id="open-link"
+          class="text-link-button"
+          href=""
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          [OPEN IN NEW TAB]
+        </button>
+        <button
+          id="poster-name"
+          class="text-link-button"
+          href=""
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          [VIEW POSTER PROFILE]
+        </button>
+        <button id="close-button" class="close-button text-link-button">
+          [CLOSE WINDOW]
+        </button>
+      </div>
+      <div class="modal-content">
+        <iframe id="story-iframe" src="https://news.ycombinator.com"></iframe>
+      </div>
     </div>
-  </div>
-</body>
-terciary
-<style>
-  :root {
-    /* Default olor scheme inspired by brutalist design and cyberpunk */
-    --color-primary: rgba(227, 6, 19, 0.8);
-    --color-secondary: rgba(255, 237, 0, 1);
-    --color-tertiary: #f6d365;
-    --color-accent-1: #f6d365;
-    --color-accent-2: #fda085;
-    --color-dark: rgba(0, 0, 0, 0.4);
-    --color-light: white;
-    --color-text-main: darkslategrey;
+  </body>
 
-    /* Shading Utilities */
-    --text-shadow-highlight: 1px 1px var(--color-primary),
-      -1px -1px var(--color-secondary);
-    --box-shadow-highlight: 5px 5px var(--color-primary),
-      -5px -5px var(--color-secondary);
-    --backgound-linear-gradient: linear-gradient(120deg,
+  <style>
+    :root {
+      /* Default olor scheme inspired by brutalist design and cyberpunk */
+      --color-primary: rgba(227, 6, 19, 0.8);
+      --color-secondary: rgba(255, 237, 0, 1);
+      --color-tertiary: #f6d365;
+      --color-accent-1: #f6d365;
+      --color-accent-2: #fda085;
+      --color-dark: rgba(0, 0, 0, 0.4);
+      --color-light: white;
+      --color-text-main: darkslategrey;
+
+      /* Shading Utilities */
+      --text-shadow-highlight: 1px 1px var(--color-primary),
+        -1px -1px var(--color-secondary);
+      --box-shadow-highlight: 5px 5px var(--color-primary),
+        -5px -5px var(--color-secondary);
+      --backgound-linear-gradient: linear-gradient(
+        120deg,
         var(--color-accent-1) 0%,
-        var(--color-accent-2) 100%);
+        var(--color-accent-2) 100%
+      );
 
-    /* Sizing utilities */
-    --size-xxs: 0.5rem;
-    --size-xs: 0.75rem;
-    --size-sm: 1rem;
-    --size-md: 1.5rem;
-    --size-lg: 2rem;
-    --size-xl: 3rem;
-    --size-xxl: 6rem;
+      /* Sizing utilities */
+      --size-xxs: 0.5rem;
+      --size-xs: 0.75rem;
+      --size-sm: 1rem;
+      --size-md: 1.5rem;
+      --size-lg: 2rem;
+      --size-xl: 3rem;
+      --size-xxl: 6rem;
 
-    /* Breakpoints */
-    --breakpoint-mobile: 600px;
-    --breakpoint-tablet: 1100px;
-    --breakpoint-desktop: 1600px;
+      /* Breakpoints */
+      --breakpoint-mobile: 600px;
+      --breakpoint-tablet: 1100px;
+      --breakpoint-desktop: 1600px;
 
-    /* Misc */
-    --top-level-padding-side: 5%;
-  }
-
-  * {
-    font-family: Menlo, monospace;
-  }
-
-  @keyframes fade-to-black {
-    100% {
-      background: var(--color-dark);
+      /* Misc */
+      --top-level-padding-side: 5%;
     }
-  }
 
-  .use-fade-to-black {
-    animation: fade-to-black 10s infinite;
-  }
+    * {
+      font-family: Menlo, monospace;
+    }
 
-  ::-webkit-scrollbar {
-    width: var(--size-lg);
-  }
+    @keyframes fade-to-black {
+      100% {
+        background: var(--color-dark);
+      }
+    }
 
-  ::-webkit-scrollbar-track {
-    background: var(--color-tertiary);
-  }
+    .use-fade-to-black {
+      animation: fade-to-black 10s infinite;
+    }
 
-  ::-webkit-scrollbar-thumb {
-    background: var(--color-primary);
-    border-radius: 0px;
-    min-height: var(--size-xxl);
-    z-index: 100;
-  }
+    ::-webkit-scrollbar {
+      width: var(--size-lg);
+    }
 
-  ::-webkit-scrollbar-track:active {
-    background: var(--color-secondary);
-  }
+    ::-webkit-scrollbar-track {
+      background: var(--color-tertiary);
+    }
 
-  ::-webkit-scrollbar-track:hover {
-    background: var(--color-secondary);
-  }
+    ::-webkit-scrollbar-thumb {
+      background: var(--color-primary);
+      border-radius: 0px;
+      min-height: var(--size-xxl);
+      z-index: 100;
+    }
 
-  ::-webkit-scrollbar-thumb:active {
-    box-shadow: 1px 3px var(--text-color);
-  }
+    ::-webkit-scrollbar-track:active {
+      background: var(--color-secondary);
+    }
 
-  ::-webkit-scrollbar-thumb:hover {
-    box-shadow: 1px 3px var(--color-text-main);
-  }
+    ::-webkit-scrollbar-track:hover {
+      background: var(--color-secondary);
+    }
 
-  body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
-  }
+    ::-webkit-scrollbar-thumb:active {
+      box-shadow: 1px 3px var(--text-color);
+    }
 
-  h1 {
-    font-size: var(--size-md);
-    text-align: center;
-    color: transparent;
-    text-shadow: var(--text-shadow-highlight);
-    font-weight: bold;
-  }
+    ::-webkit-scrollbar-thumb:hover {
+      box-shadow: 1px 3px var(--color-text-main);
+    }
 
-  .use-gpu-rendering {
-    -webkit-transform: translate3d(0, 0, 0);
-    -moz-transform: translate3d(0, 0, 0);
-    -ms-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
-    -webkit-backface-visibility: hidden;
-    -moz-backface-visibility: hidden;
-    -ms-backface-visibility: hidden;
-    backface-visibility: hidden;
-    -webkit-perspective: 1000;
-    -moz-perspective: 1000;
-    -ms-perspective: 1000;
-    perspective: 1000;
-    -webkit-transform: translateZ(0);
-    -moz-transform: translateZ(0);
-    -ms-transform: translateZ(0);
-    -o-transform: translateZ(0);
-  }
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+    }
 
-  .modal {
-    display: none;
-    flex-direction: column;
-    position: absolute;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 50%;
-    height: 50%;
-    overflow: auto;
-    background-color: var(--color-dark);
-    border: var(--color-primary) 3px solid;
-    resize: both;
-    box-shadow: var(--box-shadow-highlight);
-    z-index: 15;
-  }
-
-  .modal-window-title {
-    cursor: move;
-    height: var(--size-md);
-    font-size: var(--size-sm);
-    display: flex;
-    align-items: left;
-    background-color: var(--color-tertiary);
-    color: var(--color-text-main);
-    padding: var(--size-xxs);
-    color: var(--color-primary);
-    justify-content: space-evenly;
-    border-bottom: var(--color-primary) 3px solid;
-    box-shadow: var(--box-shadow-highlight);
-  }
-
-  .modal-window-title:hover {
-    background-color: var(--color-secondary);
-  }
-
-  @media screen and (max-width: 1100px) {
-    .modal-window-title {
-      flex-direction: column;
-      height: fit-content;
+    h1 {
+      font-size: var(--size-md);
       text-align: center;
-      align-items: center;
-      font-size: var(--size-xs);
+      color: transparent;
+      text-shadow: var(--text-shadow-highlight);
+      font-weight: bold;
     }
-  }
 
-  .text-link-button {
-    color: var(--text-color);
-    text-decoration: none;
-    cursor: pointer;
-    transition: text-indent 0.5s;
-    font-size: var(--size-sm);
-  }
+    .use-gpu-rendering {
+      -webkit-transform: translate3d(0, 0, 0);
+      -moz-transform: translate3d(0, 0, 0);
+      -ms-transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0);
+      -webkit-backface-visibility: hidden;
+      -moz-backface-visibility: hidden;
+      -ms-backface-visibility: hidden;
+      backface-visibility: hidden;
+      -webkit-perspective: 1000;
+      -moz-perspective: 1000;
+      -ms-perspective: 1000;
+      perspective: 1000;
+      -webkit-transform: translateZ(0);
+      -moz-transform: translateZ(0);
+      -ms-transform: translateZ(0);
+      -o-transform: translateZ(0);
+    }
 
-  @media screen and (max-width: 600px) {
-    .text-link-button {
+    .modal {
+      display: none;
+      flex-direction: column;
+      position: absolute;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 50%;
+      height: 50%;
+      overflow: auto;
+      background-color: var(--color-light);
+      background: var(--color-light);
+      border: var(--color-primary) 3px solid;
+      resize: both;
+      box-shadow: var(--box-shadow-highlight);
+      z-index: 15;
+    }
+
+    .modal-window-title {
+      cursor: move;
+      height: var(--size-md);
       font-size: var(--size-sm);
+      display: flex;
+      align-items: left;
+      background-color: var(--color-tertiary);
+      color: var(--color-text-main);
+      padding: var(--size-xxs);
+      color: var(--color-primary);
+      justify-content: space-evenly;
+      border-bottom: var(--color-primary) 3px solid;
+      box-shadow: var(--box-shadow-highlight);
     }
-  }
 
-  .text-link-button--selected {
-    color: var(--color-primary);
-    font-weight: bolder;
-  }
+    .modal-window-title:hover {
+      background-color: var(--color-secondary);
+    }
 
-  .text-link-button:hover {
-    color: var(--color-primary);
-    text-shadow: var(--text-shadow-highlight);
-  }
+    @media screen and (max-width: 1100px) {
+      .modal-window-title {
+        flex-direction: column;
+        height: fit-content;
+        text-align: center;
+        align-items: center;
+        font-size: var(--size-xs);
+      }
+    }
 
-  .modal-content {
-    flex-grow: 1;
-    overflow: hidden;
-  }
+    .text-link-button {
+      color: var(--text-color);
+      text-decoration: none;
+      cursor: pointer;
+      transition: text-indent 0.5s;
+      font-size: var(--size-sm);
+      background: transparent;
+      border: 0;
+    }
 
-  iframe {
-    width: 100%;
-    height: 100%;
-    background: var(--color-white);
-  }
+    @media screen and (max-width: 600px) {
+      .text-link-button {
+        font-size: var(--size-sm);
+      }
+    }
 
-  .title-content {
-    position: absolute;
-    height: var(--size-lg);
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: baseline;
-    padding-left: var(--top-level-padding-side);
-    background: var(--color-accent-1);
-    width: calc(100vw - var(--top-level-padding-side) - var(--size-lg));
-    z-index: 10;
-  }
+    .text-link-button--selected {
+      color: var(--color-primary);
+      font-weight: bolder;
+    }
 
-  .title-content:hover {
-    background: var(--color-secondary);
-  }
+    .text-link-button:hover {
+      color: var(--color-primary);
+      text-shadow: var(--text-shadow-highlight);
+    }
 
-  .title-content h1 {
-    margin: 0 var(--size-xs) 0 0;
-  }
+    .modal-content {
+      flex-grow: 1;
+      overflow: hidden;
+      background-color: var(--color-light);
+      background: var(--color-light);
+    }
 
-  .main-content {
-    background-image: var(--backgound-linear-gradient);
-    padding-left: var(--top-level-padding-side);
-    padding-right: var(--top-level-padding-side);
-    height: 100vh;
-    max-height: 100vh;
-    overflow-y: scroll;
-    padding-top: var(--size-lg);
-  }
+    iframe {
+      width: 100%;
+      height: 100%;
+      background: var(--color-light);
+    }
 
-  .stories-container {
-    width: 100%;
-    height: 100%;
-  }
+    .title-content {
+      position: absolute;
+      height: var(--size-lg);
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: baseline;
+      padding-left: var(--top-level-padding-side);
+      background: var(--color-accent-1);
+      width: calc(100vw - var(--top-level-padding-side) - var(--size-lg));
+      z-index: 10;
+    }
 
-  .story-container {
-    margin-top: var(--size-xxs);
-    margin-bottom: var(--size-xxs);
-  }
+    .title-content:hover {
+      background: var(--color-secondary);
+    }
 
-  .story-container span {
-    color: var(--color-text-main);
-    font-size: var(--size-sm);
-    cursor: pointer;
-  }
+    .title-content h1 {
+      margin: 0 var(--size-xs) 0 0;
+    }
 
-  .story-container span:hover {
-    color: transparent;
-    font-weight: bold;
-    text-indent: 5px;
-    transition: text-indent 0.5s;
-    text-shadow: var(--text-shadow-highlight);
-  }
+    .main-content {
+      background-image: var(--backgound-linear-gradient);
+      padding-left: var(--top-level-padding-side);
+      padding-right: var(--top-level-padding-side);
+      height: 100vh;
+      max-height: 100vh;
+      overflow-y: scroll;
+      padding-top: var(--size-lg);
+    }
 
-  .story-container span:hover::before {
-    display: inline-block;
-    content: "->";
-  }
-</style>
+    .story-container {
+      margin-top: var(--size-xxs);
+      margin-bottom: var(--size-xxs);
+    }
 
-<script type="text/javascript">
-  const HACKER_NEWS_API_URL = "https://hacker-news.firebaseio.com/v0/";
-  const HACKER_NEWS_USER_PROFILE_URL =
-    "https://news.ycombinator.com/user?id=";
+    .story-container span {
+      color: var(--color-text-main);
+      font-size: var(--size-sm);
+      cursor: pointer;
+    }
 
-  const itemCache = new Map();
+    .story-container span:hover {
+      color: transparent;
+      font-weight: bold;
+      text-indent: 5px;
+      transition: text-indent 0.5s;
+      text-shadow: var(--text-shadow-highlight);
+    }
 
-  const API = {
-    topStories: () => {
-      return fetch(`${HACKER_NEWS_API_URL}topstories.json`)
-        .then((response) => response.json())
-        .catch((error) => console.error(error));
-    },
-    newStories: () => {
-      return fetch(`${HACKER_NEWS_API_URL}newstories.json`)
-        .then((response) => response.json())
-        .catch((error) => console.error(error));
-    },
-    bestStories: () => {
-      return fetch(`${HACKER_NEWS_API_URL}beststories.json`)
-        .then((response) => response.json())
-        .catch((error) => console.error(error));
-    },
-    askStories: () => {
-      return fetch(`${HACKER_NEWS_API_URL}askstories.json`)
-        .then((response) => response.json())
-        .catch((error) => console.error(error));
-    },
-    showStories: () => {
-      return fetch(`${HACKER_NEWS_API_URL}showstories.json`)
-        .then((response) => response.json())
-        .catch((error) => console.error(error));
-    },
-    jobStories: () => {
-      return fetch(`${HACKER_NEWS_API_URL}jobstories.json`)
-        .then((response) => response.json())
-        .catch((error) => console.error(error));
-    },
-    /**
+    .story-container span:hover::before {
+      display: inline-block;
+      content: "->";
+    }
+  </style>
+
+  <script type="text/javascript">
+    const HACKER_NEWS_API_URL = "https://hacker-news.firebaseio.com/v0/";
+    const HACKER_NEWS_USER_PROFILE_URL =
+      "https://news.ycombinator.com/user?id=";
+
+    const itemCache = new Map();
+
+    const API = {
+      topStories: () => {
+        return fetch(`${HACKER_NEWS_API_URL}topstories.json`)
+          .then((response) => response.json())
+          .catch((error) => console.error(error));
+      },
+      newStories: () => {
+        return fetch(`${HACKER_NEWS_API_URL}newstories.json`)
+          .then((response) => response.json())
+          .catch((error) => console.error(error));
+      },
+      bestStories: () => {
+        return fetch(`${HACKER_NEWS_API_URL}beststories.json`)
+          .then((response) => response.json())
+          .catch((error) => console.error(error));
+      },
+      askStories: () => {
+        return fetch(`${HACKER_NEWS_API_URL}askstories.json`)
+          .then((response) => response.json())
+          .catch((error) => console.error(error));
+      },
+      showStories: () => {
+        return fetch(`${HACKER_NEWS_API_URL}showstories.json`)
+          .then((response) => response.json())
+          .catch((error) => console.error(error));
+      },
+      jobStories: () => {
+        return fetch(`${HACKER_NEWS_API_URL}jobstories.json`)
+          .then((response) => response.json())
+          .catch((error) => console.error(error));
+      },
+      /**
      * Stories, comments, jobs, Ask HNs and even polls are just items. They're 
      * identified by their ids, which are unique integers, and live under 
      * /v0/item/<id>.
@@ -372,154 +460,314 @@ terciary
       * @param {number} id
       *
       */
-    item: (id) => {
-      if (itemCache.has(id)) return Promise.resolve(itemCache.get(id));
-      return fetch(`${HACKER_NEWS_API_URL}item/${id}.json`)
-        .then((response) => response.json())
-        .then((item) => {
-          itemCache.set(id, item);
-          return item;
-        })
-        .catch((error) => console.error(error));
-    },
-    user: (id) => {
-      return fetch(`${HACKER_NEWS_API_URL}user/${id}.json`)
-        .then((response) => response.json())
-        .catch((error) => console.error(error));
-    },
-  };
-</script>
+      item: (id) => {
+        if (itemCache.has(id)) return Promise.resolve(itemCache.get(id));
+        return fetch(`${HACKER_NEWS_API_URL}item/${id}.json`)
+          .then((response) => response.json())
+          .then((item) => {
+            itemCache.set(id, item);
+            return item;
+          })
+          .catch((error) => console.error(error));
+      },
+      user: (id) => {
+        return fetch(`${HACKER_NEWS_API_URL}user/${id}.json`)
+          .then((response) => response.json())
+          .catch((error) => console.error(error));
+      },
+    };
+  </script>
 
-<script type="text/javascript">
-  const ARTICLE_MIN_DELAY_SECONDS = 0.001;
-  const ARTICLE_MAX_DELAY_SECONDS = 3;
-  const MILLISECONDS_IN_SECOND = 1_000;
-  const TOTAL_ANIMATION_STRINGS = 100;
-  const LOADING_STRING_MIN_LENGTH = 33;
-  const LOADING_STRING_MAX_LENGTH = 55;
-  const MOBILE_DEVICE_MAX_WIDTH = 600;
+  <script type="text/javascript">
+    const ARTICLE_MIN_DELAY_SECONDS = 0.001;
+    const ARTICLE_MAX_DELAY_SECONDS = 3;
+    const MILLISECONDS_IN_SECOND = 1_000;
+    const TOTAL_ANIMATION_STRINGS = 100;
+    const LOADING_STRING_MIN_LENGTH = 33;
+    const LOADING_STRING_MAX_LENGTH = 55;
+    const MOBILE_DEVICE_MAX_WIDTH = 600;
 
-  /**
-   * Generate random delay for article title animation
-   */
-  function getArticleTitleAnimationDelay() {
-    return (
-      Math.floor(
-        Math.random() * ARTICLE_MAX_DELAY_SECONDS + ARTICLE_MIN_DELAY_SECONDS
-      ) * MILLISECONDS_IN_SECOND
-    );
-  }
+    /**
+     * Generate random delay for article title animation
+     */
+    function getArticleTitleAnimationDelay() {
+      return (
+        Math.floor(
+          Math.random() * ARTICLE_MAX_DELAY_SECONDS + ARTICLE_MIN_DELAY_SECONDS
+        ) * MILLISECONDS_IN_SECOND
+      );
+    }
 
-  function wait(timeInMs) {
-    return new Promise((resolve) => {
-      setTimeout(resolve, timeInMs);
+    function wait(timeInMs) {
+      return new Promise((resolve) => {
+        setTimeout(resolve, timeInMs);
+      });
+    }
+
+    function getHackerNewsPosterURLFromId(id) {
+      return `${HACKER_NEWS_USER_PROFILE_URL}${id}`;
+    }
+
+    function dragElement(elmnt) {
+      let pos1 = 0,
+        pos2 = 0,
+        pos3 = 0,
+        pos4 = 0;
+
+      document.querySelector(".modal-window-title").onmousedown = dragMouseDown;
+
+      function dragMouseDown(e) {
+        e = e || window.event;
+        e.preventDefault();
+        // get the mouse cursor position at startup:
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        document.onmouseup = closeDragElement;
+        // call a function whenever the cursor moves:
+        document.onmousemove = elementDrag;
+      }
+
+      function elementDrag(e) {
+        e = e || window.event;
+        e.preventDefault();
+        // calculate the new cursor position:
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        // set the element's new position:
+        elmnt.style.top = elmnt.offsetTop - pos2 + "px";
+        elmnt.style.left = elmnt.offsetLeft - pos1 + "px";
+      }
+
+      function closeDragElement() {
+        // stop moving when mouse button is released:
+        document.onmouseup = null;
+        document.onmousemove = null;
+      }
+    }
+
+    function generateLoadingString(length) {
+      // Expanded character set to include symbols fitting Matrix, brutalist, cyberpunk aesthetics, and programming
+      const characters =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+=-[]{}|;:,.<>?♥♦♣♠•◘○◆☻☺♂♀♪♫☼►◄↕‼¶§▬↨↑↓→←∟↔▲▼ァアィイゥウェエォオカガキギクゲゴサザシジスゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャユョヨラリルレロヮワヰヱヲン々〆〤￥「」『』【】〒〓─━│┃┄┅┆┇┈┉┊┋┌┍┎┏┐┑┒┓└┕┖┗┘┙┚┛├┝┞┟┠┡┢┣┤┥┦┧┨┩┪┫┬┭┮┯┰┱┲┳┴┵┶┷┸┹┺┻┼┽┾┿╀╁╂╃╄╅╆╇╈╉╊╋╌╍╎╏═║╒╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡╢╣╤╥╦╧╨╩╪╫╬§¶☊☋☌☍ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθικλμνξοπρςστυφχψω←↑→↓↔↕↖↗↘↙↚↛↜↝↞↟↠↡↢↣↤↥↦↧↨↩↪↫↬↭↮↯↰↱↲↳↴↵↶↷↸↹↺↻↼↽↾↿⇀⇁⇂⇃⇄⇅⇆⇇⇈⇉⇊⇋⇌⇍⇎⇏⇐⇑⇒⇓⇔⇕⇖⇗⇘⇙⇚⇛⇜⇝⇞⇟⇠⇡⇢⇣⇤⇥⇦⇧⇨⇩⇪⌨";
+      let result = "";
+      for (let i = 0; i < length; i++) {
+        result += characters.charAt(
+          Math.floor(Math.random() * characters.length)
+        );
+      }
+      return result;
+    }
+
+    // Generates 300 loading strings in parallel, with length randomly varying from 22-55 characters
+    async function precomputeLoadingStrings() {
+      const loadingStrings = [];
+      for (let i = 0; i < TOTAL_ANIMATION_STRINGS; i++) {
+        loadingStrings.push(
+          generateLoadingString(
+            Math.random() *
+              (LOADING_STRING_MAX_LENGTH - LOADING_STRING_MIN_LENGTH) +
+              LOADING_STRING_MIN_LENGTH
+          )
+        );
+      }
+      return loadingStrings;
+    }
+
+    const NAVIGATION_OPTIONS = {
+      TOP: "top",
+      NEW: "new",
+      BEST: "best",
+      ASK: "ask",
+      SHOW: "show",
+      JOB: "job",
+      FAVORITES: "favorites",
+      SETTINGS: "settings",
+    };
+
+    function updateDOMForNavigationOption(option) {
+      Object.entries(NAVIGATION_OPTIONS).forEach(([key, value]) => {
+        if (value === option) {
+          document
+            .querySelector(`#nav-button-${value}`)
+            .classList.add("text-link-button--selected");
+        } else {
+          document
+            .querySelector(`#nav-button-${value}`)
+            .classList.remove("text-link-button--selected");
+        }
+        document.querySelector(`#${value}-outlet`).style.display =
+          value === option ? "block" : "none";
+      });
+    }
+
+    /**
+     * Utility for handling state and side effects, listening for changes
+     */
+    function reactive(initialState, sideEffect) {
+      let state = initialState;
+      const current = () => state;
+
+      const update = (newState) => {
+        state = newState;
+        sideEffect(state);
+      };
+
+      const observers = [];
+      const subscribe = (observer) => observers.push(observer);
+
+      const notify = () => {
+        observers.forEach((observer) => observer(state));
+      };
+
+      return {
+        current,
+        update,
+        subscribe,
+        notify,
+      };
+    }
+
+    const topStoryElements = reactive([], (newState) => {
+      console.log("Top story elements:", newState);
+      document.querySelector("#top-outlet").innerHTML = "";
+      newState.forEach((storyElement) => {
+        document.querySelector("#top-outlet").appendChild(storyElement);
+      });
     });
-  }
 
-  function getHackerNewsPosterURLFromId(id) {
-    return `${HACKER_NEWS_USER_PROFILE_URL}${id}`;
-  }
-
-  function dragElement(elmnt) {
-    let pos1 = 0,
-      pos2 = 0,
-      pos3 = 0,
-      pos4 = 0;
-
-    document.querySelector(".modal-window-title").onmousedown = dragMouseDown;
-
-    function dragMouseDown(e) {
-      e = e || window.event;
-      e.preventDefault();
-      // get the mouse cursor position at startup:
-      pos3 = e.clientX;
-      pos4 = e.clientY;
-      document.onmouseup = closeDragElement;
-      // call a function whenever the cursor moves:
-      document.onmousemove = elementDrag;
-    }
-
-    function elementDrag(e) {
-      e = e || window.event;
-      e.preventDefault();
-      // calculate the new cursor position:
-      pos1 = pos3 - e.clientX;
-      pos2 = pos4 - e.clientY;
-      pos3 = e.clientX;
-      pos4 = e.clientY;
-      // set the element's new position:
-      elmnt.style.top = elmnt.offsetTop - pos2 + "px";
-      elmnt.style.left = elmnt.offsetLeft - pos1 + "px";
-    }
-
-    function closeDragElement() {
-      // stop moving when mouse button is released:
-      document.onmouseup = null;
-      document.onmousemove = null;
-    }
-  }
-
-  function generateLoadingString(length) {
-    // Expanded character set to include symbols fitting Matrix, brutalist, cyberpunk aesthetics, and programming
-    const characters =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+=-[]{}|;:,.<>?♥♦♣♠•◘○◆☻☺♂♀♪♫☼►◄↕‼¶§▬↨↑↓→←∟↔▲▼ァアィイゥウェエォオカガキギクゲゴサザシジスゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャユョヨラリルレロヮワヰヱヲン々〆〤￥「」『』【】〒〓─━│┃┄┅┆┇┈┉┊┋┌┍┎┏┐┑┒┓└┕┖┗┘┙┚┛├┝┞┟┠┡┢┣┤┥┦┧┨┩┪┫┬┭┮┯┰┱┲┳┴┵┶┷┸┹┺┻┼┽┾┿╀╁╂╃╄╅╆╇╈╉╊╋╌╍╎╏═║╒╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡╢╣╤╥╦╧╨╩╪╫╬§¶☊☋☌☍ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθικλμνξοπρςστυφχψω←↑→↓↔↕↖↗↘↙↚↛↜↝↞↟↠↡↢↣↤↥↦↧↨↩↪↫↬↭↮↯↰↱↲↳↴↵↶↷↸↹↺↻↼↽↾↿⇀⇁⇂⇃⇄⇅⇆⇇⇈⇉⇊⇋⇌⇍⇎⇏⇐⇑⇒⇓⇔⇕⇖⇗⇘⇙⇚⇛⇜⇝⇞⇟⇠⇡⇢⇣⇤⇥⇦⇧⇨⇩⇪⌨";
-    let result = "";
-    for (let i = 0; i < length; i++) {
-      result += characters.charAt(
-        Math.floor(Math.random() * characters.length)
+    const topStoryIds = reactive([], (newState) => {
+      console.log("Top story ids:", newState);
+      topStoryElements.update(
+        newState.map((storyId) => new StoryListElement(storyId))
       );
-    }
-    return result;
-  }
+    });
 
-  // Generates 300 loading strings in parallel, with length randomly varying from 22-55 characters
-  async function precomputeLoadingStrings() {
-    const loadingStrings = [];
-    for (let i = 0; i < TOTAL_ANIMATION_STRINGS; i++) {
-      loadingStrings.push(
-        generateLoadingString(
-          Math.random() *
-          (LOADING_STRING_MAX_LENGTH - LOADING_STRING_MIN_LENGTH) +
-          LOADING_STRING_MIN_LENGTH
-        )
+    const newStoryElements = reactive([], (newState) => {
+      console.log("New story elements:", newState);
+      document.querySelector("#new-outlet").innerHTML = "";
+      newState.forEach((storyElement) => {
+        document.querySelector("#new-outlet").appendChild(storyElement);
+      });
+    });
+
+    const newStoryIds = reactive([], (newState) => {
+      console.log("New story ids:", newState);
+      newStoryElements.update(
+        newState.map((storyId) => new StoryListElement(storyId))
       );
-    }
-    return loadingStrings;
-  }
+    });
 
+    const bestStoryElements = reactive([], (newState) => {
+      console.log("Best story elements:", newState);
+      document.querySelector("#best-outlet").innerHTML = "";
+      newState.forEach((storyElement) => {
+        document.querySelector("#best-outlet").appendChild(storyElement);
+      });
+    });
 
-  async function main() {
-    // Precompute loading strings first
-    const loadingStrings = await precomputeLoadingStrings();
-    const getRandomLoadingString = () =>
-      loadingStrings[Math.floor(Math.random() * TOTAL_ANIMATION_STRINGS)];
+    const bestStoryIds = reactive([], (newState) => {
+      console.log("Best story ids:", newState);
+      bestStoryElements.update(
+        newState.map((storyId) => new StoryListElement(storyId))
+      );
+    });
 
-    // References to DOM elements
-    const $mainContent = document.querySelector(".main-content");
-    const $storiesContainerElement =
-      document.getElementById("stories-container");
-    const $modalElement = document.getElementById("modal");
-    const $storyIframeElement = document.getElementById("story-iframe");
-    const $modalStoryTitleElement = document.getElementById("article-name");
-    const $modalOpenLinkButtonElement = document.getElementById("open-link");
-    const $modalCloseButtonElement = document.querySelector(".close-button");
-    const $modalPosterNameElement = document.getElementById("poster-name");
+    const askStoryElements = reactive([], (newState) => {
+      console.log("Ask story elements:", newState);
+      document.querySelector("#ask-outlet").innerHTML = "";
+      newState.forEach((storyElement) => {
+        document.querySelector("#ask-outlet").appendChild(storyElement);
+      });
+    });
 
-    dragElement($modalElement);
+    const askStoryIds = reactive([], (newState) => {
+      console.log("Ask story ids:", newState);
+      askStoryElements.update(
+        newState.map((storyId) => new StoryListElement(storyId))
+      );
+    });
 
-    const blurMainContent = () => {
-      document.querySelector(".main-content").style.filter = "blur(5px)";
-    };
-    const unblurMainContent = () => {
-      document.querySelector(".main-content").style.filter = "none";
-    };
+    const showStoryElements = reactive([], (newState) => {
+      console.log("Show story elements:", newState);
+      document.querySelector("#show-outlet").innerHTML = "";
+      newState.forEach((storyElement) => {
+        document.querySelector("#show-outlet").appendChild(storyElement);
+      });
+    });
 
-    const showModal = () => ($modalElement.style.display = "flex");
-    const hideModal = () => {
-      $modalElement.style.display = "none";
-      unblurMainContent();
-    };
-    $modalCloseButtonElement.addEventListener("click", hideModal);
+    const showStoryIds = reactive([], (newState) => {
+      console.log("Show story ids:", newState);
+      showStoryElements.update(
+        newState.map((storyId) => new StoryListElement(storyId))
+      );
+    });
+
+    const jobStoryElements = reactive([], (newState) => {
+      console.log("Job story elements:", newState);
+      document.querySelector("#job-outlet").innerHTML = "";
+      newState.forEach((storyElement) => {
+        document.querySelector("#job-outlet").appendChild(storyElement);
+      });
+    });
+
+    const jobStoryIds = reactive([], (newState) => {
+      console.log("Job story ids:", newState);
+      jobStoryElements.update(
+        newState.map((storyId) => new StoryListElement(storyId))
+      );
+    });
+
+    const favorites = reactive([], (newState) => {
+      console.log("Favorites:", newState);
+    });
+
+    const selectedSection = reactive(NAVIGATION_OPTIONS.TOP, (newState) => {
+      updateDOMForNavigationOption(newState);
+
+      switch (newState) {
+        case NAVIGATION_OPTIONS.TOP:
+          console.log("inside switch");
+          API.topStories().then((storyIds) => {
+            topStoryIds.update(storyIds);
+          });
+          break;
+        case NAVIGATION_OPTIONS.NEW:
+          API.newStories().then((storyIds) => {
+            newStoryIds.update(storyIds);
+          });
+          break;
+        case NAVIGATION_OPTIONS.BEST:
+          API.bestStories().then((storyIds) => {
+            bestStoryIds.update(storyIds);
+          });
+          break;
+        case NAVIGATION_OPTIONS.ASK:
+          API.askStories().then((storyIds) => {
+            askStoryIds.update(storyIds);
+          });
+          break;
+        case NAVIGATION_OPTIONS.SHOW:
+          API.showStories().then((storyIds) => {
+            showStoryIds.update(storyIds);
+          });
+          break;
+        case NAVIGATION_OPTIONS.JOB:
+          API.jobStories().then((storyIds) => {
+            jobStoryIds.update(storyIds);
+          });
+          break;
+        case NAVIGATION_OPTIONS.FAVORITES:
+          console.log("complete me");
+          break;
+        case NAVIGATION_OPTIONS.SETTINGS:
+          console.log("complete me");
+          break;
+        default:
+          console.error("Invalid navigation option");
+      }
+    });
 
     function StoryListElement(storyId) {
       // Create html element for story
@@ -531,22 +779,11 @@ terciary
       storyContainer.innerHTML = `<span>${getRandomLoadingString()}}</span>`;
 
       API.item(storyId).then(async (story) => {
-        // and again
-        await wait(getArticleTitleAnimationDelay());
-        storyContainer.innerHTML = `<span>${getRandomLoadingString()}}</span>`;
-
-        // ... and again
-        await wait(getArticleTitleAnimationDelay());
-        storyContainer.innerHTML = `<span>${getRandomLoadingString()}}</span>`;
-
-        // Now assign actual data and event listeners
         storyContainer.firstChild.textContent = story.title;
         storyContainer.addEventListener("click", () => {
           $storyIframeElement.src = story.url;
           $modalOpenLinkButtonElement.href = story.url;
-          $modalPosterNameElement.href = getHackerNewsPosterURLFromId(
-            story.by
-          );
+          $modalPosterNameElement.href = getHackerNewsPosterURLFromId(story.by);
           showModal();
         });
       });
@@ -554,52 +791,114 @@ terciary
       return storyContainer;
     }
 
-    function handleModalSizing() {
-      if (window.innerWidth < MOBILE_DEVICE_MAX_WIDTH) {
-        $modalElement.style.width = "90%";
-        $modalElement.style.height = "99%";
-        return;
-      }
-      $modalElement.style.width = "50%";
-      $modalElement.style.height = "50%";
-    }
+    let loadingStrings = ["loading..."];
+    precomputeLoadingStrings().then((strings) => {
+      loadingStrings = strings;
+    });
 
-    function handleModalPosition() {
-      if (window.innerWidth < MOBILE_DEVICE_MAX_WIDTH) {
-        $modalElement.style.top = "0";
-        $modalElement.style.left = "0";
-        return;
-      }
-      $modalElement.style.top = "25%";
-      $modalElement.style.left = "25%";
-    }
+    const getRandomLoadingString = () =>
+      loadingStrings[Math.floor(Math.random() * TOTAL_ANIMATION_STRINGS)];
 
-    const loadData = () => {
-      $mainContent.classList.add("use-fade-to-black");
-      API.topStories()
-        .then((storyIds) => {
-          storyIds.map((storyId) =>
-            $storiesContainerElement.appendChild(
-              new StoryListElement(storyId)
-            )
-          );
-        })
-        .catch((error) => {
-          console.error(error);
-        })
-        .finally(() => {
-          $mainContent.classList.remove("use-fade-to-black");
+    function attachNavigationButtonClickListeners() {
+      document
+        .querySelector("#nav-button-top")
+        .addEventListener("click", () => {
+          selectedSection.update(NAVIGATION_OPTIONS.TOP);
         });
+      document
+        .querySelector("#nav-button-new")
+        .addEventListener("click", () => {
+          selectedSection.update(NAVIGATION_OPTIONS.NEW);
+        });
+      document
+        .querySelector("#nav-button-best")
+        .addEventListener("click", () => {
+          selectedSection.update(NAVIGATION_OPTIONS.BEST);
+        });
+      document
+        .querySelector("#nav-button-ask")
+        .addEventListener("click", () => {
+          selectedSection.update(NAVIGATION_OPTIONS.ASK);
+        });
+      document
+        .querySelector("#nav-button-show")
+        .addEventListener("click", () => {
+          selectedSection.update(NAVIGATION_OPTIONS.SHOW);
+        });
+      document
+        .querySelector("#nav-button-job")
+        .addEventListener("click", () => {
+          selectedSection.update(NAVIGATION_OPTIONS.JOB);
+        });
+      document
+        .querySelector("#nav-button-favorites")
+        .addEventListener("click", () => {
+          selectedSection.update(NAVIGATION_OPTIONS.FAVORITES);
+        });
+      document
+        .querySelector("#nav-button-settings")
+        .addEventListener("click", () => {
+          selectedSection.update(NAVIGATION_OPTIONS.SETTINGS);
+        });
+    }
+
+    async function main() {
+      // References to DOM elements
+      window.$mainContent = document.querySelector(".main-content");
+      window.$storiesContainerElement =
+        document.getElementById("stories-outlet");
+      window.$modalElement = document.getElementById("modal");
+      window.$storyIframeElement = document.getElementById("story-iframe");
+      window.$modalStoryTitleElement = document.getElementById("article-name");
+      window.$modalOpenLinkButtonElement = document.getElementById("open-link");
+      window.$modalCloseButtonElement = document.querySelector(".close-button");
+      window.$modalPosterNameElement = document.getElementById("poster-name");
+
+      dragElement($modalElement);
+
+      const blurMainContent = () => {
+        document.querySelector(".main-content").style.filter = "blur(5px)";
+      };
+      const unblurMainContent = () => {
+        document.querySelector(".main-content").style.filter = "none";
+      };
+
+      window.showModal = () => ($modalElement.style.display = "flex");
+      window.hideModal = () => {
+        $modalElement.style.display = "none";
+        unblurMainContent();
+      };
+      $modalCloseButtonElement.addEventListener("click", hideModal);
+
+      function handleModalSizing() {
+        if (window.innerWidth < MOBILE_DEVICE_MAX_WIDTH) {
+          $modalElement.style.width = "90%";
+          $modalElement.style.height = "99%";
+          return;
+        }
+        $modalElement.style.width = "50%";
+        $modalElement.style.height = "50%";
+      }
+
+      function handleModalPosition() {
+        if (window.innerWidth < MOBILE_DEVICE_MAX_WIDTH) {
+          $modalElement.style.top = "0";
+          $modalElement.style.left = "0";
+          return;
+        }
+        $modalElement.style.top = "25%";
+        $modalElement.style.left = "25%";
+      }
+
+      handleModalSizing();
+      handleModalPosition();
+      attachNavigationButtonClickListeners();
+    }
+
+    selectedSection.update(NAVIGATION_OPTIONS.TOP);
+
+    document.onreadystatechange = () => {
+      if (document.readyState === "complete") main();
     };
-
-    loadData();
-    handleModalSizing();
-    handleModalPosition();
-  }
-
-  document.onreadystatechange = () => {
-    if (document.readyState === "complete") main();
-  };
-</script>
-
+  </script>
 </html>
