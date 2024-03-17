@@ -392,6 +392,7 @@
       resize: both;
       box-shadow: var(--box-shadow-highlight);
       z-index: 15;
+      overflow-x: hidden;
     }
 
     .modal-window-title {
@@ -407,6 +408,8 @@
       justify-content: space-evenly;
       border-bottom: var(--color-primary) 3px solid;
       box-shadow: var(--box-shadow-highlight);
+      position:fixed;
+      width: 100%;
     }
 
     .modal-window-title:hover {
@@ -451,7 +454,9 @@
 
     .modal-content {
       flex-grow: 1;
+      height: 100%;
       overflow: hidden;
+      overflow-y: hidden;
       background-color: var(--color-light);
       background: var(--color-light);
     }
@@ -569,6 +574,8 @@
     const ANIMATION_CHARACTERS_STRING =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+=-[]{}|;:,.<>?♥♦♣♠•◘○◆☻☺♂♀♪♫☼►◄↕‼¶§▬↨↑↓→←∟↔▲▼ァアィイゥウェエォオカガキギクゲゴサザシジスゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャユョヨラリルレロヮワヰヱヲン々〆〤￥「」『』【】〒〓─━│┃┄┅┆┇┈┉┊┋┌┍┎┏┐┑┒┓└┕┖┗┘┙┚┛├┝┞┟┠┡┢┣┤┥┦┧┨┩┪┫┬┭┮┯┰┱┲┳┴┵┶┷┸┹┺┻┼┽┾┿╀╁╂╃╄╅╆╇╈╉╊╋╌╍╎╏═║╒╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡╢╣╤╥╦╧╨╩╪╫╬§¶☊☋☌☍ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθικλμνξοπρςστυφχψω←↑→↓↔↕↖↗↘↙↚↛↜↝↞↟↠↡↢↣↤↥↦↧↨↩↪↫↬↭↮↯↰↱↲↳↴↵↶↷↸↹↺↻↼↽↾↿⇀⇁⇂⇃⇄⇅⇆⇇⇈⇉⇊⇋⇌⇍⇎⇏⇐⇑⇒⇓⇔⇕⇖⇗⇘⇙⇚⇛⇜⇝⇞⇟⇠⇡⇢⇣⇤⇥⇦⇧⇨⇩⇪⌨";
     // TODO: add more of these incase of future alteration
+    const TWITTER_SHARE_URL =
+      "https://twitter.com/intent/tweet?text=Check%20out%20this%20awesome%20content&url=";
   </script>
 
   <!-- API -->
@@ -725,6 +732,62 @@
         subscribe,
         notify,
       };
+    }
+
+    function shareOnTwitter(story) {
+      window.open(
+        `${TWITTER_SHARE_URL}${story.url || window.location.href}`,
+        "_blank"
+      );
+    }
+
+    function shareStory(story) {
+      if (!!navigator.canShare && navigator.canShare() && !!navigator.share) {
+        navigator
+          .share({
+            title: story.title,
+            text: story.text || story.title,
+            url: story.url || window.location.href,
+          })
+          .then(() => console.log("Successful share"))
+          .catch((error) => shareOnTwitter(story));
+      } else {
+        shareOnTwitter(story);
+      }
+    }
+  </script>
+
+  <!-- Favorites -->
+  <script>
+    function loadFavorites() {
+      const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+      const favoriteStories = document.querySelector("#favorites-outlet");
+      favoriteStories.innerHTML = "";
+      favorites.forEach((storyId) => {
+        favoriteStories.appendChild(StoryListElement(storyId));
+      });
+    }
+
+    function favoriteStory(storyId) {
+      const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+      if (favorites.includes(storyId)) {
+        return;
+      }
+      favorites.push(storyId);
+      localStorage.setItem("favorites", JSON.stringify(favorites));
+      loadFavorites();
+    }
+
+    function unfavoriteStory(storyId) {
+      const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+      const newFavorites = favorites.filter((id) => id !== storyId);
+      localStorage.setItem("favorites", JSON.stringify(newFavorites));
+      loadFavorites();
+    }
+
+    function isStoryFavorited(storyId) {
+      const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+      return favorites.includes(storyId);
     }
   </script>
 
@@ -1047,22 +1110,36 @@
       const modal = document.createElement("div");
       modal.classList.add("modal");
       modal.classList.add("use-gpu-rendering");
+
+      const isFavorited = isStoryFavorited(story.id);
+
       modal.innerHTML = `<div class="modal-window-title">
+        <button id="close-button-${story.id}" class="close-button">
+         CLOSE
+        </button>
+
         <button
           id="open-link-${story.id}"
-          class="text-link-button"
         >
-          [OPEN IN NEW TAB]
+         OPEN EXTERNAL
         </button>
+
         <button
           id="poster-name-${story.id}"
-          class="text-link-button"
         >
-          [VIEW POSTER PROFILE]
+          VIEW POSTER PROFILE
         </button>
-        <button id="close-button-${story.id}" class="close-button text-link-button">
-          [CLOSE WINDOW]
+
+        <button id="share-story-${story.id}">
+          SHARE
         </button>
+
+        ${
+          isFavorited
+            ? `<button id="favorite-story-button-${story.id}">SAVED</button>`
+            : `<button id="favorite-story-button-${story.id}">SAVE</button>`
+        }
+       
       </div>
       <div class="modal-content">
         <iframe id="story-iframe-${story.id}" src="${story.url}"></iframe>
@@ -1100,6 +1177,35 @@
         .querySelector(`#close-button-${story.id}`)
         .addEventListener("click", () => {
           modal.remove();
+        });
+
+      modal
+        .querySelector(`#share-story-${story.id}`)
+        .addEventListener("click", () => {
+          shareStory(story);
+        });
+
+      const updateFavoriteButtonState = () => {
+        if (isStoryFavorited(story.id)) {
+          modal.querySelector(
+            `#favorite-story-button-${story.id}`
+          ).textContent = "SAVED";
+        } else {
+          modal.querySelector(
+            `#favorite-story-button-${story.id}`
+          ).textContent = "SAVE";
+        }
+      };
+
+      modal
+        .querySelector(`#favorite-story-button-${story.id}`)
+        .addEventListener("click", () => {
+          if (isStoryFavorited(story.id)) {
+            unfavoriteStory(story.id);
+          } else {
+            favoriteStory(story.id);
+          }
+          updateFavoriteButtonState();
         });
 
       return modal;
@@ -1349,7 +1455,7 @@
           });
           break;
         case NAVIGATION_OPTIONS.FAVORITES:
-          console.log("complete me");
+          loadFavorites();
           break;
         case NAVIGATION_OPTIONS.SETTINGS:
           console.log("complete me");
@@ -1379,6 +1485,7 @@
       attachNavigationButtonClickListeners();
       loadSettingsFromLocalStorage();
       initializeSettings();
+      loadFavorites();
       // This triggers root propagation of state changes
       selectedSection.update(NAVIGATION_OPTIONS.TOP);
     }
