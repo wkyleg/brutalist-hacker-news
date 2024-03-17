@@ -97,27 +97,159 @@
         id="settings-outlet"
         class="use-gpu-rendering"
         style="display: none"
-      ></section>
+      >
+        <div
+          class="settings-content"
+          role="table"
+          id="settings-content-container"
+        >
+          <div class="setting-element" id="setting--color-primary">
+            <div class="setting-name">primary</div>
+            <div class="setting-new-value-input">
+              <input
+                type="color"
+                id="setting-input--color-primary"
+                style="border-color: var(--color-primary)"
+              />
+            </div>
+            <button
+              class="setting-apply-button"
+              id="apply-setting--color-primary"
+            >
+              APPLY
+            </button>
+            <button
+              class="setting-reset-button"
+              id="reset-setting--color-primary"
+            >
+              RESET
+            </button>
+          </div>
+          <div class="setting-element" id="setting--color-secondary">
+            <div class="setting-name">secondary</div>
+            <div class="setting-new-value-input">
+              <input type="color" id="setting-input--color-secondary" />
+            </div>
+            <button
+              class="setting-apply-button"
+              id="apply-setting--color-secondary"
+            >
+              APPLY
+            </button>
+            <button
+              class="setting-reset-button"
+              id="reset-setting--color-secondary"
+            >
+              RESET
+            </button>
+          </div>
+          <div class="setting-element" id="setting--color-accent-1">
+            <div class="setting-name">accent-1</div>
+            <div class="setting-new-value-input">
+              <input type="color" id="setting-input--color-accent-1" />
+            </div>
+            <button
+              class="setting-apply-button"
+              id="apply-setting--color-accent-1"
+            >
+              APPLY
+            </button>
+            <button
+              class="setting-reset-button"
+              id="reset-setting--color-accent-1"
+            >
+              RESET
+            </button>
+          </div>
+          <div class="setting-element" id="setting--color-accent-2">
+            <div class="setting-name">accent-2</div>
+            <div class="setting-new-value-input">
+              <input type="color" id="setting-input--color-accent-2" />
+            </div>
+            <button
+              class="setting-apply-button"
+              id="apply-setting--color-accent-2"
+            >
+              APPLY
+            </button>
+            <button
+              class="setting-reset-button"
+              id="reset-setting--color-accent-2"
+            >
+              RESET
+            </button>
+          </div>
+          <div class="setting-element" id="setting--color-dark">
+            <div class="setting-name">dark</div>
+            <div class="setting-new-value-input">
+              <input type="color" id="setting-input--color-dark" />
+            </div>
+            <button class="setting-apply-button" id="apply-setting--color-dark">
+              APPLY
+            </button>
+            <button class="setting-reset-button" id="reset-setting--color-dark">
+              RESET
+            </button>
+          </div>
+          <div class="setting-element" id="setting--color-light">
+            <div class="setting-name">light</div>
+            <div class="setting-new-value-input">
+              <input type="color" id="setting-input--color-light" />
+            </div>
+            <button
+              class="setting-apply-button"
+              id="apply-setting--color-light"
+            >
+              APPLY
+            </button>
+            <button
+              class="setting-reset-button"
+              id="reset-setting--color-light"
+            >
+              RESET
+            </button>
+          </div>
+          <div class="setting-element" id="setting--color-text-main">
+            <div class="setting-name">text-main</div>
+            <div class="setting-new-value-input">
+              <input type="color" id="setting-input--color-text-main" />
+            </div>
+            <button
+              class="setting-apply-button"
+              id="apply-setting--color-text-main"
+            >
+              APPLY
+            </button>
+            <button
+              class="setting-reset-button"
+              id="reset-setting--color-text-main"
+            >
+              RESET
+            </button>
+          </div>
+        </div>
+      </section>
     </main>
   </body>
 
   <style>
     :root {
       /* Default olor scheme inspired by brutalist design and cyberpunk */
-      --color-primary: rgba(227, 6, 19, 0.8);
-      --color-secondary: rgba(255, 237, 0, 1);
-      --color-tertiary: #f6d365;
+      --color-primary:#e30613;
+      --color-secondary: #ffed00;
       --color-accent-1: #f6d365;
       --color-accent-2: #fda085;
-      --color-dark: rgba(0, 0, 0, 0.4);
-      --color-light: white;
-      --color-text-main: darkslategrey;
+      --color-dark: #3c3c3c
+      --color-light: #FFFFFF;
+      --color-text-main: #2f4f4f ;
 
       /* Shading Utilities */
       --text-shadow-highlight: 1px 1px var(--color-primary),
         -1px -1px var(--color-secondary);
       --box-shadow-highlight: 5px 5px var(--color-primary),
         -5px -5px var(--color-secondary);
+      --box-shadow-highlight-mild: 1px 1px var(--color-primary),
+        -1px -1px var(--color-secondary);
       --backgound-linear-gradient: linear-gradient(
         120deg,
         var(--color-accent-1) 0%,
@@ -144,6 +276,28 @@
 
     * {
       font-family: Menlo, monospace;
+      border-radius: 0;
+      color: var(--color-text-main);
+      border: 0;
+      border-radius: 0;
+    }
+
+    input {
+      color: var(--color-text-main);
+      padding-block: 0;
+      padding-inline: 0;
+      margin-block: 0;
+      margin-inline: 0;
+    }
+
+    button {
+      cursor: pointer;
+      background: var(--color-light);
+      color: var(--color-text-main);
+    }
+
+    button:hover {
+      filter: brightness(1.2);
     }
 
     @keyframes fade-to-black {
@@ -161,7 +315,7 @@
     }
 
     ::-webkit-scrollbar-track {
-      background: var(--color-tertiary);
+      background: var(--color-accent-1);
     }
 
     ::-webkit-scrollbar-thumb {
@@ -246,7 +400,7 @@
       font-size: var(--size-sm);
       display: flex;
       align-items: left;
-      background-color: var(--color-tertiary);
+      background-color: var(--color-accent-1);
       color: var(--color-text-main);
       padding: var(--size-xxs);
       color: var(--color-primary);
@@ -362,6 +516,45 @@
     .story-container span:hover::before {
       display: inline-block;
       content: "->";
+    }
+
+    .settings-content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: left;
+      padding-top: var(--size-xxs);
+    }
+
+    .setting-element {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--size-xxs);
+    }
+
+    .setting-element:hover {
+      background: var(--color-secondary);
+    }
+
+    .setting-name {
+      min-width: var(--size-xxl);
+    }
+
+    .setting-new-value-input {
+      background: transparent;
+      border: 0;
+    }
+
+    .setting-apply-button, .setting-reset-button {
+      height: var(--size-md);
+    }
+
+
+
+    .settings-content button {
+      margin-left: var(--size-xs);
     }
   </style>
 
@@ -533,6 +726,112 @@
         notify,
       };
     }
+  </script>
+
+  <!-- Settings -->
+  <script type="text/javascript">
+    const SETTINGS = {
+      COLOR_PRIMARY: "--color-primary",
+      COLOR_SECONDARY: "--color-secondary",
+      COLOR_ACCENT_1: "--color-accent-1",
+      COLOR_ACCENT_2: "--color-accent-2",
+      COLOR_DARK: "--color-dark",
+      COLOR_LIGHT: "--color-light",
+      COLOR_TEXT_MAIN: "--color-text-main",
+    };
+
+    const SETTING__DEFAULT_VALUES = {
+      [SETTINGS.COLOR_PRIMARY]: "#e30613",
+      [SETTINGS.COLOR_SECONDARY]: "#ffed00",
+      [SETTINGS.COLOR_ACCENT_1]: "#f6d365",
+      [SETTINGS.COLOR_ACCENT_2]: "#fda085",
+      [SETTINGS.COLOR_DARK]: "#3c3c3c",
+      [SETTINGS.COLOR_LIGHT]: "#FFFFFF",
+      [SETTINGS.COLOR_TEXT_MAIN]: "#2f4f4f",
+    };
+
+    const convertToHexString = (rgba) => {
+      const [r, g, b, a] = rgba
+        .substring(5, rgba.length - 1)
+        .replace(/ /g, "")
+        .split(",");
+      return `#${parseInt(r).toString(16)}${parseInt(g).toString(16)}${parseInt(
+        b
+      ).toString(16)}`;
+    };
+
+    const convertToCSSInputValue = (string) => {
+      if (string.startsWith("#")) {
+        return string;
+      }
+      return convertToHexString(string);
+    };
+
+    const getCSSVariable = (variable) =>
+      getComputedStyle(document.documentElement).getPropertyValue(variable);
+
+    const setCSSVariable = (variable, value) =>
+      document.documentElement.style.setProperty(variable, value);
+
+    const loadSettingsFromLocalStorage = () => {
+      Object.entries(SETTINGS).forEach(([key, value]) => {
+        const storedValue = localStorage.getItem(value);
+        if (storedValue) {
+          setCSSVariable(value, storedValue);
+        }
+      });
+    };
+
+    const saveSettingToLocalStorage = (setting, value) => {
+      localStorage.setItem(setting, value);
+    };
+
+    const changeSetting = (setting, value) => {
+      setCSSVariable(setting, value);
+      saveSettingToLocalStorage(setting, value);
+    };
+
+    const updateSettingInputWithCurrentValue = (setting) => {
+      document.querySelector(`#setting-input${setting}`).value =
+        convertToCSSInputValue(getCSSVariable(setting));
+    };
+
+    const resetSetting = (setting) => {
+      changeSetting(setting, SETTING__DEFAULT_VALUES[setting]);
+      updateSettingInputWithCurrentValue(setting);
+    };
+
+    const initializeSettings = () => {
+      Object.entries(SETTINGS).forEach(([key, value]) => {
+        try {
+          const storedValue = localStorage.getItem(value);
+          if (!storedValue) {
+            setCSSVariable(value, SETTING__DEFAULT_VALUES[value]);
+            saveSettingToLocalStorage(value, SETTING__DEFAULT_VALUES[value]);
+          }
+
+          updateSettingInputWithCurrentValue(value);
+
+          document
+            .querySelector(`#apply-setting${value}`)
+            .addEventListener("click", () => {
+              changeSetting(
+                value,
+                document.querySelector(`#setting-input${value}`).value
+              );
+            });
+
+          document
+            .querySelector(`#reset-setting${value}`)
+            .addEventListener("click", () => {
+              resetSetting(value);
+            });
+        } catch (e) {
+          console.error(e);
+          resetSetting(value);
+        }
+      });
+    };
   </script>
 
   <!-- Navigation -->
@@ -1078,6 +1377,8 @@
     async function main() {
       initializeLoadingAnimation();
       attachNavigationButtonClickListeners();
+      loadSettingsFromLocalStorage();
+      initializeSettings();
       // This triggers root propagation of state changes
       selectedSection.update(NAVIGATION_OPTIONS.TOP);
     }
