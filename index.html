@@ -257,9 +257,19 @@
             </button>
           </div>
         </div>
+        <p>... or use pre built theme ...</p>
+        <div class="theme-buttons-row">
+          <button id="button-theme-default">DEFAULT</button>
+          <button id="button-theme-hacker">H@CK3R</button>
+          <button id="button-theme-l33t">l33+</button>
+          <button id="button-theme-dream-pop">DrE∀M P♡P</button>
+          <button id="button-theme-solar-flare">S☉l@r ⒻⓁⒶⓇⒺ</button>
+          <button id="button-theme-hippie">Ħłρρłε</button>
+        </div>
+
         <br />
         <button id="download-theme-button" class="settings-favorites-button">
-          DOWNLOAD THEME
+          DOWNLOAD CURRENT THEME
         </button>
         <br />
         <br />
@@ -1173,6 +1183,11 @@
         .settings-content button {
           margin-left: var(--size-xs);
         }
+
+        .theme-buttons-row button {
+          margin-bottom: var(--size-xs);
+          height: var(--size-md);
+        }
   </style>
 
   <!-- Constants -->
@@ -1456,6 +1471,62 @@
       [SETTINGS.COLOR_TEXT_MAIN]: "#2f4f4f",
     };
 
+    const themes = {
+      hacker: {
+        "--color-primary": "#00ff00", // Neon Green
+        "--color-secondary": "#ff00ff", // Neon Purple
+        "--color-accent-1": "#ff0000", // Bright Red
+        "--color-accent-2": "#0000ff", // Bright Blue
+        "--color-dark": "#000000", // Black
+        "--color-light": "#ffffff", // White
+        "--color-text-main": "#00ff00", // Neon Green
+      },
+      l33t: {
+        "--color-primary": "#08fdd8", // Aqua
+        "--color-secondary": "#f800ff", // Magenta
+        "--color-accent-1": "#1b1b1b", // Dark Gray
+        "--color-accent-2": "#333333", // Medium Gray
+        "--color-dark": "#080808", // Very Dark Gray
+        "--color-light": "#f0f0f0", // Off White
+        "--color-text-main": "#0033FF", // Aqua
+      },
+      "dream-pop": {
+        "--color-primary": "#ff77aa", // Pink
+        "--color-secondary": "#cc99ff", // Purple
+        "--color-accent-1": "#ff99ee", // Light Pink
+        "--color-accent-2": "#d1b3ff", // Light Purple
+        "--color-dark": "#342a4e", // Dark Purple
+        "--color-light": "#fff0f5", // Lavender Blush
+        "--color-text-main": "##808080", // Gray
+      },
+      "solar-flare": {
+        "--color-primary": "#ffffff", // White
+        "--color-secondary": "#000000", // Black
+        "--color-accent-1": "#ff0000", // Red
+        "--color-accent-2": "#ffff00", // Yellow
+        "--color-dark": "#000000", // Black
+        "--color-light": "#ffffff", // White
+        "--color-text-main": "#282828", // White
+      },
+      hippie: {
+        "--color-primary": "#fabd2f", // Yellow
+        "--color-secondary": "#d3869b", // Pink
+        "--color-accent-1": "#83a598", // Aqua
+        "--color-accent-2": "#b8bb26", // Green
+        "--color-dark": "#282828", // Dark Gray
+        "--color-light": "#ebdbb2", // Light Gray
+        "--color-text-main": "#fabd2f", // Yellow
+      },
+    };
+
+    const applyTheme = (theme) => {
+      Object.entries(theme).forEach(([key, value]) => {
+        setCSSVariable(key, value);
+        saveSettingToLocalStorage(key, value);
+        updateSettingInputWithCurrentValue(key);
+      });
+    };
+
     const convertToHexString = (rgba) => {
       const [r, g, b, a] = rgba
         .substring(5, rgba.length - 1)
@@ -1543,6 +1614,34 @@
           resetSetting(value);
         }
       });
+
+      document
+        .querySelector("#download-theme-button")
+        .addEventListener("click", downloadCurrentColorTheme);
+
+      document
+        .querySelector("#button-theme-default")
+        .addEventListener("click", () => applyTheme(SETTING__DEFAULT_VALUES));
+
+      document
+        .querySelector("#button-theme-hacker")
+        .addEventListener("click", () => applyTheme(themes.hacker));
+
+      document
+        .querySelector("#button-theme-l33t")
+        .addEventListener("click", () => applyTheme(themes.l33t));
+
+      document
+        .querySelector("#button-theme-dream-pop")
+        .addEventListener("click", () => applyTheme(themes["dream-pop"]));
+
+      document
+        .querySelector("#button-theme-solar-flare")
+        .addEventListener("click", () => applyTheme(themes["solar-flare"]));
+
+      document
+        .querySelector("#button-theme-hippie")
+        .addEventListener("click", () => applyTheme(themes.hippie));
     };
   </script>
 
