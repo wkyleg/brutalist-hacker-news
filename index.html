@@ -1154,11 +1154,18 @@
   <!-- Custom Elements -->
   <script type="text/javascript">
     /**
+     * Cache of callbacks to load stories into elements so that they are only
+     * loaded as brought into view.
+     */
+    const storyElementLoadingCallbacks = {};
+
+    /**
      * Story list element for a hacker news story
      * @param {number} storyId
+     * @param {boolean} loadContentImmediately
      * @returns {HTMLElement}
      */
-    function StoryListElement(storyId) {
+    function StoryListElement(storyId, loadContentImmediately = false) {
       // Create html element for story
       const storyContainer = document.createElement("div");
       storyContainer.id = storyId;
@@ -1167,12 +1174,18 @@
       // Assign random string for loading effect
       storyContainer.innerHTML = `<span>${getRandomLoadingString()}}</span>`;
 
-      API.item(storyId).then(async (story) => {
-        storyContainer.firstChild.textContent = story.title;
-        storyContainer.addEventListener("click", () => {
-          launchStoryModal(story);
+      const loadStory = () => {
+        API.item(storyId).then(async (story) => {
+          storyContainer.firstChild.textContent = story.title;
+          storyContainer.addEventListener("click", () => {
+            launchStoryModal(story);
+          });
         });
-      });
+      };
+
+      if (loadContentImmediately) loadStory();
+
+      storyElementLoadingCallbacks[storyId] = loadStory;
 
       return storyContainer;
     }
@@ -1366,6 +1379,7 @@
       newState.forEach((storyElement) => {
         document.querySelector("#top-outlet").appendChild(storyElement);
       });
+      startStoryIntersectionObservers();
     });
 
     /**
@@ -1386,6 +1400,7 @@
       newState.forEach((storyElement) => {
         document.querySelector("#new-outlet").appendChild(storyElement);
       });
+      startStoryIntersectionObservers();
     });
 
     /**
@@ -1406,6 +1421,7 @@
       newState.forEach((storyElement) => {
         document.querySelector("#best-outlet").appendChild(storyElement);
       });
+      startStoryIntersectionObservers();
     });
 
     /**
@@ -1426,6 +1442,7 @@
       newState.forEach((storyElement) => {
         document.querySelector("#ask-outlet").appendChild(storyElement);
       });
+      startStoryIntersectionObservers();
     });
 
     /**
@@ -1446,6 +1463,7 @@
       newState.forEach((storyElement) => {
         document.querySelector("#show-outlet").appendChild(storyElement);
       });
+      startStoryIntersectionObservers();
     });
 
     /**
@@ -1466,6 +1484,7 @@
       newState.forEach((storyElement) => {
         document.querySelector("#job-outlet").appendChild(storyElement);
       });
+      startStoryIntersectionObservers();
     });
 
     /**
@@ -1523,6 +1542,7 @@
           break;
         case NAVIGATION_OPTIONS.FAVORITES:
           renderFavorites();
+          startStoryIntersectionObservers();
           break;
         default:
           console.error("Invalid navigation option");
@@ -1551,6 +1571,31 @@
       const node = document.body.appendChild(new StoryModal(story));
       // TODO: find a way to make modal dragable in constructor
       makeModalDragable(node);
+    }
+
+    /**
+     * Starts intersection observers for story elements in view. These stories
+     * will only load their data as they come into view.
+     * @returns {void}
+     */
+    function startStoryIntersectionObservers() {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              if (storyElementLoadingCallbacks[entry.target.id])
+                storyElementLoadingCallbacks[entry.target.id]();
+
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { rootMargin: "0px 0px 100px 0px" }
+      );
+
+      document.querySelectorAll(".story-container").forEach((story) => {
+        observer.observe(story);
+      });
     }
 
     /**
