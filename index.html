@@ -357,13 +357,28 @@
         <br />
 
         <h3>ABOUT</h3>
-        <p>
+        <p class="about-text">
           An experiment with
-          <a href="https://brutalist-web.design/"> brutalist web design </a>
+          <a href="https://brutalist-web.design/"> brutalist web design </a>.
+          Built no libraries, only vanilla HTML/JavaScript/CSS and the Hacker
+          News API. This page is a minimalist and accessible reader for Hacker
+          News.
           <br />
           <br />
           You can contribute to the development of this page on
           <a href="https://github.com/wkyleg/brutalist-hacker-news">GitHub</a>
+          <br />
+          <br />
+          Share your thoughts and feedback with:
+          <br />
+          <br />
+          <button id="share-twitter">X (TWITTER)</button>
+          <button id="share-facebook">FACEBOOK</button>
+          <button id="share-linkedin">LINKEDIN</button>
+          <button id="share-reddit">REDDIT</button>
+          <button id="share-telegram">TELEGRAM</button>
+          <button id="share-whatsapp">WHATSAPP</button>
+          <button id="share-email">EMAIL</button>
         </p>
       </section>
     </main>
@@ -1177,6 +1192,11 @@
           margin-bottom: var(--size-xs);
           height: var(--size-md);
         }
+
+        .about-text button {
+          margin-bottom: var(--size-xs);
+          height: var(--size-md);
+        }
   </style>
 
   <!-- Constants -->
@@ -1194,6 +1214,17 @@
     // TODO: add more of these incase of future alteration
     const TWITTER_SHARE_URL =
       "https://twitter.com/intent/tweet?text=Check%20out%20this%20awesome%20content&url=";
+    const FACEBOOK_SHARE_URL = "https://www.facebook.com/sharer/sharer.php?u=";
+    const LINKEDIN_SHARE_URL =
+      "https://www.linkedin.com/shareArticle?mini=true&url=";
+    const WHATSAPP_SHARE_URL =
+      "https://wa.me/?text=Check%20out%20this%20amazing%20site!%20";
+    const REDDIT_SHARE_URL =
+      "https://reddit.com/submit?url=https://example.com&title=Brutalist%20HN";
+    const TELEGRAM_URL =
+      "https://telegram.me/share/url?url=https://example.com&text=Check%20out%20this%20site!";
+    const EMAIL_SHARE_URL =
+      "mailto:?subject=Check%20out%20this%20site!&body=I%20thought%20you%20might%20like%20this%20site:%20";
   </script>
 
   <!-- API -->
@@ -1352,12 +1383,44 @@
       };
     }
 
-    function shareOnTwitter(story) {
+    function shareOnTwitter(url) {
       window.open(
-        `${TWITTER_SHARE_URL}${story.url || window.location.href}`,
+        `${TWITTER_SHARE_URL}${url || window.location.href}`,
         "_blank"
       );
     }
+
+    function shareOnFacebook(url) {
+      window.open(
+        `${FACEBOOK_SHARE_URL}${url || window.location.href}`,
+        "_blank"
+      );
+    }
+
+    function shareOnLinkedIn(url) {
+      window.open(
+        `${LINKEDIN_SHARE_URL}${url || window.location.href}`,
+        "_blank"
+      );
+    }
+
+    const shareOnWhatsApp = (url) =>
+      window.open(
+        `${WHATSAPP_SHARE_URL}${url || window.location.href}`,
+        "_blank"
+      );
+
+    const shareOnReddit = (url) =>
+      window.open(
+        `${REDDIT_SHARE_URL}${url || window.location.href}`,
+        "_blank"
+      );
+
+    const shareOnTelegram = (url) =>
+      window.open(`${TELEGRAM_URL}${url || window.location.href}`, "_blank");
+
+    const shareViaEmail = (url) =>
+      window.open(`${EMAIL_SHARE_URL}${url || window.location.href}`, "_blank");
 
     function shareStory(story) {
       if (!!navigator.canShare && navigator.canShare() && !!navigator.share) {
@@ -1368,7 +1431,7 @@
             url: story.url || window.location.href,
           })
           .then(() => console.log("Successful share"))
-          .catch((error) => shareOnTwitter(story));
+          .catch((error) => shareOnTwitter(story.url));
       } else {
         shareOnTwitter(story);
       }
@@ -1631,6 +1694,42 @@
       document
         .querySelector("#button-theme-hippie")
         .addEventListener("click", () => applyTheme(themes.hippie));
+
+      document.querySelector("#share-twitter").addEventListener("click", () => {
+        shareOnTwitter();
+      });
+
+      document
+        .querySelector("#share-facebook")
+        .addEventListener("click", () => {
+          shareOnFacebook();
+        });
+
+      document
+        .querySelector("#share-linkedin")
+        .addEventListener("click", () => {
+          shareOnLinkedIn();
+        });
+
+      document
+        .querySelector("#share-whatsapp")
+        .addEventListener("click", () => {
+          shareOnWhatsApp();
+        });
+
+      document.querySelector("#share-reddit").addEventListener("click", () => {
+        shareOnReddit();
+      });
+
+      document
+        .querySelector("#share-telegram")
+        .addEventListener("click", () => {
+          shareOnTelegram();
+        });
+
+      document.querySelector("#share-email").addEventListener("click", () => {
+        shareViaEmail();
+      });
     };
   </script>
 
@@ -1819,17 +1918,17 @@
       storyContainer.innerHTML = `<span>${getRandomLoadingString()}}</span>`;
 
       const loadStory = () => {
-        API.item(storyId).then(async (story) => {
-          storyContainer.firstChild.textContent = story.title;
-          storyContainer.addEventListener("click", () => {
-            launchStoryModal(story);
+        API.item(storyId)
+          .then(async (story) => {
+            storyContainer.firstChild.textContent = story.title;
+            storyContainer.addEventListener("click", () => {
+              launchStoryModal(story);
+            });
+          })
+          .catch((error) => {
+            console.error(error);
+            storyContainer.firstChild.textContent = "Eᴙᴙ0ᴙ...";
           });
-        })
-        .catch((error) => {
-          console.error(error);
-          storyContainer.firstChild.textContent = "Eᴙᴙ0ᴙ...";
-        });
-        ;
       };
 
       if (loadContentImmediately) loadStory();
@@ -1841,7 +1940,7 @@
 
     function sizeModal(modal) {
       if (window.innerWidth < MOBILE_DEVICE_MAX_WIDTH) {
-        modal.style.width = "98%"
+        modal.style.width = "98%";
         modal.style.height = "99%";
       } else {
         modal.style.width = "50%";
@@ -1887,8 +1986,8 @@
 
         ${
           isStoryFavorited(story.id)
-            ? `<button id="favorite-story-button-${story.id}" class="modal-window-title-button">UNFAV</button>`
-            : `<button id="favorite-story-button-${story.id}" class="modal-window-title-button">FAV</button>`
+            ? `<button id="favorite-story-button-${story.id}" class="modal-window-title-button">Unfav</button>`
+            : `<button id="favorite-story-button-${story.id}" class="modal-window-title-button">Fav</button>`
         }
 
       </div>
@@ -1920,11 +2019,11 @@
         if (isStoryFavorited(story.id)) {
           modal.querySelector(
             `#favorite-story-button-${story.id}`
-          ).textContent = "UNFAV";
+          ).textContent = "Unfav";
         } else {
           modal.querySelector(
             `#favorite-story-button-${story.id}`
-          ).textContent = "FAV";
+          ).textContent = "Fav";
         }
       };
 
