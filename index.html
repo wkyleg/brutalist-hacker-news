@@ -14,27 +14,46 @@
     <meta name="theme-color" content="#4e8ef7" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta
+      name="description"
+      content="Explore Hacker News in a new light with our minimalist and accessible reader. Dive into the latest tech stories, discussions, and insights with ease and comfort. Perfect for those who value clarity, simplicity, and inclusivity in the stucture of webpages. Also an interesting view of brutalist and Cyberpunk aesthetics."
+    />
   </head>
 
   <body>
-    <header class="title-content layers glitch-slow">
+    <header
+      class="title-content layers glitch-slow"
+      aria-label="Main navigation"
+    >
       <h1 id="title" class="font glitch">hn</h1>
-      <nav id="nav-button-top" class="text-link-button" aria-label="Top">
+      <nav
+        id="nav-button-top"
+        class="text-link-button"
+        aria-label="Top Stories"
+      >
         [&#128285;]
       </nav>
-      <nav id="nav-button-new" class="text-link-button" aria-label="New">
+      <nav
+        id="nav-button-new"
+        class="text-link-button"
+        aria-label="New Stories"
+      >
         [&#10561;]
       </nav>
-      <nav id="nav-button-best" class="text-link-button" aria-label="Best">
+      <nav
+        id="nav-button-best"
+        class="text-link-button"
+        aria-label="Best Stories"
+      >
         [&#9812;]
       </nav>
-      <nav id="nav-button-ask" class="text-link-button" aria-label="Ask">
+      <nav id="nav-button-ask" class="text-link-button" aria-label="Ask HN">
         [?]
       </nav>
-      <nav id="nav-button-show" class="text-link-button" aria-label="Show">
+      <nav id="nav-button-show" class="text-link-button" aria-label="Show HN">
         [&#10547;]
       </nav>
-      <nav id="nav-button-job" class="text-link-button" aria-label="Job">
+      <nav id="nav-button-job" class="text-link-button" aria-label="Jobs">
         [$]
       </nav>
       <nav
@@ -57,46 +76,55 @@
         id="loading-outlet"
         class="use-gpu-rendering stories-loading-animation"
         style="display: none"
+        aria-live="polite"
       ></section>
       <section
         id="top-outlet"
         class="use-gpu-rendering"
         style="display: none"
+        aria-live="polite"
       ></section>
       <section
         id="new-outlet"
         class="use-gpu-rendering"
         style="display: none"
+        aria-live="polite"
       ></section>
       <section
         id="best-outlet"
         class="use-gpu-rendering"
         style="display: none"
+        aria-live="polite"
       ></section>
       <section
         id="ask-outlet"
         class="use-gpu-rendering"
         style="display: none"
+        aria-live="polite"
       ></section>
       <section
         id="show-outlet"
         class="use-gpu-rendering"
         style="display: none"
+        aria-live="polite"
       ></section>
       <section
         id="job-outlet"
         class="use-gpu-rendering"
         style="display: none"
+        aria-live="polite"
       ></section>
       <section
         id="favorites-outlet"
         class="use-gpu-rendering"
         style="display: none"
+        aria-live="polite"
       ></section>
       <section
         id="settings-outlet"
         class="use-gpu-rendering"
         style="display: none"
+        aria-live="polite"
       >
         <div
           class="settings-content"
@@ -105,7 +133,7 @@
         >
           <h3>THEME</h3>
           <div class="setting-element" id="setting--color-primary">
-            <div class="setting-name">primary</div>
+            <div class="setting-name" role="label">primary</div>
             <div class="setting-new-value-input">
               <input
                 type="color"
@@ -127,7 +155,7 @@
             </button>
           </div>
           <div class="setting-element" id="setting--color-secondary">
-            <div class="setting-name">secondary</div>
+            <div class="setting-name" role="label">secondary</div>
             <div class="setting-new-value-input">
               <input type="color" id="setting-input--color-secondary" />
             </div>
@@ -145,7 +173,7 @@
             </button>
           </div>
           <div class="setting-element" id="setting--color-accent-1">
-            <div class="setting-name">accent-1</div>
+            <div class="setting-name" role="label">accent-1</div>
             <div class="setting-new-value-input">
               <input type="color" id="setting-input--color-accent-1" />
             </div>
@@ -163,7 +191,7 @@
             </button>
           </div>
           <div class="setting-element" id="setting--color-accent-2">
-            <div class="setting-name">accent-2</div>
+            <div class="setting-name" role="label">accent-2</div>
             <div class="setting-new-value-input">
               <input type="color" id="setting-input--color-accent-2" />
             </div>
@@ -181,7 +209,7 @@
             </button>
           </div>
           <div class="setting-element" id="setting--color-dark">
-            <div class="setting-name">dark</div>
+            <div class="setting-name" role="label">dark</div>
             <div class="setting-new-value-input">
               <input type="color" id="setting-input--color-dark" />
             </div>
@@ -193,7 +221,7 @@
             </button>
           </div>
           <div class="setting-element" id="setting--color-light">
-            <div class="setting-name">light</div>
+            <div class="setting-name" role="label">light</div>
             <div class="setting-new-value-input">
               <input type="color" id="setting-input--color-light" />
             </div>
@@ -211,7 +239,7 @@
             </button>
           </div>
           <div class="setting-element" id="setting--color-text-main">
-            <div class="setting-name">text-main</div>
+            <div class="setting-name" role="label">text-main</div>
             <div class="setting-new-value-input">
               <input type="color" id="setting-input--color-text-main" />
             </div>
@@ -1663,7 +1691,7 @@
       modal.classList.add("modal");
       modal.classList.add("use-gpu-rendering");
 
-      modal.innerHTML = `<div class="modal-window-title">
+      modal.innerHTML = `<div class="modal-window-title" role="dialog" aria-modal="true">
         <button id="close-button-${story.id}" class="modal-window-title-button">
           ❌
         </button>
