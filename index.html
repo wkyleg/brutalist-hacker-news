@@ -103,6 +103,7 @@
           role="table"
           id="settings-content-container"
         >
+          <h3>THEME</h3>
           <div class="setting-element" id="setting--color-primary">
             <div class="setting-name">primary</div>
             <div class="setting-new-value-input">
@@ -228,6 +229,29 @@
             </button>
           </div>
         </div>
+        <br />
+
+        <h3>FAVORITES</h3>
+        <button
+          id="clear-all-favorites-button"
+          class="clear-all-favorites-button"
+        >
+          CLEAR ALL FAVORITES
+        </button>
+
+        <br />
+        <br />
+        <br />
+
+        <h3>ABOUT</h3>
+        <p>
+          An exercise in
+          <a href="https://brutalist-web.design/"> brutalist web design </a>
+          <br />
+          <br />
+          You can contribute to the development of this page on
+          <a href="https://github.com/wkyleg/brutalist-hacker-news">GitHub</a>
+        </p>
       </section>
     </main>
   </body>
@@ -296,6 +320,12 @@
       color: var(--color-text-main);
     }
 
+    .clear-all-favorites-button {
+      background: var(--color-primary);
+      color: var(--color-light);
+      height: var(--size-md);
+    }
+
     button:hover {
       filter: brightness(1.2);
     }
@@ -357,6 +387,11 @@
       font-weight: bold;
     }
 
+    h3 {
+      margin-top: 0;
+      margin-bottom: var(--size-xs);
+    }
+
     .use-gpu-rendering {
       -webkit-transform: translate3d(0, 0, 0);
       -moz-transform: translate3d(0, 0, 0);
@@ -397,15 +432,15 @@
 
     .modal-window-title {
       cursor: move;
-      height: var(--size-md);
-      font-size: var(--size-sm);
+      height: var(--size-lg);
+      font-size: var(--size-md);
       display: flex;
-      align-items: left;
+      align-items: center;
       background-color: var(--color-accent-1);
       color: var(--color-text-main);
       padding: var(--size-xxs);
       color: var(--color-primary);
-      justify-content: space-evenly;
+      justify-content: flex-start;
       border-bottom: var(--color-primary) 3px solid;
       box-shadow: var(--box-shadow-highlight);
       position:fixed;
@@ -414,6 +449,20 @@
 
     .modal-window-title:hover {
       background-color: var(--color-secondary);
+    }
+
+    .modal-window-title-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      margin-left: var(--size-sm);
+      margin-right: var(--size-sm);
+      height: var(--size-md);
+      width: var(--size-md);
+      border: 0;
+      font-size: var(--size-lg);
+      background: transparent;
     }
 
     @media screen and (max-width: 1100px) {
@@ -792,6 +841,16 @@
       setFavorites(getFavorites().filter((id) => id !== storyId));
       renderFavorites();
     }
+
+    function clearAllFavorites() {
+      setFavorites([]);
+      renderFavorites();
+    }
+
+    const attachClearAllFavoritesEventListner = () =>
+      document
+        .querySelector("#clear-all-favorites-button")
+        .addEventListener("click", clearAllFavorites);
   </script>
 
   <!-- Settings -->
@@ -1096,29 +1155,27 @@
       modal.classList.add("modal");
       modal.classList.add("use-gpu-rendering");
 
-      const isFavorited = isStoryFavorited(story.id);
-
       modal.innerHTML = `<div class="modal-window-title">
-        <button id="close-button-${story.id}" class="close-button">
-         CLOSE
+        <button id="close-button-${story.id}" class="modal-window-title-button">
+          ❌
         </button>
 
-        <button id="open-link-${story.id}">
-          OPEN EXTERNAL
+        <button id="open-link-${story.id}" class="modal-window-title-button">
+          🔗
         </button>
 
-        <button id="poster-name-${story.id}">
-          VIEW POSTER PROFILE
+        <button id="poster-name-${story.id}" class="modal-window-title-button">
+          👤
         </button>
 
-        <button id="share-story-${story.id}">
-          SHARE
+        <button id="share-story-${story.id}" class="modal-window-title-button">
+          📤
         </button>
 
         ${
-          isFavorited
-            ? `<button id="favorite-story-button-${story.id}">SAVED</button>`
-            : `<button id="favorite-story-button-${story.id}">SAVE</button>`
+          isStoryFavorited(story.id)
+            ? `<button id="favorite-story-button-${story.id}" class="modal-window-title-button">💘</button>`
+            : `<button id="favorite-story-button-${story.id}" class="modal-window-title-button">💖</button>`
         }
 
       </div>
@@ -1164,11 +1221,11 @@
         if (isStoryFavorited(story.id)) {
           modal.querySelector(
             `#favorite-story-button-${story.id}`
-          ).textContent = "SAVED";
+          ).textContent = "💘";
         } else {
           modal.querySelector(
             `#favorite-story-button-${story.id}`
-          ).textContent = "SAVE";
+          ).textContent = "💖";
         }
       };
 
@@ -1434,9 +1491,6 @@
         case NAVIGATION_OPTIONS.FAVORITES:
           renderFavorites();
           break;
-        case NAVIGATION_OPTIONS.SETTINGS:
-          console.log("complete me");
-          break;
         default:
           console.error("Invalid navigation option");
       }
@@ -1476,6 +1530,7 @@
       loadSettingsFromLocalStorage();
       initializeSettings();
       renderFavorites();
+      attachClearAllFavoritesEventListner();
       // This triggers root propagation of state changes
       navigationState.update(NAVIGATION_OPTIONS.TOP);
     }
