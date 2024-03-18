@@ -275,6 +275,19 @@
         <br />
         <br />
 
+        <h3>LINK BEHAVIOR</h3>
+        <input
+          type="checkbox"
+          name="new-tab-check-box"
+          value="true"
+          id="open-links-in-new-tab-checkbox"
+        />
+        <label for="new-tab-check-box"
+          >Open Links in New Tab (Default is in modal)</label
+        ><br />
+        <br />
+        <br />
+
         <h3>FAVORITES</h3>
         <button
           id="download-favorites-button"
@@ -1638,6 +1651,14 @@
       downloadJSONAsFile(theme);
     };
 
+    const shouldOpenLinksInNewTab = () => {
+      return localStorage.getItem("openLinksInNewTab") === "true";
+    };
+
+    const setShouldOpenLinksInNewTab = (value) => {
+      localStorage.setItem("openLinksInNewTab", value);
+    };
+
     const initializeSettings = () => {
       Object.entries(SETTINGS).forEach(([key, value]) => {
         try {
@@ -1730,6 +1751,15 @@
       document.querySelector("#share-email").addEventListener("click", () => {
         shareViaEmail();
       });
+
+      document.getElementById("open-links-in-new-tab-checkbox").checked =
+        shouldOpenLinksInNewTab();
+
+      document
+        .querySelector("#open-links-in-new-tab-checkbox")
+        .addEventListener("change", (event) => {
+          setShouldOpenLinksInNewTab(event.target.checked);
+        });
     };
   </script>
 
@@ -1922,6 +1952,7 @@
           .then(async (story) => {
             storyContainer.firstChild.textContent = story.title;
             storyContainer.addEventListener("click", () => {
+              if (shouldOpenLinksInNewTab()) return window.open(story.url);
               launchStoryModal(story);
             });
           })
