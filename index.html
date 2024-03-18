@@ -355,8 +355,6 @@
         </section>
 
         <br />
-        <br />
-        <br />
 
         <h3>ABOUT</h3>
         <p>
@@ -414,7 +412,8 @@
         }
 
         * {
-          font-family: Menlo, monospace;
+          /*  Default to best Apple Monospace fonts, then Chrome fonts, then windows fonts */
+          font-family: "Menlo", "SF Mono", "Fira Code", "Roboto Mono", "Consolas", "Liberation Mono", "Courier New", monospace;
           border-radius: 0;
           color: var(--color-text-main);
           border: 0;
@@ -440,7 +439,8 @@
         }
 
         button:hover {
-          filter: brightness(1.2);
+          filter: brightness(1.2), contrast(1.2);
+          box-shadow: inset 1px 1px 1px var(--color-text-main);
         }
 
     /* Glitch Animation */
@@ -1006,6 +1006,7 @@
           box-shadow: var(--box-shadow-highlight);
           z-index: 15;
           overflow-x: hidden;
+          overflow-y: hidden;
         }
 
         .modal-window-title {
@@ -1016,12 +1017,9 @@
           align-items: center;
           background-color: var(--color-accent-1);
           color: var(--color-text-main);
-          padding: var(--size-xxs);
-          color: var(--color-primary);
-          justify-content: flex-start;
+          justify-content: space-around;
           border-bottom: var(--color-primary) 3px solid;
           box-shadow: var(--box-shadow-highlight);
-          position:fixed;
           width: 100%;
         }
 
@@ -1029,24 +1027,15 @@
           background-color: var(--color-secondary);
         }
 
-        .modal-window-title-button {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 0;
-          margin-left: var(--size-sm);
-          margin-right: var(--size-sm);
-          height: var(--size-md);
-          width: var(--size-md);
-          border: 0;
-          font-size: var(--size-lg);
-          background: transparent;
-        }
-
         @media screen and (max-width: 1100px) {
           .modal-window-title {
             height: fit-content;
             font-size: var(--size-xs);
+          }
+
+          .modal-window-title-button {
+            margin: var(--size-xxs);
+            height: var(--size-lg);
           }
         }
 
@@ -1858,19 +1847,19 @@
 
       modal.innerHTML = `<div class="modal-window-title" role="dialog" aria-modal="true">
         <button id="close-button-${story.id}" class="modal-window-title-button">
-          ❌
+          Close
         </button>
 
         <button id="open-link-${story.id}" class="modal-window-title-button">
-          🔗
+          NewTab
         </button>
 
         <button id="poster-name-${story.id}" class="modal-window-title-button">
-          👤
+         ViewPrfl
         </button>
 
         <button id="share-story-${story.id}" class="modal-window-title-button">
-          📤
+          Share
         </button>
 
         ${
@@ -2162,6 +2151,7 @@
     const onNavigationChange = (newState) => {
       updateDOMForNavigationOption(newState);
       applyCurrentNavigationStateToURL();
+      scrollToTop();
 
       switch (newState) {
         case NAVIGATION_OPTIONS.TOP:
