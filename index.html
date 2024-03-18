@@ -230,11 +230,23 @@
           </div>
         </div>
         <br />
+        <button id="download-theme-button" class="settings-favorites-button">
+          DOWNLOAD THEME
+        </button>
+        <br />
+        <br />
+        <br />
 
         <h3>FAVORITES</h3>
         <button
+          id="download-favorites-button"
+          class="settings-favorites-button"
+        >
+          DOWNLOAD FAVORITES
+        </button>
+        <button
           id="clear-all-favorites-button"
-          class="clear-all-favorites-button"
+          class="settings-favorites-button"
         >
           CLEAR ALL FAVORITES
         </button>
@@ -320,9 +332,7 @@
       color: var(--color-text-main);
     }
 
-    .clear-all-favorites-button {
-      background: var(--color-primary);
-      color: var(--color-light);
+    .settings-favorites-button {
       height: var(--size-md);
     }
 
@@ -467,10 +477,7 @@
 
     @media screen and (max-width: 1100px) {
       .modal-window-title {
-        flex-direction: column;
         height: fit-content;
-        text-align: center;
-        align-items: center;
         font-size: var(--size-xs);
       }
     }
@@ -806,6 +813,17 @@
         shareOnTwitter(story);
       }
     }
+
+    function downloadJSONAsFile(json) {
+      const data = JSON.stringify(json, null, 2);
+      const blob = new Blob([data], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "data.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
   </script>
 
   <!-- Favorites -->
@@ -847,10 +865,17 @@
       renderFavorites();
     }
 
-    const attachClearAllFavoritesEventListner = () =>
+    const downloadFavorites = () => downloadJSONAsFile(getFavorites());
+
+    const attachFavoritesListeners = () => {
       document
         .querySelector("#clear-all-favorites-button")
         .addEventListener("click", clearAllFavorites);
+
+      document
+        .querySelector("#download-favorites-button")
+        .addEventListener("click", downloadFavorites);
+    };
   </script>
 
   <!-- Settings -->
@@ -924,6 +949,14 @@
     const resetSetting = (setting) => {
       changeSetting(setting, SETTING__DEFAULT_VALUES[setting]);
       updateSettingInputWithCurrentValue(setting);
+    };
+
+    const downloadCurrentColorTheme = () => {
+      const theme = {};
+      Object.entries(SETTINGS).forEach(([key, value]) => {
+        theme[value] = getCSSVariable(value);
+      });
+      downloadJSONAsFile(theme);
     };
 
     const initializeSettings = () => {
@@ -1530,7 +1563,7 @@
       loadSettingsFromLocalStorage();
       initializeSettings();
       renderFavorites();
-      attachClearAllFavoritesEventListner();
+      attachFavoritesListeners();
       // This triggers root propagation of state changes
       navigationState.update(NAVIGATION_OPTIONS.TOP);
     }
