@@ -260,7 +260,7 @@
         <p>... or use pre built theme ...</p>
         <div class="theme-buttons-row">
           <button id="button-theme-default">DEFAULT</button>
-          <button id="button-theme-hacker">H@CK3R</button>
+          <button id="button-theme-hacker">H@CK3ᴙ</button>
           <button id="button-theme-l33t">l33+</button>
           <button id="button-theme-dream-pop">DrE∀M P♡P</button>
           <button id="button-theme-solar-flare">S☉l@r ⒻⓁⒶⓇⒺ</button>
@@ -1824,7 +1824,12 @@
           storyContainer.addEventListener("click", () => {
             launchStoryModal(story);
           });
+        })
+        .catch((error) => {
+          console.error(error);
+          storyContainer.firstChild.textContent = "Eᴙᴙ0ᴙ...";
         });
+        ;
       };
 
       if (loadContentImmediately) loadStory();
@@ -1832,6 +1837,24 @@
       storyElementLoadingCallbacks[storyId] = loadStory;
 
       return storyContainer;
+    }
+
+    function sizeModal(modal) {
+      if (window.innerWidth < MOBILE_DEVICE_MAX_WIDTH) {
+        modal.style.width = "98%"
+        modal.style.height = "99%";
+      } else {
+        modal.style.width = "50%";
+        modal.style.height = "50%";
+      }
+
+      if (window.innerWidth < MOBILE_DEVICE_MAX_WIDTH) {
+        modal.style.top = "0";
+        modal.style.left = "0";
+      } else {
+        modal.style.top = "25%";
+        modal.style.left = "25%";
+      }
     }
 
     /**
@@ -1864,8 +1887,8 @@
 
         ${
           isStoryFavorited(story.id)
-            ? `<button id="favorite-story-button-${story.id}" class="modal-window-title-button">💘</button>`
-            : `<button id="favorite-story-button-${story.id}" class="modal-window-title-button">💖</button>`
+            ? `<button id="favorite-story-button-${story.id}" class="modal-window-title-button">UNFAV</button>`
+            : `<button id="favorite-story-button-${story.id}" class="modal-window-title-button">FAV</button>`
         }
 
       </div>
@@ -1873,21 +1896,7 @@
         <iframe id="story-iframe-${story.id}" src="${story.url}"></iframe>
       </div>`;
 
-      if (window.innerWidth < MOBILE_DEVICE_MAX_WIDTH) {
-        modal.style.width = "90%";
-        modal.style.height = "99%";
-      } else {
-        modal.style.width = "50%";
-        modal.style.height = "50%";
-      }
-
-      if (window.innerWidth < MOBILE_DEVICE_MAX_WIDTH) {
-        modal.style.top = "0";
-        modal.style.left = "0";
-      } else {
-        modal.style.top = "25%";
-        modal.style.left = "25%";
-      }
+      sizeModal(modal);
 
       modal
         .querySelector(`#open-link-${story.id}`)
@@ -1911,11 +1920,11 @@
         if (isStoryFavorited(story.id)) {
           modal.querySelector(
             `#favorite-story-button-${story.id}`
-          ).textContent = "💘";
+          ).textContent = "UNFAV";
         } else {
           modal.querySelector(
             `#favorite-story-button-${story.id}`
-          ).textContent = "💖";
+          ).textContent = "FAV";
         }
       };
 
