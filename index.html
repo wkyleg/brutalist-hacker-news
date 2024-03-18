@@ -570,6 +570,8 @@
     const LOADING_STRING_MIN_LENGTH = 5;
     const LOADING_STRING_MAX_LENGTH = 80;
     const MOBILE_DEVICE_MAX_WIDTH = 600;
+    const LOADING_STORY_ANIMATION_REFRESH_INTERVAL_MINIMUM = 250;
+    const LOADING_STORY_ANIMATION_REFRESH_INTERVAL_MAXIMUM = 2_000;
     const LOADING_ANIMATION_NUMBER_OF_ROWS = 50;
     const ANIMATION_CHARACTERS_STRING =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+=-[]{}|;:,.<>?♥♦♣♠•◘○◆☻☺♂♀♪♫☼►◄↕‼¶§▬↨↑↓→←∟↔▲▼ァアィイゥウェエォオカガキギクゲゴサザシジスゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャユョヨラリルレロヮワヰヱヲン々〆〤￥「」『』【】〒〓─━│┃┄┅┆┇┈┉┊┋┌┍┎┏┐┑┒┓└┕┖┗┘┙┚┛├┝┞┟┠┡┢┣┤┥┦┧┨┩┪┫┬┭┮┯┰┱┲┳┴┵┶┷┸┹┺┻┼┽┾┿╀╁╂╃╄╅╆╇╈╉╊╋╌╍╎╏═║╒╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡╢╣╤╥╦╧╨╩╪╫╬§¶☊☋☌☍ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθικλμνξοπρςστυφχψω←↑→↓↔↕↖↗↘↙↚↛↜↝↞↟↠↡↢↣↤↥↦↧↨↩↪↫↬↭↮↯↰↱↲↳↴↵↶↷↸↹↺↻↼↽↾↿⇀⇁⇂⇃⇄⇅⇆⇇⇈⇉⇊⇋⇌⇍⇎⇏⇐⇑⇒⇓⇔⇕⇖⇗⇘⇙⇚⇛⇜⇝⇞⇟⇠⇡⇢⇣⇤⇥⇦⇧⇨⇩⇪⌨";
@@ -759,35 +761,36 @@
 
   <!-- Favorites -->
   <script>
-    function loadFavorites() {
-      const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+    const getFavorites = () =>
+      JSON.parse(localStorage.getItem("favorites")) || [];
+
+    const setFavorites = (favorites) =>
+      localStorage.setItem("favorites", JSON.stringify(favorites));
+
+    function isStoryFavorited(storyId) {
+      return getFavorites().includes(storyId);
+    }
+
+    function renderFavorites() {
       const favoriteStories = document.querySelector("#favorites-outlet");
       favoriteStories.innerHTML = "";
-      favorites.forEach((storyId) => {
-        favoriteStories.appendChild(StoryListElement(storyId));
+      getFavorites().forEach((storyId) => {
+        favoriteStories.appendChild(new StoryListElement(storyId));
       });
+      return favoriteStories;
     }
 
     function favoriteStory(storyId) {
-      const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
-      if (favorites.includes(storyId)) {
-        return;
-      }
+      const favorites = getFavorites();
+      if (favorites.includes(storyId)) return;
       favorites.push(storyId);
-      localStorage.setItem("favorites", JSON.stringify(favorites));
-      loadFavorites();
+      setFavorites(favorites);
+      renderFavorites();
     }
 
     function unfavoriteStory(storyId) {
-      const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
-      const newFavorites = favorites.filter((id) => id !== storyId);
-      localStorage.setItem("favorites", JSON.stringify(newFavorites));
-      loadFavorites();
-    }
-
-    function isStoryFavorited(storyId) {
-      const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
-      return favorites.includes(storyId);
+      setFavorites(getFavorites().filter((id) => id !== storyId));
+      renderFavorites();
     }
   </script>
 
@@ -823,7 +826,7 @@
       ).toString(16)}`;
     };
 
-    const convertToCSSInputValue = (string) => {
+    const asColorSelectorInputValue = (string) => {
       if (string.startsWith("#")) {
         return string;
       }
@@ -856,7 +859,7 @@
 
     const updateSettingInputWithCurrentValue = (setting) => {
       document.querySelector(`#setting-input${setting}`).value =
-        convertToCSSInputValue(getCSSVariable(setting));
+        asColorSelectorInputValue(getCSSVariable(setting));
     };
 
     const resetSetting = (setting) => {
@@ -886,9 +889,7 @@
 
           document
             .querySelector(`#reset-setting${value}`)
-            .addEventListener("click", () => {
-              resetSetting(value);
-            });
+            .addEventListener("click", () => resetSetting(value));
         } catch (e) {
           console.error(e);
           resetSetting(value);
@@ -939,46 +940,30 @@
      * @returns {void}
      */
     function attachNavigationButtonClickListeners() {
-      document
-        .querySelector("#nav-button-top")
-        .addEventListener("click", () => {
-          selectedSection.update(NAVIGATION_OPTIONS.TOP);
-        });
-      document
-        .querySelector("#nav-button-new")
-        .addEventListener("click", () => {
-          selectedSection.update(NAVIGATION_OPTIONS.NEW);
-        });
-      document
-        .querySelector("#nav-button-best")
-        .addEventListener("click", () => {
-          selectedSection.update(NAVIGATION_OPTIONS.BEST);
-        });
-      document
-        .querySelector("#nav-button-ask")
-        .addEventListener("click", () => {
-          selectedSection.update(NAVIGATION_OPTIONS.ASK);
-        });
-      document
-        .querySelector("#nav-button-show")
-        .addEventListener("click", () => {
-          selectedSection.update(NAVIGATION_OPTIONS.SHOW);
-        });
-      document
-        .querySelector("#nav-button-job")
-        .addEventListener("click", () => {
-          selectedSection.update(NAVIGATION_OPTIONS.JOB);
-        });
-      document
-        .querySelector("#nav-button-favorites")
-        .addEventListener("click", () => {
-          selectedSection.update(NAVIGATION_OPTIONS.FAVORITES);
-        });
-      document
-        .querySelector("#nav-button-settings")
-        .addEventListener("click", () => {
-          selectedSection.update(NAVIGATION_OPTIONS.SETTINGS);
-        });
+      Object.entries(NAVIGATION_OPTIONS).forEach(([key, value]) => {
+        document
+          .querySelector(`#nav-button-${value}`)
+          .addEventListener("click", () => {
+            navigationState.update(value);
+          });
+      });
+    }
+
+    function applyInitialNavigationState() {
+      const currentURL = new URL(window.location.href);
+      const currentPath = currentURL.pathname.split("/").pop();
+      if (Object.values(NAVIGATION_OPTIONS).includes(currentPath)) {
+        navigationState.update(currentPath);
+      } else {
+        navigationState.update(NAVIGATION_OPTIONS.TOP);
+      }
+    }
+
+    function applyCurrentNavigationStateToURL() {
+      const currentURL = new URL(window.location.href);
+      const currentPath = currentURL.pathname.split("/").pop();
+      currentURL.pathname = `/${navigationState.current()}`;
+      window.history.pushState({}, "", currentURL);
     }
   </script>
 
@@ -1118,15 +1103,11 @@
          CLOSE
         </button>
 
-        <button
-          id="open-link-${story.id}"
-        >
-         OPEN EXTERNAL
+        <button id="open-link-${story.id}">
+          OPEN EXTERNAL
         </button>
 
-        <button
-          id="poster-name-${story.id}"
-        >
+        <button id="poster-name-${story.id}">
           VIEW POSTER PROFILE
         </button>
 
@@ -1139,7 +1120,7 @@
             ? `<button id="favorite-story-button-${story.id}">SAVED</button>`
             : `<button id="favorite-story-button-${story.id}">SAVE</button>`
         }
-       
+
       </div>
       <div class="modal-content">
         <iframe id="story-iframe-${story.id}" src="${story.url}"></iframe>
@@ -1163,27 +1144,21 @@
 
       modal
         .querySelector(`#open-link-${story.id}`)
-        .addEventListener("click", () => {
-          window.open(story.url, "_blank");
-        });
+        .addEventListener("click", () => window.open(story.url, "_blank"));
 
       modal
         .querySelector(`#poster-name-${story.id}`)
-        .addEventListener("click", () => {
-          window.open(getHackerNewsPosterURLFromId(story.by), "_blank");
-        });
+        .addEventListener("click", () =>
+          window.open(getHackerNewsPosterURLFromId(story.by), "_blank")
+        );
 
       modal
         .querySelector(`#close-button-${story.id}`)
-        .addEventListener("click", () => {
-          modal.remove();
-        });
+        .addEventListener("click", () => modal.remove());
 
       modal
         .querySelector(`#share-story-${story.id}`)
-        .addEventListener("click", () => {
-          shareStory(story);
-        });
+        .addEventListener("click", () => shareStory(story));
 
       const updateFavoriteButtonState = () => {
         if (isStoryFavorited(story.id)) {
@@ -1219,21 +1194,30 @@
       const loadingContainer = document.createElement("div");
       loadingContainer.classList.add("story-container");
 
-      loadingContainer.innerHTML = `<span style=>${generateLoadingString(
-        getRandomNumberBetween(5, 60)
-      )}</span>`;
+      const animationRender = () =>
+        (loadingContainer.innerHTML = `<span>${generateLoadingString(
+          getRandomNumberBetween(
+            LOADING_STRING_MIN_LENGTH,
+            LOADING_STRING_MAX_LENGTH
+          )
+        )}</span>`);
 
-      const interval = setInterval(
-        () =>
-          (loadingContainer.innerHTML = `<span>${generateLoadingString(
-            getRandomNumberBetween(5, 80)
-          )}</span>`),
-        getRandomNumberBetween(250, 2000)
+      const animationSpeed = getRandomNumberBetween(
+        LOADING_STORY_ANIMATION_REFRESH_INTERVAL_MINIMUM,
+        LOADING_STORY_ANIMATION_REFRESH_INTERVAL_MAXIMUM
       );
+
+      const animationUpdateInterval = setInterval(
+        animationRender,
+        animationSpeed
+      );
+
+      // Initial render
+      animationRender();
 
       // Clear interval whenever the element is removed from the DOM
       loadingContainer.addEventListener("DOMNodeRemoved", () =>
-        clearInterval(interval)
+        clearInterval(animationRender)
       );
 
       return loadingContainer;
@@ -1411,16 +1395,9 @@
       console.log("Favorites:", newState);
     });
 
-    /**
-     * Reactive store for section selected to rended. Will change the section.
-     * This also triggers recomputation of all cascading sections from their own
-     * respective reactive stores.
-     *
-     * @param {string} initialState
-     * @param {function} sideEffect
-     */
-    const selectedSection = reactive(NAVIGATION_OPTIONS.TOP, (newState) => {
+    const onNavigationChange = (newState) => {
       updateDOMForNavigationOption(newState);
+      applyCurrentNavigationStateToURL();
 
       switch (newState) {
         case NAVIGATION_OPTIONS.TOP:
@@ -1455,7 +1432,7 @@
           });
           break;
         case NAVIGATION_OPTIONS.FAVORITES:
-          loadFavorites();
+          renderFavorites();
           break;
         case NAVIGATION_OPTIONS.SETTINGS:
           console.log("complete me");
@@ -1463,7 +1440,20 @@
         default:
           console.error("Invalid navigation option");
       }
-    });
+    };
+
+    /**
+     * Reactive store for section selected to rended. Will change the section.
+     * This also triggers recomputation of all cascading sections from their own
+     * respective reactive stores.
+     *
+     * @param {string} initialState
+     * @param {function} sideEffect
+     */
+    const navigationState = reactive(
+      NAVIGATION_OPTIONS.TOP,
+      onNavigationChange
+    );
 
     /**
      * Launches a modal for a story
@@ -1485,9 +1475,9 @@
       attachNavigationButtonClickListeners();
       loadSettingsFromLocalStorage();
       initializeSettings();
-      loadFavorites();
+      renderFavorites();
       // This triggers root propagation of state changes
-      selectedSection.update(NAVIGATION_OPTIONS.TOP);
+      navigationState.update(NAVIGATION_OPTIONS.TOP);
     }
 
     // Call main when other data loaded
