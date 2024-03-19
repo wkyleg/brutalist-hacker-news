@@ -1036,6 +1036,12 @@
           color: var(--color-primary);
         }
 
+        pre, code {
+          word-break: break-word;
+          word-wrap: break-word;
+          text-wrap: wrap;
+        }
+
         .use-gpu-rendering {
           -webkit-transform: translate3d(0, 0, 0);
           -moz-transform: translate3d(0, 0, 0);
@@ -1305,6 +1311,7 @@
     const LOADING_STORY_ANIMATION_REFRESH_INTERVAL_MINIMUM = 250;
     const LOADING_STORY_ANIMATION_REFRESH_INTERVAL_MAXIMUM = 2_000;
     const LOADING_ANIMATION_NUMBER_OF_ROWS = 50;
+    const MODAL_POSITION_RANDOM_OFFSET = 10;
     const ANIMATION_CHARACTERS_STRING =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+=-[]{}|;:,.<>?♥♦♣♠•◘○◆☻☺♂♀♪♫☼►◄↕‼¶§▬↨↑↓→←∟↔▲▼ァアィイゥウェエォオカガキギクゲゴサザシジスゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャユョヨラリルレロヮワヰヱヲン々〆〤￥「」『』【】〒〓─━│┃┄┅┆┇┈┉┊┋┌┍┎┏┐┑┒┓└┕┖┗┘┙┚┛├┝┞┟┠┡┢┣┤┥┦┧┨┩┪┫┬┭┮┯┰┱┲┳┴┵┶┷┸┹┺┻┼┽┾┿╀╁╂╃╄╅╆╇╈╉╊╋╌╍╎╏═║╒╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡╢╣╤╥╦╧╨╩╪╫╬§¶☊☋☌☍ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθικλμνξοπρςστυφχψω←↑→↓↔↕↖↗↘↙↚↛↜↝↞↟↠↡↢↣↤↥↦↧↨↩↪↫↬↭↮↯↰↱↲↳↴↵↶↷↸↹↺↻↼↽↾↿⇀⇁⇂⇃⇄⇅⇆⇇⇈⇉⇊⇋⇌⇍⇎⇏⇐⇑⇒⇓⇔⇕⇖⇗⇘⇙⇚⇛⇜⇝⇞⇟⇠⇡⇢⇣⇤⇥⇦⇧⇨⇩⇪⌨";
     // TODO: add more of these incase of future alteration
@@ -2217,8 +2224,20 @@
         modal.style.left = "0";
       } else {
         // Make position vary slightly for stacked modals on desktop
-        modal.style.left = 25 + getRandomNumberBetween(-25, 25) + "%";
-        modal.style.top = 25 + getRandomNumberBetween(-25, 25) + "%";
+        modal.style.left =
+          25 +
+          getRandomNumberBetween(
+            -MODAL_POSITION_RANDOM_OFFSET,
+            MODAL_POSITION_RANDOM_OFFSET
+          ) +
+          "%";
+        modal.style.top =
+          25 +
+          getRandomNumberBetween(
+            -MODAL_POSITION_RANDOM_OFFSET,
+            MODAL_POSITION_RANDOM_OFFSET
+          ) +
+          "%";
       }
     }
 
