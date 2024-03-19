@@ -282,6 +282,7 @@
           <button id="button-theme-street-magic">ⓈⓉⓇⒺⒺⓉ ⓂⒶⒼⒾⒸ</button>
           <button id="button-theme-washington">Ⓦⓐⓢⓗⓘⓝⓖⓣⓞⓝ</button>
           <button id="button-theme-rainbow">✦☾⇢✧⇠☽✦</button>
+          <button id="button-theme-miami">MⓘⒶMⓘ</button>
         </div>
 
         <br />
@@ -1554,6 +1555,9 @@
     };
 
     const themes = {
+      default: {
+        ...SETTING__DEFAULT_VALUES,
+      },
       hacker: {
         "--color-primary": "#00ff00",
         "--color-secondary": "#ff00ff",
@@ -1752,6 +1756,15 @@
         "--color-light": "#F0E68C",
         "--color-text-main": "#2F4F4F",
       },
+      miami: {
+        "--color-primary": "#ff9f1c", // Coral
+        "--color-secondary": "#2ec4b6", // Turquoise
+        "--color-accent-1": "#ffbf69", // Sandy
+        "--color-accent-2": "#cbf3f0", // Pale turquoise
+        "--color-dark": "#011627", // Deep blue
+        "--color-light": "#fdfffc", // Bright white
+        "--color-text-main": "#011627", // Deep blue
+      },
     };
 
     const applyTheme = (theme) => {
@@ -1862,99 +1875,11 @@
         .querySelector("#download-theme-button")
         .addEventListener("click", downloadCurrentColorTheme);
 
-      document
-        .querySelector("#button-theme-default")
-        .addEventListener("click", () => applyTheme(SETTING__DEFAULT_VALUES));
-
-      document
-        .querySelector("#button-theme-hacker")
-        .addEventListener("click", () => applyTheme(themes.hacker));
-
-      document
-        .querySelector("#button-theme-l33t")
-        .addEventListener("click", () => applyTheme(themes.l33t));
-
-      document
-        .querySelector("#button-theme-dream-pop")
-        .addEventListener("click", () => applyTheme(themes["dream-pop"]));
-
-      document
-        .querySelector("#button-theme-solar-flare")
-        .addEventListener("click", () => applyTheme(themes["solar-flare"]));
-
-      document
-        .querySelector("#button-theme-hippie")
-        .addEventListener("click", () => applyTheme(themes.hippie));
-
-      document
-        .querySelector("#button-theme-neon-concrete")
-        .addEventListener("click", () => applyTheme(themes["neon-concrete"]));
-
-      document
-        .querySelector("#button-theme-solarpunk")
-        .addEventListener("click", () => applyTheme(themes.solarpunk));
-
-      document
-        .querySelector("#button-theme-hyperreality")
-        .addEventListener("click", () => applyTheme(themes.hyperreality));
-
-      document
-        .querySelector("#button-theme-cybernetic-dream")
-        .addEventListener("click", () =>
-          applyTheme(themes["cybernetic-dream"])
-        );
-
-      document
-        .querySelector("#button-theme-steampunk")
-        .addEventListener("click", () => applyTheme(themes.steampunk));
-
-      document
-        .querySelector("#button-theme-petal-dream")
-        .addEventListener("click", () => applyTheme(themes["petal-dream"]));
-
-      document
-        .querySelector("#button-theme-neo-tokyo")
-        .addEventListener("click", () => applyTheme(themes["neo-tokyo"]));
-
-      document
-        .querySelector("#button-theme-china")
-        .addEventListener("click", () => applyTheme(themes.china));
-
-      document
-        .querySelector("#button-theme-sakura-matsuri")
-        .addEventListener("click", () => applyTheme(themes["sakura-matsuri"]));
-
-      document
-        .querySelector("#button-theme-merc")
-        .addEventListener("click", () => applyTheme(themes.merc));
-
-      document
-        .querySelector("#button-theme-sao-paulo")
-        .addEventListener("click", () => applyTheme(themes["sao-paulo"]));
-
-      document
-        .querySelector("#button-theme-lagos")
-        .addEventListener("click", () => applyTheme(themes.lagos));
-
-      document
-        .querySelector("#button-theme-nyc")
-        .addEventListener("click", () => applyTheme(themes.nyc));
-
-      document
-        .querySelector("#button-theme-greyscale")
-        .addEventListener("click", () => applyTheme(themes.greyscale));
-
-      document
-        .querySelector("#button-theme-street-magic")
-        .addEventListener("click", () => applyTheme(themes["street-magic"]));
-
-      document
-        .querySelector("#button-theme-washington")
-        .addEventListener("click", () => applyTheme(themes.washington));
-
-      document
-        .querySelector("#button-theme-rainbow")
-        .addEventListener("click", () => applyTheme(themes.rainbow));
+      Object.entries(themes).forEach(([key, value]) => {
+        document
+          .querySelector(`#button-theme-${key}`)
+          .addEventListener("click", () => applyTheme(value));
+      });
 
       document.querySelector("#share-twitter").addEventListener("click", () => {
         shareOnTwitter();
