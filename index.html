@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8" />
-    <title>minimal hn</title>
+    <title>BRUTALIST HACKER NEWS</title>
     <meta
       name="viewport"
       content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
@@ -265,6 +265,23 @@
           <button id="button-theme-dream-pop">DrE∀M P♡P</button>
           <button id="button-theme-solar-flare">S☉l@r ⒻⓁⒶⓇⒺ</button>
           <button id="button-theme-hippie">Ħłρρłε</button>
+          <button id="button-theme-neon-concrete">N3ØN ₵ØN₵RΣTΣ</button>
+          <button id="button-theme-solarpunk">S☼LΛRPUNK</button>
+          <button id="button-theme-hyperreality">H¥P3RR34L!TY</button>
+          <button id="button-theme-cybernetic-dream">⊂¥βΞ尺ภΞ†เς Ð尺ΞΛⓜ</button>
+          <button id="button-theme-steampunk">S†ε@мקцηк</button>
+          <button id="button-theme-petal-dream">✿ Pétäl Drëäm ✿</button>
+          <button id="button-theme-neo-tokyo">新しい東京</button>
+          <button id="button-theme-china">中國龍</button>
+          <button id="button-theme-sakura-matsuri">桜ーまつり</button>
+          <button id="button-theme-merc">ⓜⓔⓡⓒ</button>
+          <button id="button-theme-sao-paulo">🄼🄴🅃🄾́🄿🄾🄻🄸🅂 🄿🄰🅄🄻🄸🅂🅃🄰</button>
+          <button id="button-theme-lagos">ḺᾰǤⱺϨ⸚ 𝔽𝕌𝕋𝕌ℝ𝔸</button>
+          <button id="button-theme-nyc">𝕟𝕪𝕔</button>
+          <button id="button-theme-greyscale">𝔤𝔯𝔢𝔶𝔰𝔠𝔞𝔩𝔢</button>
+          <button id="button-theme-street-magic">ⓈⓉⓇⒺⒺⓉ ⓂⒶⒼⒾⒸ</button>
+          <button id="button-theme-washington">Ⓦⓐⓢⓗⓘⓝⓖⓣⓞⓝ</button>
+          <button id="button-theme-rainbow">✦☾⇢✧⇠☽✦</button>
         </div>
 
         <br />
@@ -441,7 +458,7 @@
 
         * {
           /*  Default to best Apple Monospace fonts, then Chrome fonts, then windows fonts */
-          font-family: "Menlo", "SF Mono", "Fira Code", "Roboto Mono", "Consolas", "Liberation Mono", "Courier New", monospace;
+          font-family: "Menlo", "SF Mono", "Inconsolata", "Fira Code", "Roboto Mono", "Consolas", "Liberation Mono", "Courier New", monospace;
           border-radius: 0;
           color: var(--color-text-main);
           border: 0;
@@ -1538,49 +1555,202 @@
 
     const themes = {
       hacker: {
-        "--color-primary": "#00ff00", // Neon Green
-        "--color-secondary": "#ff00ff", // Neon Purple
-        "--color-accent-1": "#ff0000", // Bright Red
-        "--color-accent-2": "#0000ff", // Bright Blue
-        "--color-dark": "#000000", // Black
-        "--color-light": "#ffffff", // White
-        "--color-text-main": "#00ff00", // Neon Green
+        "--color-primary": "#00ff00",
+        "--color-secondary": "#ff00ff",
+        "--color-accent-1": "#ff0000",
+        "--color-accent-2": "#0000ff",
+        "--color-dark": "#000000",
+        "--color-light": "#ffffff",
+        "--color-text-main": "#00ff00",
       },
       l33t: {
-        "--color-primary": "#08fdd8", // Aqua
-        "--color-secondary": "#f800ff", // Magenta
-        "--color-accent-1": "#1b1b1b", // Dark Gray
-        "--color-accent-2": "#333333", // Medium Gray
-        "--color-dark": "#080808", // Very Dark Gray
-        "--color-light": "#f0f0f0", // Off White
-        "--color-text-main": "#0033FF", // Aqua
+        "--color-primary": "#08fdd8",
+        "--color-secondary": "#f800ff",
+        "--color-accent-1": "#1b1b1b",
+        "--color-accent-2": "#333333",
+        "--color-dark": "#080808",
+        "--color-light": "#f0f0f0",
+        "--color-text-main": "#0033FF",
       },
       "dream-pop": {
-        "--color-primary": "#ff77aa", // Pink
-        "--color-secondary": "#cc99ff", // Purple
-        "--color-accent-1": "#ff99ee", // Light Pink
-        "--color-accent-2": "#d1b3ff", // Light Purple
-        "--color-dark": "#342a4e", // Dark Purple
-        "--color-light": "#fff0f5", // Lavender Blush
-        "--color-text-main": "##808080", // Gray
+        "--color-primary": "#ff77aa",
+        "--color-secondary": "#cc99ff",
+        "--color-accent-1": "#ff99ee",
+        "--color-accent-2": "#d1b3ff",
+        "--color-dark": "#342a4e",
+        "--color-light": "#fff0f5",
+        "--color-text-main": "##808080",
       },
       "solar-flare": {
-        "--color-primary": "#ffffff", // White
-        "--color-secondary": "#000000", // Black
-        "--color-accent-1": "#ff0000", // Red
-        "--color-accent-2": "#ffff00", // Yellow
-        "--color-dark": "#000000", // Black
-        "--color-light": "#ffffff", // White
-        "--color-text-main": "#282828", // White
+        "--color-primary": "#ffffff",
+        "--color-secondary": "#000000",
+        "--color-accent-1": "#ff0000",
+        "--color-accent-2": "#ffff00",
+        "--color-dark": "#000000",
+        "--color-light": "#ffffff",
+        "--color-text-main": "#282828",
       },
       hippie: {
-        "--color-primary": "#fabd2f", // Yellow
-        "--color-secondary": "#d3869b", // Pink
-        "--color-accent-1": "#83a598", // Aqua
-        "--color-accent-2": "#b8bb26", // Green
-        "--color-dark": "#282828", // Dark Gray
-        "--color-light": "#ebdbb2", // Light Gray
-        "--color-text-main": "#fabd2f", // Yellow
+        "--color-primary": "#fabd2f",
+        "--color-secondary": "#d3869b",
+        "--color-accent-1": "#83a598",
+        "--color-accent-2": "#b8bb26",
+        "--color-dark": "#282828",
+        "--color-light": "#ebdbb2",
+        "--color-text-main": "#fabd2f",
+      },
+      "neon-concrete": {
+        "--color-primary": "#00D9FF",
+        "--color-secondary": "#FF007F",
+        "--color-accent-1": "#8C8C8C",
+        "--color-accent-2": "#9A9A9A",
+        "--color-dark": "#1A1A1A",
+        "--color-light": "#E5E5E5",
+        "--color-text-main": "#757575",
+      },
+      solarpunk: {
+        "--color-primary": "#ff8c00",
+        "--color-secondary": "#7ec850",
+        "--color-accent-1": "#ffd700",
+        "--color-accent-2": "#40e0d0",
+        "--color-dark": "#005a51",
+        "--color-light": "#f0f8ff",
+        "--color-text-main": "#3c6e71",
+      },
+      hyperreality: {
+        "--color-primary": "#00ff00",
+        "--color-secondary": "#000000",
+        "--color-accent-1": "#1A1A1A",
+        "--color-accent-2": "#333333",
+        "--color-dark": "#0a0a0a",
+        "--color-light": "#9A9A9A",
+        "--color-text-main": "#00ff00",
+      },
+      "cybernetic-dream": {
+        "--color-primary": "#00D1B2",
+        "--color-secondary": "#FF3860",
+        "--color-accent-1": "#3273DC",
+        "--color-accent-2": "#F5F5F5",
+        "--color-dark": "#363636",
+        "--color-light": "#FFFFFF",
+        "--color-text-main": "#4A4A4A",
+      },
+      steampunk: {
+        "--color-primary": "#bca136",
+        "--color-secondary": "#7b3f00",
+        "--color-accent-1": "#cc7722",
+        "--color-accent-2": "#967117",
+        "--color-dark": "#3c3022",
+        "--color-light": "#f0e68c",
+        "--color-text-main": "#5d4c46",
+      },
+      "petal-dream": {
+        "--color-primary": "#F78FB3",
+        "--color-secondary": "#CF9FFF",
+        "--color-accent-1": "#A4DEFF",
+        "--color-accent-2": "#FFD670",
+        "--color-dark": "#7E5475",
+        "--color-light": "#FFC0CB",
+        "--color-text-main": "#C57B9A",
+      },
+      "neo-tokyo": {
+        "--color-primary": "#DC143C",
+        "--color-secondary": "#FFC0CB",
+        "--color-accent-1": "#87CEEB",
+        "--color-accent-2": "#32CD32",
+        "--color-dark": "#00008B",
+        "--color-light": "#FFFFFF",
+        "--color-text-main": "#2F4F4F",
+      },
+      china: {
+        "--color-primary": "#A80000",
+        "--color-secondary": "#FFD700",
+        "--color-accent-1": "#00A86B",
+        "--color-accent-2": "#8B4513",
+        "--color-dark": "#000000",
+        "--color-light": "#FFFAF0",
+        "--color-text-main": "#363636",
+      },
+      "sakura-matsuri": {
+        "--color-primary": "#FF69B4",
+        "--color-secondary": "#FFD700",
+        "--color-accent-1": "#FF6347",
+        "--color-accent-2": "#FF1493",
+        "--color-dark": "#000000",
+        "--color-light": "#FFFAF0",
+        "--color-text-main": "#363636",
+      },
+      merc: {
+        "--color-primary": "#4B5320",
+        "--color-secondary": "#78866B",
+        "--color-accent-1": "#6B8E23",
+        "--color-accent-2": "#806B2A",
+        "--color-dark": "#3C341F",
+        "--color-light": "#F0E68C",
+        "--color-text-main": "#333333",
+      },
+      "sao-paulo": {
+        "--color-primary": "#FFD700",
+        "--color-secondary": "#C0C0C0",
+        "--color-accent-1": "#008000",
+        "--color-accent-2": "#A52A2A",
+        "--color-dark": "#333333",
+        "--color-light": "#F0F0F0",
+        "--color-text-main": "#000000",
+      },
+      lagos: {
+        "--color-primary": "#4DB848",
+        "--color-secondary": "#FFC107",
+        "--color-accent-1": "#00ACC1",
+        "--color-accent-2": "#E91E63",
+        "--color-dark": "#263238",
+        "--color-light": "#E0E0E0",
+        "--color-text-main": "#FFFFFF",
+      },
+      nyc: {
+        "--color-primary": "#4d4d4d",
+        "--color-secondary": "#999999",
+        "--color-accent-1": "#b3b3b3",
+        "--color-accent-2": "#e6e6e6",
+        "--color-dark": "#333333",
+        "--color-light": "#f2f2f2",
+        "--color-text-main": "#1a1a1a",
+      },
+      greyscale: {
+        "--color-primary": "#0a0a0a",
+        "--color-secondary": "#bfbfbf",
+        "--color-accent-1": "#d9d9d9",
+        "--color-accent-2": "#bfbfbf",
+        "--color-dark": "#050505",
+        "--color-light": "#ffffff",
+        "--color-text-main": "#0a0a0a",
+      },
+      "street-magic": {
+        "--color-primary": "#ffcc00",
+        "--color-secondary": "#ff6600",
+        "--color-accent-1": "#ff0000",
+        "--color-accent-2": "#6600ff",
+        "--color-dark": "#000000",
+        "--color-light": "#ffffff",
+        "--color-text-main": "#000000",
+      },
+      washington: {
+        "--color-primary": "#B22234",
+        "--color-secondary": "#3C3B6E",
+        "--color-accent-1": "#FFFFFF",
+        "--color-accent-2": "#F0EDEE",
+        "--color-dark": "#212529",
+        "--color-light": "#F0E68C",
+        "--color-text-main": "#002D62",
+      },
+      rainbow: {
+        "--color-primary": "#FF69B4",
+        "--color-secondary": "#00BFFF",
+        "--color-accent-1": "#FFD700",
+        "--color-accent-2": "#32CD32",
+        "--color-dark": "#8B008B",
+        "--color-light": "#F0E68C",
+        "--color-text-main": "#2F4F4F",
       },
     };
 
@@ -1715,6 +1885,76 @@
       document
         .querySelector("#button-theme-hippie")
         .addEventListener("click", () => applyTheme(themes.hippie));
+
+      document
+        .querySelector("#button-theme-neon-concrete")
+        .addEventListener("click", () => applyTheme(themes["neon-concrete"]));
+
+      document
+        .querySelector("#button-theme-solarpunk")
+        .addEventListener("click", () => applyTheme(themes.solarpunk));
+
+      document
+        .querySelector("#button-theme-hyperreality")
+        .addEventListener("click", () => applyTheme(themes.hyperreality));
+
+      document
+        .querySelector("#button-theme-cybernetic-dream")
+        .addEventListener("click", () =>
+          applyTheme(themes["cybernetic-dream"])
+        );
+
+      document
+        .querySelector("#button-theme-steampunk")
+        .addEventListener("click", () => applyTheme(themes.steampunk));
+
+      document
+        .querySelector("#button-theme-petal-dream")
+        .addEventListener("click", () => applyTheme(themes["petal-dream"]));
+
+      document
+        .querySelector("#button-theme-neo-tokyo")
+        .addEventListener("click", () => applyTheme(themes["neo-tokyo"]));
+
+      document
+        .querySelector("#button-theme-china")
+        .addEventListener("click", () => applyTheme(themes.china));
+
+      document
+        .querySelector("#button-theme-sakura-matsuri")
+        .addEventListener("click", () => applyTheme(themes["sakura-matsuri"]));
+
+      document
+        .querySelector("#button-theme-merc")
+        .addEventListener("click", () => applyTheme(themes.merc));
+
+      document
+        .querySelector("#button-theme-sao-paulo")
+        .addEventListener("click", () => applyTheme(themes["sao-paulo"]));
+
+      document
+        .querySelector("#button-theme-lagos")
+        .addEventListener("click", () => applyTheme(themes.lagos));
+
+      document
+        .querySelector("#button-theme-nyc")
+        .addEventListener("click", () => applyTheme(themes.nyc));
+
+      document
+        .querySelector("#button-theme-greyscale")
+        .addEventListener("click", () => applyTheme(themes.greyscale));
+
+      document
+        .querySelector("#button-theme-street-magic")
+        .addEventListener("click", () => applyTheme(themes["street-magic"]));
+
+      document
+        .querySelector("#button-theme-washington")
+        .addEventListener("click", () => applyTheme(themes.washington));
+
+      document
+        .querySelector("#button-theme-rainbow")
+        .addEventListener("click", () => applyTheme(themes.rainbow));
 
       document.querySelector("#share-twitter").addEventListener("click", () => {
         shareOnTwitter();
@@ -2004,11 +2244,11 @@
         </button>
 
         <button id="open-link-${story.id}" class="modal-window-title-button">
-          NewTab
+          New Tab
         </button>
 
         <button id="poster-name-${story.id}" class="modal-window-title-button">
-         ViewPrfl
+          Posted By
         </button>
 
         <button id="share-story-${story.id}" class="modal-window-title-button">
