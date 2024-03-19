@@ -11,7 +11,7 @@
     <meta name="msapplication-tap-highlight" content="no" />
     <link rel="icon" type="image/x-icon" href="assets/icon/favicon.ico" />
     <link rel="manifest" href="manifest.json" />
-    <meta name="theme-color" content="#4e8ef7" />
+    <meta name="theme-color" content="#f6d365" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <meta
@@ -30,6 +30,7 @@
         id="nav-button-top"
         class="text-link-button"
         aria-label="Top Stories"
+        title="Top Stories"
       >
         [&#128285;]
       </nav>
@@ -37,6 +38,7 @@
         id="nav-button-new"
         class="text-link-button"
         aria-label="New Stories"
+        title="New Stories"
       >
         [&#10561;]
       </nav>
@@ -44,22 +46,39 @@
         id="nav-button-best"
         class="text-link-button"
         aria-label="Best Stories"
+        title="Best Stories"
       >
         [&#9812;]
       </nav>
-      <nav id="nav-button-ask" class="text-link-button" aria-label="Ask HN">
+      <nav
+        id="nav-button-ask"
+        class="text-link-button"
+        aria-label="Ask HN"
+        title="Ask HN"
+      >
         [?]
       </nav>
-      <nav id="nav-button-show" class="text-link-button" aria-label="Show HN">
+      <nav
+        id="nav-button-show"
+        class="text-link-button"
+        aria-label="Show HN"
+        title="Show HN"
+      >
         [&#10547;]
       </nav>
-      <nav id="nav-button-job" class="text-link-button" aria-label="Jobs">
+      <nav
+        id="nav-button-job"
+        class="text-link-button"
+        aria-label="Jobs"
+        title="Jobs"
+      >
         [$]
       </nav>
       <nav
         id="nav-button-favorites"
         class="text-link-button"
-        aria-label="Favorites"
+        aria-label="Saved"
+        title="Saved"
       >
         [&hearts;]
       </nav>
@@ -67,6 +86,7 @@
         id="nav-button-settings"
         class="text-link-button"
         aria-label="Settings"
+        title="Settings"
       >
         [⚙]
       </nav>
@@ -417,7 +437,7 @@
 
   <style>
         :root {
-          /* Default olor scheme inspired by brutalist design and cyberpunk */
+          /* Default color scheme inspired by brutalist design and cyberpunk */
           --color-primary:#e30613;
           --color-secondary: #ffed00;
           --color-accent-1: #f6d365;
@@ -1063,10 +1083,11 @@
           align-items: center;
           background-color: var(--color-accent-1);
           color: var(--color-text-main);
-          justify-content: space-around;
+          justify-content: flex-start;
           border-bottom: var(--color-primary) 3px solid;
           box-shadow: var(--box-shadow-highlight);
           width: 100%;
+          padding-left: var(--top-level-padding-side);
         }
 
         .modal-window-title:hover {
@@ -1077,11 +1098,6 @@
           .modal-window-title {
             height: fit-content;
             font-size: var(--size-xs);
-          }
-
-          .modal-window-title-button {
-            margin: var(--size-xxs);
-            height: var(--size-lg);
           }
         }
 
@@ -1125,6 +1141,54 @@
           height: 100%;
           background: var(--color-light);
         }
+
+        .modal-content-post {
+          padding: var(--size-md);
+          overflow-y: scroll;
+          height: calc(100% - var(--size-xl) - var(--size-lg));
+          background: var(--color-light);
+        }
+
+        .story-summary-statistics {
+          font-size: var(--size-xss);
+          text-align: center;
+          font-style: italic;
+        }
+
+        .modal-content-post h3 {
+          text-align: center;
+        }
+
+        .modal-content-post .story-text {
+          font-size: var(--size-xs);
+        }
+
+        .modal-content-post p {
+          font-size: var(--size-xs);
+          word-wrap: break-word;
+        }
+
+        .modal-content-post code, a, pre {
+          word-wrap: break-word;
+        }
+
+        .modal-content-post .comment {
+          font-size: var(--size-xs);
+          padding: var(--size-xs);
+          margin: var(--size-xs);
+          border: var(--color-primary) 1px solid;
+          background: var(--color-light);
+          min-width: 33vw;
+        }
+
+        .modal-content-post .comment p {
+          margin-top: 0;
+        }
+
+        .modal-content-post .comment:hover {
+          box-shadow: var(--box-shadow-highlight-mild);
+        }
+
 
         .title-content {
           position: absolute;
@@ -1232,6 +1296,7 @@
 
   <!-- Constants -->
   <script type="text/javascript">
+    const YCOMBINATOR_URL = "https://news.ycombinator.com/";
     const MILLISECONDS_IN_SECOND = 1_000;
     const TOTAL_ANIMATION_STRINGS = 100;
     const LOADING_STRING_MIN_LENGTH = 5;
@@ -1412,6 +1477,10 @@
         subscribe,
         notify,
       };
+    }
+
+    function isMobileDevice() {
+      return window.innerWidth < MOBILE_DEVICE_MAX_WIDTH;
     }
 
     function shareOnTwitter(url) {
@@ -2147,8 +2216,9 @@
         modal.style.top = "0";
         modal.style.left = "0";
       } else {
-        modal.style.top = "25%";
-        modal.style.left = "25%";
+        // Make position vary slightly for stacked modals on desktop
+        modal.style.left = 25 + getRandomNumberBetween(-25, 25) + "%";
+        modal.style.top = 25 + getRandomNumberBetween(-25, 25) + "%";
       }
     }
 
@@ -2163,49 +2233,114 @@
       modal.classList.add("modal");
       modal.classList.add("use-gpu-rendering");
 
-      modal.innerHTML = `<div class="modal-window-title" role="dialog" aria-modal="true">
-        <button id="close-button-${story.id}" class="modal-window-title-button">
-          Close
-        </button>
+      const datePosted = new Date(story.time * 1000).toLocaleString();
 
-        <button id="open-link-${story.id}" class="modal-window-title-button">
-          New Tab
-        </button>
+      modal.innerHTML = `<header class="modal-window-title layers glitch-slow" role="dialog" aria-modal="true">
+        <nav id="close-button-${
+          story.id
+        }" class="text-link-button" title="Close Modal">
+          [⨉] 
+        </nav>
 
-        <button id="poster-name-${story.id}" class="modal-window-title-button">
-          Posted By
-        </button>
+        ${
+          !isMobileDevice()
+            ? "<nav id='modal-window-title-maximize' class='text-link-button' title='Toggle Full Screen'>[⛶]</nav>"
+            : ""
+        }
 
-        <button id="share-story-${story.id}" class="modal-window-title-button">
-          Share
-        </button>
+        <nav id="open-link-${
+          story.id
+        }" class="text-link-button" title='Open In New Tab'>
+          [➕]
+        </nav>
+
+        <nav id="share-story-${
+          story.id
+        }" class="text-link-button" title="Share Story">
+          [🌐] 
+        </nav>
+
+        <nav id="toggle-url-or-post-button" class="text-link-button" title="Toggle Webpage Preview or Hacker News Post">
+          [🖥️] 
+        </nav>
 
         ${
           isStoryFavorited(story.id)
-            ? `<button id="favorite-story-button-${story.id}" class="modal-window-title-button">Unfav</button>`
-            : `<button id="favorite-story-button-${story.id}" class="modal-window-title-button">Fav</button>`
+            ? `<nav id="favorite-story-button-${story.id}" class="text-link-button" title="Save/Unsave story">[♥]</button>`
+            : `<nav id="favorite-story-button-${story.id}" class="text-link-button" title="Save/Unsave story">[♡]</button>`
         }
+      </header>
 
-      </div>
-      <div class="modal-content">
-        <iframe id="story-iframe-${story.id}" src="${story.url}"></iframe>
-      </div>`;
+      <main class="modal-content">
+          <iframe id="story-iframe-${story.id}" src="${
+        story.url
+      }" style="display:none;"></iframe>
+          <section id="modal-content-post-${
+            story.id
+          }" class="modal-content-post">
+            <h3>${story.title}</h3>
+            <p class="story-summary-statistics">
+              By <a>${story.by}</a> | ${datePosted} | ${story.score} points | ${
+        story.descendants
+      } comments
+            </p>
+            ${story.text ? `<p class="story-text">${story.text}</p>` : ""}
+            <div class="comments"></div>
+          </section>
+      </main>`;
 
       sizeModal(modal);
 
       modal
         .querySelector(`#open-link-${story.id}`)
-        .addEventListener("click", () => window.open(story.url, "_blank"));
+        .addEventListener("click", () => {
+          if (
+            modal.querySelector(`#story-iframe-${story.id}`).style.display ===
+            "none"
+          ) {
+            window.open(`${YCOMBINATOR_URL}/item?id=${story.id}`, "_blank");
+          } else {
+            window.open(story.url, "_blank");
+          }
+        });
 
       modal
-        .querySelector(`#poster-name-${story.id}`)
-        .addEventListener("click", () =>
-          window.open(getHackerNewsPosterURLFromId(story.by), "_blank")
-        );
+        .querySelector(`#toggle-url-or-post-button`)
+        .addEventListener("click", () => {
+          const iframe = modal.querySelector(`#story-iframe-${story.id}`);
+          const post = modal.querySelector(`#modal-content-post-${story.id}`);
+          if (iframe.style.display === "none") {
+            iframe.style.display = "block";
+            post.style.display = "none";
+            modal.querySelector(`#toggle-url-or-post-button`).textContent =
+              "[💬]";
+          } else {
+            iframe.style.display = "none";
+            post.style.display = "block";
+            modal.querySelector(`#toggle-url-or-post-button`).textContent =
+              "[🖥️]";
+          }
+        });
 
       modal
         .querySelector(`#close-button-${story.id}`)
         .addEventListener("click", () => modal.remove());
+
+      if (!isMobileDevice()) {
+        modal
+          .querySelector(`#modal-window-title-maximize`)
+          .addEventListener("click", () => {
+            console.log(modal.style.width);
+            if (parseInt(modal.style.width.replace("%", "")) > 90) {
+              sizeModal(modal);
+            } else {
+              modal.style.width = "100%";
+              modal.style.height = "99%";
+              modal.style.top = "0";
+              modal.style.left = "0";
+            }
+          });
+      }
 
       modal
         .querySelector(`#share-story-${story.id}`)
@@ -2215,11 +2350,11 @@
         if (isStoryFavorited(story.id)) {
           modal.querySelector(
             `#favorite-story-button-${story.id}`
-          ).textContent = "Unfav";
+          ).textContent = "[♥]";
         } else {
           modal.querySelector(
             `#favorite-story-button-${story.id}`
-          ).textContent = "Fav";
+          ).textContent = "[♡]";
         }
       };
 
@@ -2233,6 +2368,34 @@
           }
           updateFavoriteButtonState();
         });
+
+      const loadCommentsAsync = async (itemId, parent) => {
+        const currentStory = await API.item(itemId);
+
+        if (!currentStory.kids) return; // Base case
+
+        const comments = await Promise.all(
+          currentStory.kids.map((commentId) => API.item(commentId))
+        );
+
+        comments.forEach((comment) => {
+          if (!comment || comment.deleted) return; // Skip if comment is null (deleted)
+          const commentElement = document.createElement("div");
+          commentElement.classList.add("comment");
+          commentElement.innerHTML = `
+            <p class="comment-by"><strong>${comment.by}</strong></p>
+            <p class="comment-text">${comment.text}</p>
+            <div class="comments-container"></div>
+          `;
+          loadCommentsAsync(
+            comment.id,
+            commentElement.querySelector(".comments-container")
+          );
+          parent.appendChild(commentElement);
+        });
+      };
+
+      loadCommentsAsync(story.id, modal.querySelector(".comments"));
 
       return modal;
     }

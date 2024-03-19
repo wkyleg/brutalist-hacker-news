@@ -1,6 +1,6 @@
 {
-  "name": "minimal hn",
-  "short_name": "minimal hn",
+  "name": "BRUTALIST HACKER NEWS",
+  "short_name": "BRUTALIST HN",
   "start_url": "index.html",
   "display": "standalone",
   "icons": [{
@@ -8,6 +8,6 @@
     "sizes": "512x512",
     "type": "image/png"
   }],
-  "background_color": "#4e8ef7",
-  "theme_color": "#4e8ef7"
+  "background_color": "#f6d365",
+  "theme_color": "#e30613"
 }
