@@ -2102,6 +2102,114 @@
       });
     }
 
+    function launchModalsFromNavigationParams() {
+      const currentURL = new URL(window.location.href);
+
+      const storyModalIdList = currentURL.searchParams.get("storyModalIdList");
+      if (storyModalIdList) {
+        const storyIds = storyModalIdList.split(",");
+        storyIds.forEach((storyId) => {
+          API.item(storyId).then((story) => launchStoryModal(story));
+        });
+      }
+
+      const profileModalIdList =
+        currentURL.searchParams.get("profileModalIdList");
+      if (profileModalIdList) {
+        const profileIds = profileModalIdList.split(",");
+        profileIds.forEach((profileId) => {
+          launchUserModal(profileId);
+        });
+      }
+    }
+
+    function addStoryModalToURL(storyId) {
+      const currentURL = new URL(window.location.href);
+      const currentPath = currentURL.pathname.split("/").pop();
+      const currentStoryModalIdList =
+        currentURL.searchParams.get("storyModalIdList");
+
+      if (currentStoryModalIdList) {
+        if (!currentStoryModalIdList.split(",").includes(storyId.toString())) {
+          currentURL.searchParams.set(
+            "storyModalIdList",
+            `${currentStoryModalIdList},${storyId}`
+          );
+        }
+      } else {
+        currentURL.searchParams.set("storyModalIdList", storyId);
+      }
+      window.history.pushState({}, "", currentURL);
+    }
+
+    function removeStoryModalFromURL(storyId) {
+      const currentURL = new URL(window.location.href);
+      const currentPath = currentURL.pathname.split("/").pop();
+
+      const currentStoryModalIdList =
+        currentURL.searchParams.get("storyModalIdList");
+
+      if (currentStoryModalIdList) {
+        const storyIds = currentStoryModalIdList.split(",");
+        console.log("storyIds", storyIds);
+        const newStoryIds = storyIds.filter((id) => id !== storyId.toString());
+        if (newStoryIds.length > 0) {
+          currentURL.searchParams.set(
+            "storyModalIdList",
+            newStoryIds.join(",")
+          );
+        } else {
+          currentURL.searchParams.delete("storyModalIdList");
+        }
+      }
+      window.history.pushState({}, "", currentURL);
+    }
+
+    function addProfileModalToURL(profileId) {
+      const currentURL = new URL(window.location.href);
+      const currentPath = currentURL.pathname.split("/").pop();
+      const currentProfileModalIdList =
+        currentURL.searchParams.get("profileModalIdList");
+
+      if (currentProfileModalIdList) {
+        if (
+          !currentProfileModalIdList.split(",").includes(profileId.toString())
+        ) {
+          currentURL.searchParams.set(
+            "profileModalIdList",
+            `${currentProfileModalIdList},${profileId}`
+          );
+        }
+      } else {
+        currentURL.searchParams.set("profileModalIdList", profileId);
+      }
+      window.history.pushState({}, "", currentURL);
+    }
+
+    function removeProfileModalFromURL(profileId) {
+      const currentURL = new URL(window.location.href);
+      const currentPath = currentURL.pathname.split("/").pop();
+
+      const currentProfileModalIdList =
+        currentURL.searchParams.get("profileModalIdList");
+
+      if (currentProfileModalIdList) {
+        const profileIds = currentProfileModalIdList.split(",");
+        const newProfileIds = profileIds.filter(
+          (id) => id !== profileId.toString()
+        );
+        if (newProfileIds.length > 0) {
+          currentURL.searchParams.set(
+            "profileModalIdList",
+            newProfileIds.join(",")
+          );
+        } else {
+          currentURL.searchParams.delete("profileModalIdList");
+        }
+      }
+      window.history.pushState({}, "", currentURL);
+    }
+
     /**
      * Attaches click listeners to navigation buttons
      * @returns {void}
@@ -2325,7 +2433,10 @@
 
       modal
         .querySelector(`#close-button-${userId}`)
-        .addEventListener("click", () => modal.remove());
+        .addEventListener("click", () => {
+          modal.remove();
+          removeProfileModalFromURL(userId);
+        });
 
       if (!isMobileDevice()) {
         modal
@@ -2353,7 +2464,7 @@
             <br />
             <strong>SUBMITTED:</strong> ${user.submitted.length} items
             <br />
-            ${user.about ? `<strong>ABOUT:</strong>${user.about}` : ""}
+            ${user.about ? `<strong>ABOUT: </strong>${user.about}` : ""}
         </div>
         
         <div class="user-submitted">
@@ -2391,6 +2502,7 @@
 
     function launchUserModal(userId) {
       makeModalDragable(document.body.appendChild(new UserModal(userId)));
+      addProfileModalToURL(userId);
     }
 
     /**
@@ -2495,7 +2607,10 @@
 
       modal
         .querySelector(`#close-button-${story.id}`)
-        .addEventListener("click", () => modal.remove());
+        .addEventListener("click", () => {
+          modal.remove();
+          removeStoryModalFromURL(story.id);
+        });
 
       if (!isMobileDevice()) {
         modal
@@ -2578,6 +2693,8 @@
       };
 
       loadCommentsAsync(story.id, modal.querySelector(".comments"));
+
+      addStoryModalToURL(story.id);
 
       return modal;
     }
@@ -2903,6 +3020,7 @@
       initializeSettings();
       renderFavorites();
       attachFavoritesListeners();
+      launchModalsFromNavigationParams();
       // This triggers root propagation of state changes
       navigationState.update(NAVIGATION_OPTIONS.TOP);
     }
