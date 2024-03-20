@@ -410,14 +410,22 @@
         <h3>ABOUT</h3>
         <p class="about-text">
           An experiment with
-          <a href="https://brutalist-web.design/"> brutalist web design </a>.
-          Built no libraries, only vanilla HTML/JavaScript/CSS and the Hacker
+          <a
+            href="https://brutalist-web.design/"
+            title="A popular page about brutalist web design"
+          >
+            brutalist web design </a
+          >. Built no libraries, only vanilla HTML/JavaScript/CSS and the Hacker
           News API. This page is a minimalist and accessible reader for Hacker
           News.
           <br />
           <br />
           You can contribute to the development of this page on
-          <a href="https://github.com/wkyleg/brutalist-hacker-news">GitHub</a>
+          <a
+            href="https://github.com/wkyleg/brutalist-hacker-news"
+            title="The git repository for this website"
+            >GitHub</a
+          >
           <br />
           <br />
           Share your thoughts and feedback with:
@@ -1081,6 +1089,31 @@
           overflow-y: hidden;
         }
 
+        .user-modal .modal-action-buttons {
+          display: flex;
+          flex-direction: row;
+          flex-grow: 1;
+          width: 30%;
+        }
+
+        .user-modal .user-modal-title {
+          display: flex;
+          flex-direction: row;
+          flex-grow: 1;
+          text-align: center;
+          justify-content: center;
+          align-items: center;
+          width: 36.6%;
+          font-size: var(--size-sm);
+        }
+
+        .user-modal .spacer {
+          display: flex;
+          flex-direction: row;
+          flex-grow: 1;
+          width: 33.3%;
+        }
+
         .modal-window-title {
           cursor: move;
           height: var(--size-lg);
@@ -1098,6 +1131,26 @@
 
         .modal-window-title:hover {
           background-color: var(--color-secondary);
+        }
+
+        .user-modal h3 {
+          text-align: left;
+        }
+
+        .user-description {
+          background: var(--color-accent-1);
+          color: var(--color-primary);
+          font-size: var(--size-sm);
+        }
+
+        .user-description, .user-submitted {
+          padding: var(--size-xs);
+          margin-bottom: var(--size-md);
+          border: var(--color-primary) 1px solid;
+        }
+
+        .user-description:hover, .user-submitted:hover {
+          box-shadow: var(--box-shadow-highlight-mild);
         }
 
         @media screen and (max-width: 1100px) {
@@ -1413,8 +1466,16 @@
           })
           .catch((error) => console.error(error));
       },
-      user: (id) =>
-        getRequestWithLoadingAnimation(`${HACKER_NEWS_API_URL}user/${id}.json`),
+      user: (id) => {
+        if (itemCache.has(id)) return Promise.resolve(itemCache.get(id));
+        return fetch(`${HACKER_NEWS_API_URL}user/${id}.json`)
+          .then((response) => response.json())
+          .then((item) => {
+            itemCache.set(id, item);
+            return item;
+          })
+          .catch((error) => console.error(error));
+      },
     };
   </script>
 
@@ -2173,6 +2234,31 @@
      */
     const storyElementLoadingCallbacks = {};
 
+    function sizeModal(modal) {
+      if (isMobileDevice()) {
+        modal.style.width = "98%";
+        modal.style.height = "99%";
+        modal.style.top = "0";
+        modal.style.left = "0";
+      } else {
+        modal.style.width = "50%";
+        modal.style.height = "50%";
+        modal.style.left =
+          25 +
+          getRandomNumberBetween(
+            -MODAL_POSITION_RANDOM_OFFSET,
+            MODAL_POSITION_RANDOM_OFFSET
+          ) +
+          "%";
+        modal.style.top =
+          25 +
+          getRandomNumberBetween(
+            -MODAL_POSITION_RANDOM_OFFSET,
+            MODAL_POSITION_RANDOM_OFFSET
+          ) +
+          "%";
+      }
+    }
     /**
      * Story list element for a hacker news story
      * @param {number} storyId
@@ -2210,35 +2296,101 @@
       return storyContainer;
     }
 
-    function sizeModal(modal) {
-      if (window.innerWidth < MOBILE_DEVICE_MAX_WIDTH) {
-        modal.style.width = "98%";
-        modal.style.height = "99%";
-      } else {
-        modal.style.width = "50%";
-        modal.style.height = "50%";
+    function UserModal(userId) {
+      const modal = document.createElement("div");
+      modal.classList.add("modal", "user-modal", "use-gpu-rendering");
+
+      modal.innerHTML = `<header class="modal-window-title" role="dialog" aria-modal="true">
+        <div class="modal-action-buttons">
+          <nav id="close-button-${userId}" class="text-link-button" title="Close Modal">
+            [⨉]
+          </nav>
+          ${
+            !isMobileDevice()
+              ? "<nav id='modal-window-title-maximize' class='text-link-button' title='Toggle Full Screen'>[⛶]</nav>"
+              : ""
+          }
+        </div>
+        <div class="user-modal-title">${userId}</div>
+        <div class="spacer"></div>
+      </header>
+
+      <main class="modal-content">
+        <section id="modal-content-post-${userId}" class="modal-content-post">
+          <div class="user-details">Loading...</div>
+        </section>
+      </main>`;
+
+      sizeModal(modal);
+
+      modal
+        .querySelector(`#close-button-${userId}`)
+        .addEventListener("click", () => modal.remove());
+
+      if (!isMobileDevice()) {
+        modal
+          .querySelector(`#modal-window-title-maximize`)
+          .addEventListener("click", () => {
+            if (parseInt(modal.style.width.replace("%", "")) > 90) {
+              sizeModal(modal);
+            } else {
+              modal.style.width = "100%";
+              modal.style.height = "99%";
+              modal.style.top = "0";
+              modal.style.left = "0";
+            }
+          });
       }
 
-      if (window.innerWidth < MOBILE_DEVICE_MAX_WIDTH) {
-        modal.style.top = "0";
-        modal.style.left = "0";
-      } else {
-        // Make position vary slightly for stacked modals on desktop
-        modal.style.left =
-          25 +
-          getRandomNumberBetween(
-            -MODAL_POSITION_RANDOM_OFFSET,
-            MODAL_POSITION_RANDOM_OFFSET
-          ) +
-          "%";
-        modal.style.top =
-          25 +
-          getRandomNumberBetween(
-            -MODAL_POSITION_RANDOM_OFFSET,
-            MODAL_POSITION_RANDOM_OFFSET
-          ) +
-          "%";
-      }
+      API.user(userId).then((user) => {
+        const userDetails = modal.querySelector(".user-details");
+        userDetails.innerHTML = `<div class="user-description">
+            <strong>CREATED:</strong> ${new Date(
+              user.created * 1000
+            ).toLocaleString()}
+            <br />
+            <strong>KARMA:</strong> ${user.karma}
+            <br />
+            <strong>SUBMITTED:</strong> ${user.submitted.length} items
+            <br />
+            ${user.about ? `<strong>ABOUT:</strong>${user.about}` : ""}
+        </div>
+        
+        <div class="user-submitted">
+          <strong>SUBMITTED:</strong>  
+        </div>
+        `;
+
+        const userSubmitted = userDetails.querySelector(".user-submitted");
+        user.submitted.forEach((storyId) => {
+          userSubmitted.appendChild(new StoryListElement(storyId));
+        });
+
+        const submittedStoriesObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                const storyId = entry.target.id;
+                if (storyElementLoadingCallbacks[storyId]) {
+                  storyElementLoadingCallbacks[storyId]();
+                  delete storyElementLoadingCallbacks[storyId];
+                }
+              }
+            });
+          },
+          { rootMargin: "0px 0px 100px 0px" }
+        );
+
+        userSubmitted.querySelectorAll(".story-container").forEach((story) => {
+          submittedStoriesObserver.observe(story);
+        });
+      });
+
+      return modal;
+    }
+
+    function launchUserModal(userId) {
+      makeModalDragable(document.body.appendChild(new UserModal(userId)));
     }
 
     /**
@@ -2258,7 +2410,7 @@
         <nav id="close-button-${
           story.id
         }" class="text-link-button" title="Close Modal">
-          [⨉] 
+          [⨉]
         </nav>
 
         ${
@@ -2276,11 +2428,11 @@
         <nav id="share-story-${
           story.id
         }" class="text-link-button" title="Share Story">
-          [🌐] 
+          [🌐]
         </nav>
 
         <nav id="toggle-url-or-post-button" class="text-link-button" title="Toggle Webpage Preview or Hacker News Post">
-          [🖥️] 
+          [🖥️]
         </nav>
 
         ${
@@ -2299,9 +2451,9 @@
           }" class="modal-content-post">
             <h3>${story.title}</h3>
             <p class="story-summary-statistics">
-              By <a>${story.by}</a> | ${datePosted} | ${story.score} points | ${
-        story.descendants
-      } comments
+              By <a class="user-id">${story.by}</a> | ${datePosted} | ${
+        story.score
+      } points | ${story.descendants || 0} comments
             </p>
             ${story.text ? `<p class="story-text">${story.text}</p>` : ""}
             <div class="comments"></div>
@@ -2388,6 +2540,10 @@
           updateFavoriteButtonState();
         });
 
+      modal.querySelector(`.user-id`).addEventListener("click", () => {
+        launchUserModal(story.by);
+      });
+
       const loadCommentsAsync = async (itemId, parent) => {
         const currentStory = await API.item(itemId);
 
@@ -2410,6 +2566,13 @@
             comment.id,
             commentElement.querySelector(".comments-container")
           );
+
+          commentElement
+            .querySelector(".comment-by")
+            .addEventListener("click", () => {
+              launchUserModal(comment.by);
+            });
+
           parent.appendChild(commentElement);
         });
       };
