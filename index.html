@@ -426,18 +426,10 @@
             title="The git repository for this website"
             >GitHub</a
           >
+
           <br />
           <br />
-          Share your thoughts and feedback with:
-          <br />
-          <br />
-          <button id="share-twitter">X (TWITTER)</button>
-          <button id="share-facebook">FACEBOOK</button>
-          <button id="share-linkedin">LINKEDIN</button>
-          <button id="share-reddit">REDDIT</button>
-          <button id="share-telegram">TELEGRAM</button>
-          <button id="share-whatsapp">WHATSAPP</button>
-          <button id="share-email">EMAIL</button>
+          <button id="share-website">SHARE THIS WEBSITE</button>
         </p>
       </section>
     </main>
@@ -1195,6 +1187,31 @@
           background: var(--color-light);
         }
 
+        .modal-content-post-share {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+          height: calc(100% - var(--size-lg));
+          background: var(--color-light);
+          /* justify-content: space-between; */
+          align-items: flex-start;
+          padding: var(--size-xs);
+          font-size: var(--size-lg);
+          overflow-x: scroll;
+          overflow-y: scroll;
+
+          /* padding: var(--size-md); */
+          /* overflow-y: scroll; */
+
+
+        }
+
+        .modal-content-post-share nav {
+          font-size: var(--size-md);
+          margin-bottom: var(--size-xs);
+        }
+
+
         iframe {
           width: 100%;
           height: 100%;
@@ -1355,6 +1372,7 @@
 
   <!-- Constants -->
   <script type="text/javascript">
+    const MEDIA_URL = "https://brutalisthackernews.com/icon.png";
     const YCOMBINATOR_URL = "https://news.ycombinator.com/";
     const MILLISECONDS_IN_SECOND = 1_000;
     const TOTAL_ANIMATION_STRINGS = 100;
@@ -1367,7 +1385,8 @@
     const MODAL_POSITION_RANDOM_OFFSET = 10;
     const ANIMATION_CHARACTERS_STRING =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+=-[]{}|;:,.<>?♥♦♣♠•◘○◆☻☺♂♀♪♫☼►◄↕‼¶§▬↨↑↓→←∟↔▲▼ァアィイゥウェエォオカガキギクゲゴサザシジスゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャユョヨラリルレロヮワヰヱヲン々〆〤￥「」『』【】〒〓─━│┃┄┅┆┇┈┉┊┋┌┍┎┏┐┑┒┓└┕┖┗┘┙┚┛├┝┞┟┠┡┢┣┤┥┦┧┨┩┪┫┬┭┮┯┰┱┲┳┴┵┶┷┸┹┺┻┼┽┾┿╀╁╂╃╄╅╆╇╈╉╊╋╌╍╎╏═║╒╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡╢╣╤╥╦╧╨╩╪╫╬§¶☊☋☌☍ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθικλμνξοπρςστυφχψω←↑→↓↔↕↖↗↘↙↚↛↜↝↞↟↠↡↢↣↤↥↦↧↨↩↪↫↬↭↮↯↰↱↲↳↴↵↶↷↸↹↺↻↼↽↾↿⇀⇁⇂⇃⇄⇅⇆⇇⇈⇉⇊⇋⇌⇍⇎⇏⇐⇑⇒⇓⇔⇕⇖⇗⇘⇙⇚⇛⇜⇝⇞⇟⇠⇡⇢⇣⇤⇥⇦⇧⇨⇩⇪⌨";
-    // TODO: add more of these incase of future alteration
+    const LINK_SHARE_DESCRIPTION =
+      "Check out this Hacker News Reader Inspired by Brutalist Web Design and Cyberpunk Aesthetics!";
     const TWITTER_SHARE_URL =
       "https://twitter.com/intent/tweet?text=Check%20out%20this%20awesome%20content&url=";
     const FACEBOOK_SHARE_URL = "https://www.facebook.com/sharer/sharer.php?u=";
@@ -1590,18 +1609,42 @@
     const shareViaEmail = (url) =>
       window.open(`${EMAIL_SHARE_URL}${url || window.location.href}`, "_blank");
 
-    function shareStory(story) {
+    const shareOnPintrest = () => {
+      window.open(
+        `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(
+          window.location.href
+        )}&media=${encodeURIComponent(
+          MEDIA_URL
+        )}&description=${encodeURIComponent(LINK_SHARE_DESCRIPTION)}`
+      );
+    };
+
+    const shareOnTumblr = () => {
+      window.open(
+        `https://www.tumblr.com/widgets/share/tool?canonicalUrl=${encodeURIComponent(
+          window.location.href
+        )}&title=${encodeURIComponent(
+          "BRUTALIST HACKER NEWS"
+        )}&caption=${encodeURIComponent(
+          "A Hacker News reader inspired by Brutalist Web Design"
+        )}&tags=${encodeURIComponent(
+          "brutalist,hackernews,webdesign,cyberpunk,accesibility"
+        )}`
+      );
+    };
+
+    function builtInShare() {
       if (!!navigator.canShare && navigator.canShare() && !!navigator.share) {
         navigator
           .share({
-            title: story.title,
-            text: story.text || story.title,
-            url: story.url || window.location.href,
+            title: "Check out this article on Brutalist Hacker News",
+            text: "Check out this article on Brutalist Hacker News",
+            url: window.location.href,
           })
           .then(() => console.log("Successful share"))
-          .catch((error) => shareOnTwitter(story.url));
+          .catch((error) => shareViaEmail());
       } else {
-        shareOnTwitter(story);
+        shareViaEmail();
       }
     }
 
@@ -2018,41 +2061,11 @@
           .addEventListener("click", () => applyTheme(value));
       });
 
-      document.querySelector("#share-twitter").addEventListener("click", () => {
-        shareOnTwitter();
-      });
-
       document
-        .querySelector("#share-facebook")
+        .getElementById("share-website")
         .addEventListener("click", () => {
-          shareOnFacebook();
+          window.launchShareModal();
         });
-
-      document
-        .querySelector("#share-linkedin")
-        .addEventListener("click", () => {
-          shareOnLinkedIn();
-        });
-
-      document
-        .querySelector("#share-whatsapp")
-        .addEventListener("click", () => {
-          shareOnWhatsApp();
-        });
-
-      document.querySelector("#share-reddit").addEventListener("click", () => {
-        shareOnReddit();
-      });
-
-      document
-        .querySelector("#share-telegram")
-        .addEventListener("click", () => {
-          shareOnTelegram();
-        });
-
-      document.querySelector("#share-email").addEventListener("click", () => {
-        shareViaEmail();
-      });
 
       document.getElementById("open-links-in-new-tab-checkbox").checked =
         shouldOpenLinksInNewTab();
@@ -2342,15 +2355,21 @@
      */
     const storyElementLoadingCallbacks = {};
 
-    function sizeModal(modal) {
+    function sizeModal(
+      modal,
+      mobileHeight = "99%",
+      mobileWidth = "98%",
+      desktopHeight = "50%",
+      desktopWidth = "50%"
+    ) {
       if (isMobileDevice()) {
-        modal.style.width = "98%";
-        modal.style.height = "99%";
+        modal.style.width = mobileWidth;
+        modal.style.height = mobileHeight;
         modal.style.top = "0";
         modal.style.left = "0";
       } else {
-        modal.style.width = "50%";
-        modal.style.height = "50%";
+        modal.style.width = desktopWidth;
+        modal.style.height = desktopHeight;
         modal.style.left =
           25 +
           getRandomNumberBetween(
@@ -2366,6 +2385,118 @@
           ) +
           "%";
       }
+    }
+
+    function ShareModal() {
+      const modal = document.createElement("div");
+      modal.classList.add(
+        "modal",
+        "share-modal",
+        "user-modal",
+        "use-gpu-rendering"
+      );
+
+      modal.innerHTML = `
+      <header class="modal-window-title" role="dialog" aria-modal="true">
+        <div class="modal-action-buttons">
+          <nav id="close-button-share" class="text-link-button" title="Close Modal">
+            [⨉]
+          </nav>
+          ${
+            !isMobileDevice()
+              ? "<nav id='modal-window-title-maximize' class='text-link-button' title='Toggle Full Screen'>[⛶]</nav>"
+              : ""
+          }
+        </div>
+        <div class="user-modal-title">Share</div>
+        <div class="spacer"></div>
+      </header>
+      <main class="modal-content">
+        <div class="modal-content-post-share">
+            <nav id="share-twitter" class="text-link-button" title="Share on X/Twitter">Twitter</nav>
+            <nav id="share-pintrest" class="text-link-button" title="Share on Pintrest">Pintrest</nav>
+            <nav id="share-tumblr" class="text-link-button" title="Share on Tumblr">Tumblr</nav>
+            <nav id="share-facebook" class="text-link-button" title="Share on Facebook">Facebook</nav>
+            <nav id="share-linkedin" class="text-link-button" title="Share on LinkedIn">LinkedIn</nav>
+            <nav id="share-whatsapp" class="text-link-button" title="Share on WhatsApp">WhatsApp</nav>
+            <nav id="share-reddit" class="text-link-button" title="Share on Reddit">Reddit</nav>
+            <nav id="share-telegram" class="text-link-button" title="Share on Telegram">Telegram</nav>
+            <nav id="built-in" class="text-link-button" title="Share on the built in browser share feature">Built-in share</nav>
+            <nav id="share-email" class="text-link-button" title="Share via Email">Email</nav>
+        </div>
+      </main>
+      `;
+
+      // Use smaller sizing for this modal
+      sizeModal(modal, "99%", "99%", "42%", "16.6%");
+
+      modal
+        .querySelector(`#close-button-share`)
+        .addEventListener("click", () => {
+          modal.remove();
+        });
+
+      if (!isMobileDevice()) {
+        modal
+          .querySelector(`#modal-window-title-maximize`)
+          .addEventListener("click", () => {
+            if (parseInt(modal.style.width.replace("%", "")) > 90) {
+              sizeModal(modal);
+            } else {
+              modal.style.width = "100%";
+              modal.style.height = "99%";
+              modal.style.top = "0";
+              modal.style.left = "0";
+            }
+          });
+      }
+
+      modal.querySelector("#share-twitter").addEventListener("click", () => {
+        shareOnTwitter();
+      });
+
+      modal.querySelector("#share-facebook").addEventListener("click", () => {
+        shareOnFacebook();
+      });
+
+      modal.querySelector("#share-linkedin").addEventListener("click", () => {
+        shareOnLinkedIn();
+      });
+
+      modal.querySelector("#share-whatsapp").addEventListener("click", () => {
+        shareOnWhatsApp();
+      });
+
+      modal.querySelector("#share-reddit").addEventListener("click", () => {
+        shareOnReddit();
+      });
+
+      modal.querySelector("#share-telegram").addEventListener("click", () => {
+        shareOnTelegram();
+      });
+
+      modal.querySelector("#share-email").addEventListener("click", () => {
+        shareViaEmail();
+      });
+
+      modal.querySelector("#share-pintrest").addEventListener("click", () => {
+        shareOnPintrest();
+      });
+
+      modal.querySelector("#share-tumblr").addEventListener("click", () => {
+        shareOnTumblr();
+      });
+
+      modal.querySelector("#built-in").addEventListener("click", () => {
+        builtInShare();
+      });
+
+      return modal;
+    }
+
+    function launchShareModal() {
+      makeModalDragable(document.body.appendChild(new ShareModal()));
+      // TODO: find a way to make modal dragable in constructor
     }
 
     function CommentListElement(item) {
@@ -2692,7 +2823,7 @@
 
       modal
         .querySelector(`#share-story-${story.id}`)
-        .addEventListener("click", () => shareStory(story));
+        .addEventListener("click", () => launchShareModal());
 
       const updateFavoriteButtonState = () => {
         if (isStoryFavorited(story.id)) {
