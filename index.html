@@ -1231,7 +1231,7 @@
           word-wrap: break-word;
         }
 
-        .modal-content-post .comment {
+         .comment {
           font-size: var(--size-xs);
           padding: var(--size-xs);
           margin: var(--size-xs);
@@ -1244,7 +1244,7 @@
           margin-top: 0;
         }
 
-        .modal-content-post .comment:hover {
+        .comment:hover {
           box-shadow: var(--box-shadow-highlight-mild);
         }
 
@@ -2367,13 +2367,65 @@
           "%";
       }
     }
+
+    function CommentListElement(item) {
+      const commentContainer = document.createElement("div");
+      commentContainer.id = item.id;
+      commentContainer.classList.add("comment-container");
+
+      commentContainer.innerHTML = `<div class="comment">
+        <p class="comment-by"><strong>${item.by || "[DELETED]"}</strong></p>
+        <p class="comment-text">${item.text || "[DELETED]"}</p>
+        </div>`;
+
+      return commentContainer;
+    }
+
+    const userProfileItemCallbacks = {};
+
+    function UserSubmittedItemElement(itemId) {
+      const storyContainer = document.createElement("div");
+      storyContainer.id = itemId;
+      storyContainer.classList.add("profile-item-container");
+
+      storyContainer.innerHTML = `<span>${getRandomLoadingString()}</span>`;
+
+      const loadItem = () => {
+        API.item(itemId)
+          .then(async (item) => {
+            storyContainer.innerHTML = "";
+            if (item.type === "story") {
+              storyContainer.appendChild(
+                new StoryListElement(itemId, true, item)
+              );
+            } else if (item.type === "comment") {
+              storyContainer.appendChild(new CommentListElement(item));
+            } else {
+              storyContainer.innerHTML = "Eᴙᴙ0ᴙ...";
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+            storyContainer.firstChild.textContent = "Eᴙᴙ0ᴙ...";
+          });
+      };
+
+      userProfileItemCallbacks[itemId] = loadItem;
+
+      return storyContainer;
+    }
+
     /**
      * Story list element for a hacker news story
      * @param {number} storyId
      * @param {boolean} loadContentImmediately
      * @returns {HTMLElement}
      */
-    function StoryListElement(storyId, loadContentImmediately = false) {
+    function StoryListElement(
+      storyId,
+      loadContentImmediately = false,
+      storyPreloaded = undefined
+    ) {
       // Create html element for story
       const storyContainer = document.createElement("div");
       storyContainer.id = storyId;
@@ -2382,22 +2434,30 @@
       // Assign random string for loading effect
       storyContainer.innerHTML = `<span>${getRandomLoadingString()}}</span>`;
 
+      const renderStory = (story) => {
+        if (story.deleted) {
+          storyContainer.innerHTML = `<span>[DELETED]</span>`;
+          return;
+        }
+        storyContainer.innerHTML = `<span>${story.title}</span>`;
+        storyContainer.addEventListener("click", () => {
+          if (shouldOpenLinksInNewTab()) return window.open(story.url);
+          launchStoryModal(story);
+        });
+      };
+
       const loadStory = () => {
         API.item(storyId)
-          .then(async (story) => {
-            storyContainer.firstChild.textContent = story.title;
-            storyContainer.addEventListener("click", () => {
-              if (shouldOpenLinksInNewTab()) return window.open(story.url);
-              launchStoryModal(story);
-            });
-          })
+          .then(async (story) => renderStory(story))
           .catch((error) => {
             console.error(error);
             storyContainer.firstChild.textContent = "Eᴙᴙ0ᴙ...";
           });
       };
 
-      if (loadContentImmediately) loadStory();
+      if (loadContentImmediately && !storyPreloaded) loadStory();
+
+      if (storyPreloaded) renderStory(storyPreloaded);
 
       storyElementLoadingCallbacks[storyId] = loadStory;
 
@@ -2466,15 +2526,15 @@
             <br />
             ${user.about ? `<strong>ABOUT: </strong>${user.about}` : ""}
         </div>
-        
+
         <div class="user-submitted">
-          <strong>SUBMITTED:</strong>  
+          <strong>SUBMITTED:</strong>
         </div>
         `;
 
         const userSubmitted = userDetails.querySelector(".user-submitted");
         user.submitted.forEach((storyId) => {
-          userSubmitted.appendChild(new StoryListElement(storyId));
+          userSubmitted.appendChild(new UserSubmittedItemElement(storyId));
         });
 
         const submittedStoriesObserver = new IntersectionObserver(
@@ -2482,9 +2542,9 @@
             entries.forEach((entry) => {
               if (entry.isIntersecting) {
                 const storyId = entry.target.id;
-                if (storyElementLoadingCallbacks[storyId]) {
-                  storyElementLoadingCallbacks[storyId]();
-                  delete storyElementLoadingCallbacks[storyId];
+                if (userProfileItemCallbacks[storyId]) {
+                  userProfileItemCallbacks[storyId]();
+                  delete userProfileItemCallbacks[storyId];
                 }
               }
             });
@@ -2492,9 +2552,11 @@
           { rootMargin: "0px 0px 100px 0px" }
         );
 
-        userSubmitted.querySelectorAll(".story-container").forEach((story) => {
-          submittedStoriesObserver.observe(story);
-        });
+        userSubmitted
+          .querySelectorAll(".profile-item-container")
+          .forEach((story) => {
+            submittedStoriesObserver.observe(story);
+          });
       });
 
       return modal;
