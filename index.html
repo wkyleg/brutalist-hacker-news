@@ -2055,11 +2055,9 @@
           .addEventListener("click", () => applyTheme(value));
       });
 
-      document
-        .getElementById("share-website")
-        .addEventListener("click", () => {
-          window.launchShareModal();
-        });
+      document.getElementById("share-website").addEventListener("click", () => {
+        window.launchShareModal();
+      });
 
       document.getElementById("open-links-in-new-tab-checkbox").checked =
         shouldOpenLinksInNewTab();
@@ -2415,7 +2413,7 @@
             <nav id="share-whatsapp" class="text-link-button" title="Share on WhatsApp">WhatsApp</nav>
             <nav id="share-reddit" class="text-link-button" title="Share on Reddit">Reddit</nav>
             <nav id="share-telegram" class="text-link-button" title="Share on Telegram">Telegram</nav>
-            <nav id="built-in" class="text-link-button" title="Share on the built in browser share feature">Built-in share</nav>
+            <nav id="built-in" class="text-link-button" title="Share on the built in browser share feature">Built-in Share</nav>
             <nav id="share-email" class="text-link-button" title="Share via Email">Email</nav>
         </div>
       </main>
@@ -3143,7 +3141,7 @@
           startStoryIntersectionObservers();
           break;
         default:
-          console.error("Invalid navigation option");
+          onNavigationChange(NAVIGATION_OPTIONS.TOP);
       }
     };
 
@@ -3208,8 +3206,7 @@
       renderFavorites();
       attachFavoritesListeners();
       launchModalsFromNavigationParams();
-      // This triggers root propagation of state changes
-      navigationState.update(NAVIGATION_OPTIONS.TOP);
+      navigationState.update(window.location.pathname.split("/").pop());
     }
 
     // Call main when other data loaded
