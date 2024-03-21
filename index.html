@@ -3192,7 +3192,13 @@
       }
             </p>
             ${story.text ? `<p class="story-text">${story.text}</p>` : ""}
-            <div class="comments"></div>
+            <div class="comments">
+              ${
+                story.descendants
+                  ? '<span id="loading-comments">Loading Comments...</span>'
+                  : ""
+              }
+            </div>
           </section>
       </main>`;
 
@@ -3288,10 +3294,16 @@
         });
       }
 
+      const loadingIndicator = modal.querySelector("#loading-comments");
+
+      const hideLoadingMessage = () => {
+        if (loadingIndicator) loadingIndicator.style.display = "none";
+      };
+
       const loadCommentsAsync = async (itemId, parent) => {
         const currentStory = await API.item(itemId);
 
-        if (!currentStory.kids) return; // Base case
+        if (!currentStory.kids) return; // Base case for end of coment tree
 
         const comments = await Promise.all(
           currentStory.kids.map((commentId) => API.item(commentId))
@@ -3316,6 +3328,8 @@
             .addEventListener("click", () => {
               launchUserModal(comment.by);
             });
+
+          hideLoadingMessage();
 
           parent.appendChild(commentElement);
         });
