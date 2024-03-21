@@ -529,6 +529,7 @@
         a {
           color: var(--color-primary);
           text-decoration: underline;
+          cursor: pointer;
         }
 
         a:hover {
@@ -2909,7 +2910,7 @@
       commentContainer.classList.add("comment-container");
 
       commentContainer.innerHTML = `<div class="comment">
-        <p><a id="parent-comment" class="comment-by"><strong>In Thread</strong></a></p>
+        <p><a id="parent-comment" class="comment-by"><strong>Parent Thread</strong></a></p>
         <p class="comment-text">${item.text || "[DELETED]"}</p>
         </div>`;
 
@@ -3182,7 +3183,7 @@
               By <a class="user-id">${story.by}</a> | ${datePosted} | ⧫ ${
         story.score
       } | ${story.descendants || 0} comments ${
-        story.parent ? `| <a id="parent-comment">In Thread</a>` : ""
+        story.parent ? `| <a id="parent-comment">Parent Thread</a>` : ""
       }
             </p>
             ${story.text ? `<p class="story-text">${story.text}</p>` : ""}
@@ -3307,7 +3308,7 @@
           const commentElement = document.createElement("div");
           commentElement.classList.add("comment");
           commentElement.innerHTML = `
-            <p class="comment-by"><strong>${comment.by}</strong></p>
+            <a class="comment-by"><strong>${comment.by}</strong></a>
             <p class="comment-text">${comment.text}</p>
             <div class="comments-container"></div>
           `;
