@@ -483,7 +483,6 @@
           border-radius: 0;
           color: var(--color-text-main);
           border: 0;
-          border-radius: 0;
         }
 
         input {
@@ -493,6 +492,24 @@
           margin-block: 0;
           margin-inline: 0;
         }
+
+        a {
+          color: var(--color-primary);
+          text-decoration: underline;
+        }
+
+        a:hover {
+          color: var(--color-secondary);
+        }
+
+        a:visited {
+          color: var(--color-accent-1);
+        }
+
+        a:visited:hover {
+          color: var(--color-accent-2);
+        }
+
 
         button {
           cursor: pointer;
@@ -1130,7 +1147,6 @@
         }
 
         .user-description {
-          background: var(--color-accent-1);
           color: var(--color-primary);
           font-size: var(--size-sm);
         }
@@ -1147,7 +1163,6 @@
 
         @media screen and (max-width: 1100px) {
           .modal-window-title {
-            height: fit-content;
             font-size: var(--size-xs);
           }
         }
@@ -1242,13 +1257,22 @@
           word-wrap: break-word;
         }
 
-         .comment {
+        .comment {
           font-size: var(--size-xs);
           padding: var(--size-xs);
           margin: var(--size-xs);
           border: var(--color-primary) 1px solid;
           background: var(--color-light);
-          min-width: 33vw;
+          min-width: 10vw;
+        }
+
+        @media screen and (max-width: 600px) {
+          .comment {
+            font-size: var(--size-xxs);
+            padding: var(--size-xxs);
+            margin: var(--size-xxs);
+            min-width: 33vw;
+          }
         }
 
         .modal-content-post .comment p {
@@ -1506,6 +1530,19 @@
       }
     };
 
+    function formatDate(timePosted) {
+      const date = new Date(timePosted * 1000);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0"); // JavaScript months are 0-based.
+      const day = String(date.getDate()).padStart(2, "0");
+      const hours = String(date.getHours()).padStart(2, "0");
+      const minutes = String(date.getMinutes()).padStart(2, "0");
+      const seconds = String(date.getSeconds()).padStart(2, "0");
+
+      // Make sure to avoid Y10K bugs
+      return `0${year}:${month}:${day}:${hours}:${minutes}:${seconds}`;
+    }
+
     /**
      * Wait utility, returns a promise that resolves after `timeInMs` milliseconds
      * @param {number} timeInMs
@@ -1651,6 +1688,32 @@
       a.download = "data.json";
       a.click();
       URL.revokeObjectURL(url);
+    }
+
+    /**
+     * Incept all link click events and make sure they open in a new tab
+     * @returns {void}
+     */
+    function initLinkClickInterceptBehavior() {
+      document.body.addEventListener("click", function (e) {
+        // Check if the clicked element is a link or inside a link
+        let target = e.target;
+        while (target != null && target.tagName !== "A") {
+          target = target.parentElement;
+        }
+
+        // If a link was clicked
+        if (target && target.tagName === "A") {
+          // Check if it's an external link or you want to force it to open in a new tab
+          if (
+            target.getAttribute("href").startsWith("http") ||
+            target.getAttribute("target") === "_blank"
+          ) {
+            e.preventDefault(); // Prevent default link behavior
+            window.open(target.href, "_blank"); // Open the link in a new tab
+          }
+        }
+      });
     }
   </script>
 
@@ -2497,9 +2560,19 @@
       commentContainer.classList.add("comment-container");
 
       commentContainer.innerHTML = `<div class="comment">
-        <p class="comment-by"><strong>${item.by || "[DELETED]"}</strong></p>
+        <p><a id="parent-comment" class="comment-by"><strong>In Thread</strong></a></p>
         <p class="comment-text">${item.text || "[DELETED]"}</p>
         </div>`;
+
+      if (item.parent) {
+        commentContainer
+          .querySelector(`#parent-comment`)
+          .addEventListener("click", () => {
+            API.item(item.parent).then((parentItem) =>
+              launchStoryModal(parentItem)
+            );
+          });
+      }
 
       return commentContainer;
     }
@@ -2561,6 +2634,15 @@
         if (story.deleted) {
           storyContainer.innerHTML = `<span>[DELETED]</span>`;
           return;
+        }
+
+        if (story.dead) {
+          storyContainer.innerHTML = `<span>[DEAD]</span>`;
+          return;
+        }
+
+        if (story.title === undefined) {
+          story.title = "[NO TITLE]";
         }
         storyContainer.innerHTML = `<span>${story.title}</span>`;
         storyContainer.addEventListener("click", () => {
@@ -2639,13 +2721,11 @@
       API.user(userId).then((user) => {
         const userDetails = modal.querySelector(".user-details");
         userDetails.innerHTML = `<div class="user-description">
-            <strong>CREATED:</strong> ${new Date(
-              user.created * 1000
-            ).toLocaleString()}
+            <strong>CREATED:</strong> ${formatDate(user.created)}
             <br />
-            <strong>KARMA:</strong> ${user.karma}
+            <strong>KARMA</strong> ${user.karma}
             <br />
-            <strong>SUBMITTED:</strong> ${user.submitted.length} items
+            <strong>SUBMITTED:</strong> ${user.submitted.length}
             <br />
             ${user.about ? `<strong>ABOUT: </strong>${user.about}` : ""}
         </div>
@@ -2701,7 +2781,7 @@
       modal.classList.add("modal");
       modal.classList.add("use-gpu-rendering");
 
-      const datePosted = new Date(story.time * 1000).toLocaleString();
+      const datePosted = formatDate(story.time);
 
       modal.innerHTML = `<header class="modal-window-title" role="dialog" aria-modal="true">
         <nav id="close-button-${
@@ -2746,11 +2826,13 @@
           <section id="modal-content-post-${
             story.id
           }" class="modal-content-post">
-            <h3>${story.title}</h3>
+            ${story.title ? `<h3>${story.title}</h3>` : ""}
             <p class="story-summary-statistics">
-              By <a class="user-id">${story.by}</a> | ${datePosted} | ${
+              By <a class="user-id">${story.by}</a> | ${datePosted} | ⧫ ${
         story.score
-      } points | ${story.descendants || 0} comments
+      } | ${story.descendants || 0} comments ${
+        story.parent ? `| <a id="parent-comment">In Thread</a>` : ""
+      }
             </p>
             ${story.text ? `<p class="story-text">${story.text}</p>` : ""}
             <div class="comments"></div>
@@ -2843,6 +2925,14 @@
       modal.querySelector(`.user-id`).addEventListener("click", () => {
         launchUserModal(story.by);
       });
+
+      if (story.parent) {
+        modal.querySelector(`#parent-comment`).addEventListener("click", () => {
+          API.item(story.parent).then((parentItem) =>
+            launchStoryModal(parentItem)
+          );
+        });
+      }
 
       const loadCommentsAsync = async (itemId, parent) => {
         const currentStory = await API.item(itemId);
@@ -3206,6 +3296,7 @@
       renderFavorites();
       attachFavoritesListeners();
       launchModalsFromNavigationParams();
+      initLinkClickInterceptBehavior();
       navigationState.update(window.location.pathname.split("/").pop());
     }
 
