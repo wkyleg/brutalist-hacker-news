@@ -1730,7 +1730,7 @@
             text: "Check out this article on Brutalist Hacker News",
             url: window.location.href,
           })
-          .then(() => console.log("Successful share"))
+          // .then(() => console.log("Successful share"))
           .catch((error) => shareViaEmail());
       } else {
         shareViaEmail();
@@ -2328,7 +2328,6 @@
 
     const applyTheme = (theme) => {
       Object.entries(theme).forEach(([key, value]) => {
-        console.log(key, value);
         setCSSVariable(key, value);
         saveSettingToLocalStorage(key, value);
         updateSettingInputWithCurrentValue(key);
@@ -2542,7 +2541,6 @@
 
       if (currentStoryModalIdList) {
         const storyIds = currentStoryModalIdList.split(",");
-        console.log("storyIds", storyIds);
         const newStoryIds = storyIds.filter((id) => id !== storyId.toString());
         if (newStoryIds.length > 0) {
           currentURL.searchParams.set(
@@ -2849,14 +2847,10 @@
         modal
           .querySelector(`#modal-window-title-maximize`)
           .addEventListener("click", () => {
-            console.log(modal.style);
             if (isModalMaximized(modal)) {
               setModalDisplayDefaultSize(modal);
             } else {
-              modal.style.width = "100%";
-              modal.style.height = "99%";
-              modal.style.top = "0";
-              modal.style.left = "0";
+              maximizeModal(modal);
             }
           });
       }
@@ -3246,7 +3240,6 @@
         modal
           .querySelector(`#modal-window-title-maximize`)
           .addEventListener("click", () => {
-            console.log(modal.style.width);
             if (isModalMaximized(modal)) {
               setModalDisplayDefaultSize(modal);
             } else {
