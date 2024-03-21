@@ -513,6 +513,9 @@
           border-radius: 0;
           color: var(--color-text-main);
           border: 0;
+          scrollbar-color: var(--color-primary) var(--color-secondary);
+          scrollbar-width: auto;
+          transition: all 0.2s ease-in-out;
         }
 
         input {
@@ -3064,7 +3067,7 @@
         modal
           .querySelector(`#modal-window-title-maximize`)
           .addEventListener("click", () => {
-            if (isModalMaximized()) {
+            if (isModalMaximized(modal)) {
               setModalDisplayDefaultSize(modal);
             } else {
               maximizeModal(modal);
