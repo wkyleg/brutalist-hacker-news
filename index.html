@@ -304,14 +304,14 @@
           <button id="button-theme-rainbow">✦☾⇢✧⇠☽✦</button>
           <button id="button-theme-miami">MⓘⒶMⓘ</button>
           <button id="button-theme-neo-vegas">𝓝𝓮𝓸 𝓥𝓮𝓰𝓪𝓼</button>
-          <button id="button-theme-moto">MOTO</button>
+          <button id="button-theme-moto">ⓜⓞⓣⓞ</button>
           <button id="button-theme-delhi">दिल्ली</button>
-          <button id="button-theme-cyber-citrus">Cyber Citrus</button>
-          <button id="button-theme-purple">purple</button>
+          <button id="button-theme-cyber-citrus">ℂ𝕪𝕓𝕖𝕣 ℂ𝕚𝕥𝕣𝕦𝕤</button>
+          <button id="button-theme-purple">ⓅⓊⓇⓅⓁⒺ</button>
           <button id="button-theme-noir">∅byssal Noir</button>
           <button id="button-theme-vaporwave">VAPORWAVE</button>
           <button id="button-theme-fuji">🗻🗻🗻🗻🗻🗻🗻🗻🗻🗻</button>
-          <button id="button-theme-y2k">Y2K</button>
+          <button id="button-theme-y2k">ⓨ²ⓚ</button>
           <button id="button-theme-the-spectacle">𝕿𝖍𝖊 𝕾𝖕𝖊𝖈𝖙𝖆𝖈𝖑𝖊</button>
           <button id="button-theme-pastel-goth">𝔓𝔞𝔰𝔱𝔢𝔩 𝔊𝔬𝔱𝔥</button>
           <button id="button-theme-k-punk">𝕂𝕡𝕦𝕟𝕜</button>
@@ -328,8 +328,10 @@
           <button id="button-theme-psyc">ᑭѕүᴄʜ</button>
           <button id="button-theme-1984">¹⁹⁸⁴</button>
           <button id="button-theme-board">Ｂｏａｒｄ</button>
-          <button id="button-theme-valley">Valley</button>
-          <button id="button-theme-space">SPACE</button>
+          <button id="button-theme-valley">ᐯᗩᒪᒪᕮᎩ</button>
+          <button id="button-theme-space">2oo4</button>
+          <button id="button-theme-terminal">T3RM!N@L</button>
+          <button id="button-theme-sudo">sudo rm -rf /*</button>
         </div>
 
         <br />
@@ -2300,6 +2302,24 @@
         "--color-light": "#F8F8F8",
         "--color-text-main": "#202020",
       },
+      terminal: {
+        "--color-primary": "#FFD700",
+        "--color-secondary": "#000000",
+        "--color-accent-1": "#FF0000",
+        "--color-accent-2": "#00FF00",
+        "--color-dark": "#0000FF",
+        "--color-light": "#FFFFFF",
+        "--color-text-main": "#000000",
+      },
+      sudo: {
+        "--color-primary": "#000000",
+        "--color-secondary": "#000000",
+        "--color-accent-1": "#000000",
+        "--color-accent-2": "#000000",
+        "--color-dark": "#000000",
+        "--color-light": "#00FF00",
+        "--color-text-main": "#000000",
+      },
     };
 
     const applyTheme = (theme) => {
@@ -2889,7 +2909,12 @@
         API.item(itemId)
           .then(async (item) => {
             storyContainer.innerHTML = "";
-            if (item.type === "story") {
+            if (
+              item.type === "story" ||
+              item.type === "job" ||
+              ite.type === "poll" ||
+              item.type === "pollopt"
+            ) {
               storyContainer.appendChild(
                 new StoryListElement(itemId, true, item)
               );
