@@ -1694,6 +1694,36 @@
       };
     }
 
+    const _parser = new DOMParser();
+
+    /**
+     * Utility for sanitizing external HTML content for malicious scripts
+     * @param {string} html
+     * @returns {string}
+     */
+    function sanitize(html) {
+     
+      const doc = _parser.parseFromString(html, "text/html");
+
+      // Remove script tags
+      doc.querySelectorAll("script").forEach((script) => script.remove());
+
+      // Sanitize attributes
+      const elements = doc.body.getElementsByTagName("*");
+      for (let i = 0; i < elements.length; i++) {
+        const attrs = elements[i].attributes;
+        for (let j = attrs.length - 1; j >= 0; j--) {
+          const attrName = attrs[j].name.toLowerCase();
+          const attrValue = attrs[j].value.toLowerCase();
+          if (attrName.startsWith("on") || attrValue.includes("javascript:")) {
+            elements[i].removeAttribute(attrs[j].name);
+          }
+        }
+      }
+
+      return doc.body.innerHTML;
+    }
+
     function isMobileDevice() {
       return window.innerWidth < MOBILE_DEVICE_MAX_WIDTH;
     }
@@ -2981,7 +3011,7 @@
 
       commentContainer.innerHTML = `<div class="comment">
         <p><a id="parent-comment" class="comment-by"><strong>In Thread</strong></a></p>
-        <p class="comment-text">${item.text || "[DELETED]"}</p>
+        <p class="comment-text">${sanitize(item.text) || "[DELETED]"}</p>
         </div>`;
 
       if (item.parent) {
@@ -3069,7 +3099,7 @@
         if (story.title === undefined) {
           story.title = "[NO TITLE]";
         }
-        storyContainer.innerHTML = `<span>${story.title}</span>`;
+        storyContainer.innerHTML = `<span>${sanitize(story.title)}</span>`;
         storyContainer.addEventListener("click", () => launchStoryModal(story));
       };
 
@@ -3148,7 +3178,7 @@
             <br />
             <strong>KARMA:</strong> ${user.karma || 0}
             <br />
-            ${user.about ? `<p>${user.about}</p> ` : ""}
+            ${user.about ? `<p>${sanitize(user.about)}</p> ` : ""}
         </div>
 
         <div class="user-submitted">
@@ -3315,7 +3345,7 @@
           <section id="modal-content-post-${
             story.id
           }" class="modal-content-post">
-            ${story.title ? `<h3>${story.title}</h3>` : ""}
+            ${story.title ? `<h3>${sanitize(story.title)}</h3>` : ""}
             <p class="story-summary-statistics">
               By <a class="user-id">${story.by}</a> | ${datePosted} | ⧫ ${
         story.score
@@ -3323,7 +3353,7 @@
         story.parent ? `| <a id="parent-comment">In Thread</a>` : ""
       }
             </p>
-            ${story.text ? `<p class="story-text">${story.text}</p>` : ""}
+            ${story.text ? `<p class="story-text">${sanitize(story.text)}</p>` : ""}
             <div class="comments">
               ${
                 story.descendants
@@ -3450,7 +3480,7 @@
           commentElement.classList.add("comment");
           commentElement.innerHTML = `
             <a class="comment-by"><strong>${comment.by}</strong></a>
-            <p class="comment-text">${comment.text}</p>
+            <p class="comment-text">${sanitize(comment.text)}</p>
             <div class="comments-container"></div>
           `;
           loadCommentsAsync(
