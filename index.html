@@ -2779,7 +2779,7 @@
       <header class="modal-window-title" role="dialog" aria-modal="true">
         <div class="modal-action-buttons">
           <nav id="close-button-share" class="text-link-button" title="Close Modal">
-            [⨉]
+            [X]
           </nav>
           ${
             !isMobileDevice()
@@ -2999,7 +2999,7 @@
       modal.innerHTML = `<header class="modal-window-title" role="dialog" aria-modal="true">
         <div class="modal-action-buttons">
           <nav id="close-button-${userId}" class="text-link-button" title="Close Modal">
-            [⨉]
+            [X]
           </nav>
           ${
             !isMobileDevice()
@@ -3041,17 +3041,15 @@
       API.user(userId).then((user) => {
         const userDetails = modal.querySelector(".user-details");
         userDetails.innerHTML = `<div class="user-description">
-            <strong>CREATED:</strong> ${formatDate(user.created)}
+            <strong>JOINED:</strong> ${formatDate(user.created)}
             <br />
-            <strong>KARMA:</strong> ${user.karma}
+            <strong>KARMA:</strong> ${user.karma || 0}
             <br />
-            <strong>SUBMITTED:</strong> ${user.submitted.length}
-            <br />
-            ${user.about ? `<strong>ABOUT: </strong>${user.about}` : ""}
+            ${user.about ? `<p>${user.about}</p> ` : ""}
         </div>
 
         <div class="user-submitted">
-          <strong>SUBMITTED:</strong>
+          <strong>SUBMITTED(${user.submitted.length}):</strong>
         </div>
         `;
 
@@ -3107,7 +3105,7 @@
         <nav id="close-button-${
           story.id
         }" class="text-link-button" title="Close Modal">
-          [⨉]
+          [X]
         </nav>
 
         ${
@@ -3128,9 +3126,11 @@
           [🌐]
         </nav>
 
-        <nav id="toggle-url-or-post-button" class="text-link-button" title="Toggle Webpage Preview or Hacker News Post">
-          [🖥️]
-        </nav>
+        ${
+          story.url
+            ? '<nav id="toggle-url-or-post-button" class="text-link-button" title="Toggle Webpage Preview or Hacker News Post"> [🖥️] </nav>'
+            : ""
+        }
 
         ${
           isStoryFavorited(story.id)
@@ -3180,23 +3180,25 @@
           }
         });
 
-      modal
-        .querySelector(`#toggle-url-or-post-button`)
-        .addEventListener("click", () => {
-          const iframe = modal.querySelector(`#story-iframe-${story.id}`);
-          const post = modal.querySelector(`#modal-content-post-${story.id}`);
-          if (iframe.style.display === "none") {
-            iframe.style.display = "block";
-            post.style.display = "none";
-            modal.querySelector(`#toggle-url-or-post-button`).textContent =
-              "[💬]";
-          } else {
-            iframe.style.display = "none";
-            post.style.display = "block";
-            modal.querySelector(`#toggle-url-or-post-button`).textContent =
-              "[🖥️]";
-          }
-        });
+      if (story.url) {
+        modal
+          .querySelector(`#toggle-url-or-post-button`)
+          .addEventListener("click", () => {
+            const iframe = modal.querySelector(`#story-iframe-${story.id}`);
+            const post = modal.querySelector(`#modal-content-post-${story.id}`);
+            if (iframe.style.display === "none") {
+              iframe.style.display = "block";
+              post.style.display = "none";
+              modal.querySelector(`#toggle-url-or-post-button`).textContent =
+                "[💬]";
+            } else {
+              iframe.style.display = "none";
+              post.style.display = "block";
+              modal.querySelector(`#toggle-url-or-post-button`).textContent =
+                "[🖥️]";
+            }
+          });
+      }
 
       modal
         .querySelector(`#close-button-${story.id}`)
@@ -3330,13 +3332,7 @@
         animationSpeed
       );
 
-      // Initial render
       animationRender();
-
-      // Clear interval whenever the element is removed from the DOM
-      loadingContainer.addEventListener("DOMNodeRemoved", () =>
-        clearInterval(animationRender)
-      );
 
       return loadingContainer;
     }
