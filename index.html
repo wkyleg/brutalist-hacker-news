@@ -1889,12 +1889,15 @@
     }
 
     function renderFavorites() {
-      const favoriteStories = document.querySelector("#favorites-outlet");
-      favoriteStories.innerHTML = "";
+      const favoriteStoriesElement =
+        document.querySelector("#favorites-outlet");
+      favoriteStoriesElement.innerHTML = "";
+      const fragment = document.createDocumentFragment();
       getFavorites().forEach((storyId) => {
-        favoriteStories.appendChild(new StoryListElement(storyId, true));
+        fragment.appendChild(new StoryListElement(storyId, true));
       });
-      return favoriteStories;
+      favoriteStoriesElement.appendChild(fragment);
+      return favoriteStoriesElement;
     }
 
     function favoriteStory(storyId) {
@@ -2822,6 +2825,40 @@
     }
 
     /**
+     * Generates a random loading string with length `length` from
+     * `ANIMATION_CHARACTERS_STRING` character set.
+     * @param {number} length
+     * @returns {string}
+     */
+    function generateLoadingString(length) {
+      let result = "";
+      for (let i = 0; i < length; i++) {
+        result += ANIMATION_CHARACTERS_STRING.charAt(
+          Math.floor(Math.random() * ANIMATION_CHARACTERS_STRING.length)
+        );
+      }
+      return result;
+    }
+
+    /**
+     * Precomputes loading strings for the loading animation
+     * @returns {Promise<string[]>}
+     */
+    async function precomputeLoadingStrings() {
+      const loadingStrings = [];
+      for (let i = 0; i < TOTAL_ANIMATION_STRINGS; i++) {
+        loadingStrings.push(
+          generateLoadingString(
+            Math.random() *
+              (LOADING_STRING_MAX_LENGTH - LOADING_STRING_MIN_LENGTH) +
+              LOADING_STRING_MIN_LENGTH
+          )
+        );
+      }
+      return loadingStrings;
+    }
+
+    /**
      * Returns a random loading string
      * @returns {string}
      */
@@ -2833,11 +2870,11 @@
      * @returns {void}
      */
     function initializeLoadingAnimation() {
-      loop(LOADING_ANIMATION_NUMBER_OF_ROWS, (i) => {
-        document
-          .querySelector("#loading-outlet")
-          .appendChild(new LoadingStoryElement());
-      });
+      const fragment = document.createDocumentFragment();
+      loop(LOADING_ANIMATION_NUMBER_OF_ROWS, (i) =>
+        fragment.append(new LoadingStoryElement())
+      );
+      document.querySelector("#loading-outlet").appendChild(fragment);
     }
   </script>
 
@@ -3575,40 +3612,6 @@
   </script>
 
   <script type="text/javascript">
-    /**
-     * Generates a random loading string with length `length` from
-     * `ANIMATION_CHARACTERS_STRING` character set.
-     * @param {number} length
-     * @returns {string}
-     */
-    function generateLoadingString(length) {
-      let result = "";
-      for (let i = 0; i < length; i++) {
-        result += ANIMATION_CHARACTERS_STRING.charAt(
-          Math.floor(Math.random() * ANIMATION_CHARACTERS_STRING.length)
-        );
-      }
-      return result;
-    }
-
-    /**
-     * Precomputes loading strings for the loading animation
-     * @returns {Promise<string[]>}
-     */
-    async function precomputeLoadingStrings() {
-      const loadingStrings = [];
-      for (let i = 0; i < TOTAL_ANIMATION_STRINGS; i++) {
-        loadingStrings.push(
-          generateLoadingString(
-            Math.random() *
-              (LOADING_STRING_MAX_LENGTH - LOADING_STRING_MIN_LENGTH) +
-              LOADING_STRING_MIN_LENGTH
-          )
-        );
-      }
-      return loadingStrings;
-    }
-
     /*
      * Precomputed loading strings
      */
@@ -3619,118 +3622,77 @@
     });
 
     /**
-     * DOM elements for top stories list
-     */
-    const topStoryElements = reactive([], (newState) => {
-      document.querySelector("#top-outlet").innerHTML = "";
-      newState.forEach((storyElement) => {
-        document.querySelector("#top-outlet").appendChild(storyElement);
-      });
-      startStoryIntersectionObservers();
-    });
-
-    /**
-     * Ids corresponding to top stories. Will recompute `topStoryElements` in
-     * memory whenever it changes.
+     * Render `StoryListElement`s for top stories
      */
     const topStoryIds = reactive([], (newState) => {
-      topStoryElements.update(
-        newState.map((storyId) => new StoryListElement(storyId))
-      );
-    });
+      const topStoriesElement = document.querySelector("#top-outlet");
+      topStoriesElement.innerHTML = "";
 
-    /**
-     * DOM elements for stories sorted by new
-     */
-    const newStoryElements = reactive([], (newState) => {
-      document.querySelector("#new-outlet").innerHTML = "";
-      newState.forEach((storyElement) => {
-        document.querySelector("#new-outlet").appendChild(storyElement);
+      const fragment = document.createDocumentFragment();
+      newState.map((storyId) => {
+        fragment.appendChild(new StoryListElement(storyId));
       });
+      topStoriesElement.appendChild(fragment);
       startStoryIntersectionObservers();
     });
 
     /**
-     * Ids corresponding to new stories. Will recompute `newStoryElements` in
-     * memory whenever it changes.
+     * Render `StoryListElement`s for new stories
      */
     const newStoryIds = reactive([], (newState) => {
-      newStoryElements.update(
-        newState.map((storyId) => new StoryListElement(storyId))
-      );
-    });
+      const newStoriesElement = document.querySelector("#new-outlet");
+      newStoriesElement.innerHTML = "";
 
-    /**
-     * DOM elements for stories sorted by best
-     */
-    const bestStoryElements = reactive([], (newState) => {
-      document.querySelector("#best-outlet").innerHTML = "";
-      newState.forEach((storyElement) => {
-        document.querySelector("#best-outlet").appendChild(storyElement);
+      const fragment = document.createDocumentFragment();
+      newState.map((storyId) => {
+        fragment.appendChild(new StoryListElement(storyId));
       });
+      newStoriesElement.appendChild(fragment);
       startStoryIntersectionObservers();
     });
 
     /**
-     * Ids corresponding to best stories. Will recompute `bestStoryElements` in
-     * memory whenever it changes.
+     * Render `StoryListElement`s for best stories
      */
     const bestStoryIds = reactive([], (newState) => {
-      bestStoryElements.update(
-        newState.map((storyId) => new StoryListElement(storyId))
-      );
-    });
+      const bestStoriesElement = document.querySelector("#best-outlet");
+      bestStoriesElement.innerHTML = "";
 
-    /**
-     * DOM elements for stories sorted by ask
-     */
-    const askStoryElements = reactive([], (newState) => {
-      document.querySelector("#ask-outlet").innerHTML = "";
-      newState.forEach((storyElement) => {
-        document.querySelector("#ask-outlet").appendChild(storyElement);
+      const fragment = document.createDocumentFragment();
+      newState.map((storyId) => {
+        fragment.appendChild(new StoryListElement(storyId));
       });
+      bestStoriesElement.appendChild(fragment);
       startStoryIntersectionObservers();
     });
 
     /**
-     * Ids corresponding to ask stories. Will recompute `askStoryElements` in
-     * memory whenever it changes.
+     * Render `StoryListElement`s for ask stories
      */
     const askStoryIds = reactive([], (newState) => {
-      askStoryElements.update(
-        newState.map((storyId) => new StoryListElement(storyId))
-      );
-    });
+      const askStoriesElement = document.querySelector("#ask-outlet");
+      askStoriesElement.innerHTML = "";
 
-    /**
-     * DOM elements for stories sorted by show
-     */
-    const showStoryElements = reactive([], (newState) => {
-      document.querySelector("#show-outlet").innerHTML = "";
-      newState.forEach((storyElement) => {
-        document.querySelector("#show-outlet").appendChild(storyElement);
+      const fragment = document.createDocumentFragment();
+      newState.map((storyId) => {
+        fragment.appendChild(new StoryListElement(storyId));
       });
+      askStoriesElement.appendChild(fragment);
       startStoryIntersectionObservers();
     });
 
     /**
-     * Ids corresponding to show stories. Will recompute `showStoryElements` in
-     * memory whenever it changes.
+     * Render `StoryListElement`s for show stories
      */
     const showStoryIds = reactive([], (newState) => {
-      showStoryElements.update(
-        newState.map((storyId) => new StoryListElement(storyId))
-      );
-    });
+      const showStoriesElement = document.querySelector("#show-outlet");
+      showStoriesElement.innerHTML = "";
 
-    /**
-     * DOM elements for stories sorted by job
-     */
-    const jobStoryElements = reactive([], (newState) => {
-      document.querySelector("#job-outlet").innerHTML = "";
-      newState.forEach((storyElement) => {
-        document.querySelector("#job-outlet").appendChild(storyElement);
+      const fragment = document.createDocumentFragment();
+      newState.map((storyId) => {
+        fragment.appendChild(new StoryListElement(storyId));
       });
+      showStoriesElement.appendChild(fragment);
       startStoryIntersectionObservers();
     });
 
@@ -3739,16 +3701,15 @@
      * memory whenever it changes.
      */
     const jobStoryIds = reactive([], (newState) => {
-      jobStoryElements.update(
-        newState.map((storyId) => new StoryListElement(storyId))
-      );
-    });
+      const jobStoriesElement = document.querySelector("#job-outlet");
+      jobStoriesElement.innerHTML = "";
 
-    /**
-     * DOM elements for stories marked as favorites
-     */
-    const favorites = reactive([], (newState) => {
-      console.log("Favorites:", newState);
+      const fragment = document.createDocumentFragment();
+      newState.map((storyId) => {
+        fragment.appendChild(new StoryListElement(storyId));
+      });
+      jobStoriesElement.appendChild(fragment);
+      startStoryIntersectionObservers();
     });
 
     const onNavigationChange = (newState) => {
