@@ -2611,38 +2611,73 @@
      * @returns {void}
      */
     function makeModalDragable(element) {
-      let pos1 = 0,
-        pos2 = 0,
-        pos3 = 0,
-        pos4 = 0;
+      let mousePosition1 = 0,
+        mousePosition2 = 0,
+        mousePosition3 = 0,
+        mousePosition4 = 0;
 
-      // Only drag from the title bar
-      element.querySelector(".modal-window-title").onmousedown = dragMouseDown;
+      let touchPosition1 = 0,
+        touchPosition2 = 0,
+        touchPosition3 = 0,
+        touchPosition4 = 0;
+
+      const modalTitleElement = element.querySelector(".modal-window-title");
+
+      // Handle drag functionality from touch screen
+      modalTitleElement.addEventListener("touchstart", (event) => {
+        touchPosition3 = event.changedTouches[0].clientX;
+        touchPosition4 = event.changedTouches[0].clientY;
+      });
+      modalTitleElement.addEventListener("touchend", (event) => {
+        touchPosition1 = 0;
+        touchPosition2 = 0;
+        touchPosition3 = 0;
+        touchPosition4 = 0;
+      });
+      modalTitleElement.addEventListener("touchcancel", (event) => {
+        touchPosition1 = 0;
+        touchPosition2 = 0;
+        touchPosition3 = 0;
+        touchPosition4 = 0;
+      });
+      modalTitleElement.addEventListener("touchmove", (event) => {
+        event.preventDefault();
+        touchPosition1 = touchPosition3 - event.changedTouches[0].clientX;
+        touchPosition2 = touchPosition4 - event.changedTouches[0].clientY;
+        touchPosition3 = event.changedTouches[0].clientX;
+        touchPosition4 = event.changedTouches[0].clientY;
+        element.style.top = element.offsetTop - touchPosition2 + "px";
+        element.style.left = element.offsetLeft - touchPosition1 + "px";
+      });
+
+      // Handle Drag Functionality from mouse
+      modalTitleElement.onmousedown = dragMouseDown;
+      modalTitleElement.ontouchstart = dragMouseDown;
 
       function dragMouseDown(e) {
         e = e || window.event;
         e.preventDefault();
         // Get the mouse cursor position at startup:
-        pos3 = e.clientX;
-        pos4 = e.clientY;
-        document.onmouseup = closeDragElement;
+        mousePosition3 = e.clientX;
+        mousePosition4 = e.clientY;
+        document.onmouseup = closeMouseDragElement;
         // Call a function whenever the cursor moves:
-        document.onmousemove = elementDrag;
+        document.onmousemove = mouseElementDrag;
       }
 
-      function elementDrag(e) {
+      function mouseElementDrag(e) {
         e = e || window.event;
         e.preventDefault();
         // Calculate the new cursor position:
-        pos1 = pos3 - e.clientX;
-        pos2 = pos4 - e.clientY;
-        pos3 = e.clientX;
-        pos4 = e.clientY;
-        element.style.top = element.offsetTop - pos2 + "px";
-        element.style.left = element.offsetLeft - pos1 + "px";
+        mousePosition1 = mousePosition3 - e.clientX;
+        mousePosition2 = mousePosition4 - e.clientY;
+        mousePosition3 = e.clientX;
+        mousePosition4 = e.clientY;
+        element.style.top = element.offsetTop - mousePosition2 + "px";
+        element.style.left = element.offsetLeft - mousePosition1 + "px";
       }
 
-      function closeDragElement() {
+      function closeMouseDragElement() {
         // Stop moving when mouse button is released:
         document.onmouseup = null;
         document.onmousemove = null;
