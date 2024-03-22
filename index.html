@@ -40,7 +40,7 @@
         aria-label="New Stories"
         title="New Stories"
       >
-        [&#10561;]
+        [🆕]
       </nav>
       <nav
         id="nav-button-best"
@@ -48,7 +48,7 @@
         aria-label="Best Stories"
         title="Best Stories"
       >
-        [&#9812;]
+        [🏆]
       </nav>
       <nav
         id="nav-button-ask"
@@ -64,7 +64,7 @@
         aria-label="Show HN"
         title="Show HN"
       >
-        [&#10547;]
+        [👁️]
       </nav>
       <nav
         id="nav-button-job"
@@ -1366,6 +1366,7 @@
                 .story-container {
                   margin-top: var(--size-xxs);
                   margin-bottom: var(--size-xxs);
+                  text-rendering: optimizeSpeed;
                 }
 
                 .story-container span {
@@ -2830,7 +2831,7 @@
           </nav>
           ${
             !isMobileDevice()
-              ? "<nav id='modal-window-title-maximize' class='text-link-button' title='Toggle Full Screen'>&#9675;</nav>"
+              ? "<nav id='modal-window-title-maximize' class='text-link-button' title='Toggle Full Screen'>[⛶]</nav>"
               : ""
           }
         </div>
@@ -2930,7 +2931,7 @@
       commentContainer.classList.add("comment-container");
 
       commentContainer.innerHTML = `<div class="comment">
-        <p><a id="parent-comment" class="comment-by"><strong>Parent Thread</strong></a></p>
+        <p><a id="parent-comment" class="comment-by"><strong>In Thread</strong></a></p>
         <p class="comment-text">${item.text || "[DELETED]"}</p>
         </div>`;
 
@@ -3158,10 +3159,10 @@
             : ""
         }
         <nav id="open-link" class="text-link-button" title='Open In New Tab'>
-          [➕]
+          [⬆️]
         </nav>
         <nav id="share-link" class="text-link-button" title="Share Link">
-          [🌐]
+          [📤]
         </nav>
       </header>
 
@@ -3234,13 +3235,13 @@
         <nav id="open-link-${
           story.id
         }" class="text-link-button" title='Open In New Tab'>
-          [➕]
+          [⬆️]
         </nav>
 
         <nav id="share-story-${
           story.id
         }" class="text-link-button" title="Share Story">
-          [🌐]
+          [📤]
         </nav>
 
         ${
@@ -3268,7 +3269,7 @@
               By <a class="user-id">${story.by}</a> | ${datePosted} | ⧫ ${
         story.score
       } | ${story.descendants || 0} comments ${
-        story.parent ? `| <a id="parent-comment">Parent Thread</a>` : ""
+        story.parent ? `| <a id="parent-comment">In Thread</a>` : ""
       }
             </p>
             ${story.text ? `<p class="story-text">${story.text}</p>` : ""}
