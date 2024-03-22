@@ -452,988 +452,1037 @@
   </body>
 
   <style>
-        :root {
-          /* Default color scheme inspired by brutalist design and cyberpunk */
-          --color-primary:#e30613;
-          --color-secondary: #ffed00;
-          --color-accent-1: #f6d365;
-          --color-accent-2: #fda085;
-          --color-dark: #3c3c3c
-          --color-light: #FFFFFF;
-          --color-text-main: #2f4f4f ;
+                                    :root {
+                                      /* Default color scheme inspired by brutalist design and cyberpunk */
+                                      --color-primary:#e30613;
+                                      --color-secondary: #ffed00;
+                                      --color-accent-1: #f6d365;
+                                      --color-accent-2: #fda085;
+                                      --color-dark: #3c3c3c
+                                      --color-light: #FFFFFF;
+                                      --color-text-main: #2f4f4f ;
 
-          /* Shading Utilities */
-          --text-shadow-highlight: 1px 1px var(--color-primary),
-            -1px -1px var(--color-secondary);
-          --box-shadow-highlight: 5px 5px var(--color-primary),
-            -5px -5px var(--color-secondary);
-          --box-shadow-highlight-mild: 1px 1px var(--color-primary),
-            -1px -1px var(--color-secondary);
-          --backgound-linear-gradient: linear-gradient(
-            120deg,
-            var(--color-accent-1) 0%,
-            var(--color-accent-2) 100%
-          );
+                                      /* Shading Utilities */
+                                      --text-shadow-highlight: 1px 1px var(--color-primary),
+                                        -1px -1px var(--color-secondary);
+                                      --box-shadow-highlight: 5px 5px var(--color-primary),
+                                        -5px -5px var(--color-secondary);
+                                      --box-shadow-highlight-mild: 1px 1px var(--color-primary),
+                                        -1px -1px var(--color-secondary);
+                                      --backgound-linear-gradient: linear-gradient(
+                                        120deg,
+                                        var(--color-accent-1) 0%,
+                                        var(--color-accent-2) 100%
+                                      );
 
-          /* Sizing utilities */
-          --size-xxs: 0.5rem;
-          --size-xs: 0.75rem;
-          --size-sm: 1rem;
-          --size-md: 1.5rem;
-          --size-lg: 2rem;
-          --size-xl: 3rem;
-          --size-xxl: 6rem;
+                                      /* Sizing utilities */
+                                      --size-xxs: 0.5rem;
+                                      --size-xs: 0.75rem;
+                                      --size-sm: 1rem;
+                                      --size-md: 1.5rem;
+                                      --size-lg: 2rem;
+                                      --size-xl: 3rem;
+                                      --size-xxl: 6rem;
 
-          /* Breakpoints */
-          --breakpoint-mobile: 600px;
-          --breakpoint-tablet: 1100px;
-          --breakpoint-desktop: 1600px;
+                                      /* Breakpoints */
+                                      --breakpoint-mobile: 600px;
+                                      --breakpoint-tablet: 1100px;
+                                      --breakpoint-desktop: 1600px;
 
-          /* Misc */
-          --top-level-padding-side: 1%;
-          --modal-border-width: 3px;
-        }
+                                      /* Misc */
+                                      --top-level-padding-side: 1%;
+                                      --modal-border-width: 3px;
+                                    }
 
-        * {
-          /*  Default to best Apple Monospace fonts, then Chrome fonts, then windows fonts */
-          font-family: "Menlo", "SF Mono", "Inconsolata", "Fira Code", "Roboto Mono", "Consolas", "Liberation Mono", "Courier New", monospace;
-          border-radius: 0;
-          color: var(--color-text-main);
-          border: 0;
-          scrollbar-color: var(--color-primary) var(--color-secondary);
-          scrollbar-width: auto;
-          transition: all 0.2s ease-in-out;
-        }
+                                    * {
+                                      /*  Default to best Apple Monospace fonts, then Chrome fonts, then windows fonts */
+                                      font-family: "Menlo", "SF Mono", "Inconsolata", "Fira Code", "Roboto Mono", "Consolas", "Liberation Mono", "Courier New", monospace;
+                                      border-radius: 0;
+                                      color: var(--color-text-main);
+                                      border: 0;
+                                      scrollbar-color: var(--color-primary) var(--color-secondary);
+                                      scrollbar-width: auto;
+                                      transition: all 0.2s ease-in-out;
+                                    }
 
-        input {
-          color: var(--color-text-main);
-          padding-block: 0;
-          padding-inline: 0;
-          margin-block: 0;
-          margin-inline: 0;
-        }
+                                    input {
+                                      color: var(--color-text-main);
+                                      padding-block: 0;
+                                      padding-inline: 0;
+                                      margin-block: 0;
+                                      margin-inline: 0;
+                                    }
 
-        a {
-          color: var(--color-primary);
-          text-decoration: underline;
-          cursor: pointer;
-        }
+                                    a {
+                                      color: var(--color-primary);
+                                      text-decoration: underline;
+                                      cursor: pointer;
+                                    }
 
-        a:hover {
-          color: var(--color-secondary);
-        }
+                                    a:hover {
+                                      color: var(--color-secondary);
+                                    }
 
-        a:visited {
-          color: var(--color-accent-1);
-        }
+                                    a:visited {
+                                      color: var(--color-accent-1);
+                                    }
 
-        a:visited:hover {
-          color: var(--color-accent-2);
-        }
+                                    a:visited:hover {
+                                      color: var(--color-accent-2);
+                                    }
 
 
-        button {
-          cursor: pointer;
-          background: var(--color-light);
-          color: var(--color-text-main);
-          transition: all 0.2s ease-in-out;
-        }
+                                    button {
+                                      cursor: pointer;
+                                      background: var(--color-light);
+                                      color: var(--color-text-main);
+                                      transition: all 0.2s ease-in-out;
+                                    }
 
-        button, a, input {
-          transition: all 0.1s ease-in-out;
-        }
+                                    button, a, input {
+                                      transition: all 0.1s ease-in-out;
+                                    }
 
-        .settings-favorites-button {
-          height: var(--size-md);
-        }
+                                    .settings-favorites-button {
+                                      height: var(--size-md);
+                                    }
 
-        button:hover {
-          filter: brightness(1.2), contrast(1.2);
-          box-shadow: inset 1px 1px 1px var(--color-text-main);
-        }
+                                    button:hover {
+                                      filter: brightness(1.2), contrast(1.2);
+                                      box-shadow: inset 1px 1px 1px var(--color-text-main);
+                                    }
 
-    /* Glitch Animation */
-    /*
-    * Inspired by https://codepen.io/mattgrosswork/pen/VwprebG
-    */
-
-    .layers {
-      position: relative;
+                                    .type {
+      font-size: 1rem;
+      display:inline-flex;
     }
 
-    .layers::before,
-    .layers::after {
-      content: attr(data-text);
-      position: absolute;
-      width: 110%;
-      z-index: -1;
+    .type span {
+      height: 1.2rem;
+      width:0%;
+      word-break:break-all;
+      overflow: hidden;
+      animation:
+        c 0.5s infinite steps(1),
+        t 2s linear infinite;
+    }
+    .type span:before {
+      content:" ";
+      display:inline-block;
     }
 
-    .layers::before {
-      top: 10px;
-      left: 15px;
-      color: var(--color-primary);
+    @keyframes t{
+      90%,100% {width:100%}
     }
 
-            .layers::after {
-              top: 5px;
-              left: -10px;
-              color: var(--color-secondary);
-        }
-
-            .single-path {
-              clip-path: polygon(
-                0% 12%,
-                53% 12%,
-                53% 26%,
-                25% 26%,
-                25% 86%,
-                31% 86%,
-                31% 0%,
-                53% 0%,
-                53% 84%,
-                92% 84%,
-                92% 82%,
-                70% 82%,
-                70% 29%,
-                78% 29%,
-                78% 65%,
-                69% 65%,
-                69% 66%,
-                77% 66%,
-                77% 45%,
-                85% 45%,
-                85% 26%,
-                97% 26%,
-                97% 28%,
-                84% 28%,
-                84% 34%,
-                54% 34%,
-                54% 89%,
-                30% 89%,
-                30% 58%,
-                83% 58%,
-                83% 5%,
-                68% 5%,
-                68% 36%,
-                62% 36%,
-                62% 1%,
-                12% 1%,
-                12% 34%,
-                60% 34%,
-                60% 57%,
-                98% 57%,
-                98% 83%,
-                1% 83%,
-                1% 53%,
-                91% 53%,
-                91% 84%,
-                8% 84%,
-                8% 83%,
-                4% 83%
-              );
-            }
-
-            .paths {
-              animation: paths 5s step-end infinite;
-            }
-
-            @keyframes paths {
-              0% {
-                clip-path: polygon(
-                  0% 43%,
-                  83% 43%,
-                  83% 22%,
-                  23% 22%,
-                  23% 24%,
-                  91% 24%,
-                  91% 26%,
-                  18% 26%,
-                  18% 83%,
-                  29% 83%,
-                  29% 17%,
-                  41% 17%,
-                  41% 39%,
-                  18% 39%,
-                  18% 82%,
-                  54% 82%,
-                  54% 88%,
-                  19% 88%,
-                  19% 4%,
-                  39% 4%,
-                  39% 14%,
-                  76% 14%,
-                  76% 52%,
-                  23% 52%,
-                  23% 35%,
-                  19% 35%,
-                  19% 8%,
-                  36% 8%,
-                  36% 31%,
-                  73% 31%,
-                  73% 16%,
-                  1% 16%,
-                  1% 56%,
-                  50% 56%,
-                  50% 8%
-                );
-              }
-
-              5% {
-                clip-path: polygon(
-                  0% 29%,
-                  44% 29%,
-                  44% 83%,
-                  94% 83%,
-                  94% 56%,
-                  11% 56%,
-                  11% 64%,
-                  94% 64%,
-                  94% 70%,
-                  88% 70%,
-                  88% 32%,
-                  18% 32%,
-                  18% 96%,
-                  10% 96%,
-                  10% 62%,
-                  9% 62%,
-                  9% 84%,
-                  68% 84%,
-                  68% 50%,
-                  52% 50%,
-                  52% 55%,
-                  35% 55%,
-                  35% 87%,
-                  25% 87%,
-                  25% 39%,
-                  15% 39%,
-                  15% 88%,
-                  52% 88%
-                );
-              }
-
-              30% {
-                clip-path: polygon(
-                  0% 53%,
-                  93% 53%,
-                  93% 62%,
-                  68% 62%,
-                  68% 37%,
-                  97% 37%,
-                  97% 89%,
-                  13% 89%,
-                  13% 45%,
-                  51% 45%,
-                  51% 88%,
-                  17% 88%,
-                  17% 54%,
-                  81% 54%,
-                  81% 75%,
-                  79% 75%,
-                  79% 76%,
-                  38% 76%,
-                  38% 28%,
-                  61% 28%,
-                  61% 12%,
-                  55% 12%,
-                  55% 62%,
-                  68% 62%,
-                  68% 51%,
-                  0% 51%,
-                  0% 92%,
-                  63% 92%,
-                  63% 4%,
-                  65% 4%
-                );
-              }
-
-              45% {
-                clip-path: polygon(
-                  0% 33%,
-                  2% 33%,
-                  2% 69%,
-                  58% 69%,
-                  58% 94%,
-                  55% 94%,
-                  55% 25%,
-                  33% 25%,
-                  33% 85%,
-                  16% 85%,
-                  16% 19%,
-                  5% 19%,
-                  5% 20%,
-                  79% 20%,
-                  79% 96%,
-                  93% 96%,
-                  93% 50%,
-                  5% 50%,
-                  5% 74%,
-                  55% 74%,
-                  55% 57%,
-                  96% 57%,
-                  96% 59%,
-                  87% 59%,
-                  87% 65%,
-                  82% 65%,
-                  82% 39%,
-                  63% 39%,
-                  63% 92%,
-                  4% 92%,
-                  4% 36%,
-                  24% 36%,
-                  24% 70%,
-                  1% 70%,
-                  1% 43%,
-                  15% 43%,
-                  15% 28%,
-                  23% 28%,
-                  23% 71%,
-                  90% 71%,
-                  90% 86%,
-                  97% 86%,
-                  97% 1%,
-                  60% 1%,
-                  60% 67%,
-                  71% 67%,
-                  71% 91%,
-                  17% 91%,
-                  17% 14%,
-                  39% 14%,
-                  39% 30%,
-                  58% 30%,
-                  58% 11%,
-                  52% 11%,
-                  52% 83%,
-                  68% 83%
-                );
-              }
-
-              76% {
-                clip-path: polygon(
-                  0% 26%,
-                  15% 26%,
-                  15% 73%,
-                  72% 73%,
-                  72% 70%,
-                  77% 70%,
-                  77% 75%,
-                  8% 75%,
-                  8% 42%,
-                  4% 42%,
-                  4% 61%,
-                  17% 61%,
-                  17% 12%,
-                  26% 12%,
-                  26% 63%,
-                  73% 63%,
-                  73% 43%,
-                  90% 43%,
-                  90% 67%,
-                  50% 67%,
-                  50% 41%,
-                  42% 41%,
-                  42% 46%,
-                  50% 46%,
-                  50% 84%,
-                  96% 84%,
-                  96% 78%,
-                  49% 78%,
-                  49% 25%,
-                  63% 25%,
-                  63% 14%
-                );
-              }
-
-              90% {
-                clip-path: polygon(
-                  0% 41%,
-                  13% 41%,
-                  13% 6%,
-                  87% 6%,
-                  87% 93%,
-                  10% 93%,
-                  10% 13%,
-                  89% 13%,
-                  89% 6%,
-                  3% 6%,
-                  3% 8%,
-                  16% 8%,
-                  16% 79%,
-                  0% 79%,
-                  0% 99%,
-                  92% 99%,
-                  92% 90%,
-                  5% 90%,
-                  5% 60%,
-                  0% 60%,
-                  0% 48%,
-                  89% 48%,
-                  89% 13%,
-                  80% 13%,
-                  80% 43%,
-                  95% 43%,
-                  95% 19%,
-                  80% 19%,
-                  80% 85%,
-                  38% 85%,
-                  38% 62%
-                );
-              }
-
-              1%,
-              7%,
-              33%,
-              47%,
-              78%,
-              93% {
-                clip-path: none;
-              }
-            }
-
-            .movement {
-              /* Normally this position would be absolute & on the layers, set to relative here so we can see it on the div */
-              position: relative;
-              animation: movement 8s step-end infinite;
-            }
-
-            @keyframes movement {
-              0% {
-                top: 0px;
-                left: -20px;
-              }
-
-              15% {
-                top: 10px;
-                left: 10px;
-              }
-
-              60% {
-                top: 5px;
-                left: -10px;
-              }
-
-              75% {
-                top: -5px;
-                left: 20px;
-              }
-
-              100% {
-                top: 10px;
-                left: 5px;
-              }
-            }
-
-            .opacity {
-              animation: opacity 5s step-end infinite;
-            }
-
-            @keyframes opacity {
-              0% {
-                opacity: 0.1;
-              }
-
-              5% {
-                opacity: 0.7;
-              }
-
-              30% {
-                opacity: 0.4;
-              }
-
-              45% {
-                opacity: 0.6;
-              }
-
-              76% {
-                opacity: 0.4;
-              }
-
-              90% {
-                opacity: 0.8;
-              }
-
-              1%,
-              7%,
-              33%,
-              47%,
-              78%,
-              93% {
-                opacity: 0;
-              }
-            }
-
-            .font {
-              animation: font 7s step-end infinite;
-            }
-
-              @keyframes font {
-                  0% {
-                    font-weight: 100;
-                    color: var(--color-primary);
-                    filter: blur(3px);
-                  }
-
-                  20% {
-                    font-weight: 500;
-                    color: var(--color-light);
-                    filter: blur(0);
-                  }
-
-                  50% {
-                    font-weight: 300;
-                    color: var(--color-accent-2);
-                    filter: blur(2px);
-                  }
-
-                  60% {
-                    font-weight: 700;
-                    color: var(--color-accent-1);
-                    filter: blur(0);
-                  }
-
-                  90% {
-                    font-weight: 500;
-                    color: var(--color-primary);
-                    filter: blur(6px);
-                  }
-                }
-
-                .glitch {
-                  animation: paths 3s step-end infinite;
-                }
-
-                .glitch::before {
-                  animation: paths 5s step-end infinite, opacity 5s step-end infinite,
-                    font 8s step-end infinite, movement 10s step-end infinite;
-                }
-
-                .glitch::after {
-                  animation: paths 5s step-end infinite, opacity 5s step-end infinite,
-                    font 7s step-end infinite, movement 8s step-end infinite;
-                }
-
-                .glitch-slow {
-                  animation: paths 10s step-end infinite;
-                }
-
-                .glitch-slow::before {
-                  animation: paths 5s step-end infinite, opacity 5s step-end infinite,
-                    font 8s step-end infinite, movement 10s step-end infinite;
-                }
-
-                .glitch-slow::after {
-                  animation: paths 5s step-end infinite, opacity 5s step-end infinite,
-                    font 7s step-end infinite, movement 8s step-end infinite;
-                }
-
-                ::-webkit-scrollbar {
-                  width: var(--size-lg);
-                  min-width: var(--size-lg);
-                }
-
-                ::-webkit-scrollbar-track {
-                  background: var(--color-accent-1);
-                }
-
-                ::-webkit-scrollbar-thumb {
-                  background: var(--color-primary);
-                  border-radius: 0px;
-                  min-height: var(--size-xxl);
-                  z-index: 100;
-                }
-
-                ::-webkit-scrollbar-track:active {
-                  background: var(--color-secondary);
-                }
-
-                ::-webkit-scrollbar-track:hover {
-                  background: var(--color-secondary);
-                }
-
-                ::-webkit-scrollbar-thumb:active {
-                  box-shadow: 1px 3px var(--text-color);
-                }
-
-                ::-webkit-scrollbar-thumb:hover {
-                  box-shadow: 1px 3px var(--color-text-main);
-                }
-
-                body {
-                  margin: 0;
-                  padding: 0;
-                  height: 100%;
-                  width: 100%;
-                  overflow: hidden;
-                }
-
-                h1 {
-                  font-size: var(--size-md);
-                  text-align: center;
-                  color: transparent;
-                  text-shadow: var(--text-shadow-highlight);
-                  font-weight: bold;
-                }
-
-                h3 {
-                  margin-top: 0;
-                  margin-bottom: var(--size-xs);
-                  color: var(--color-primary);
-                }
-
-                pre, code {
-                  word-break: break-word;
-                  word-wrap: break-word;
-                  text-wrap: wrap;
-                }
-
-                .use-gpu-rendering {
-                  -webkit-transform: translate3d(0, 0, 0);
-                  -moz-transform: translate3d(0, 0, 0);
-                  -ms-transform: translate3d(0, 0, 0);
-                  transform: translate3d(0, 0, 0);
-                  -webkit-backface-visibility: hidden;
-                  -moz-backface-visibility: hidden;
-                  -ms-backface-visibility: hidden;
-                  backface-visibility: hidden;
-                  -webkit-perspective: 1000;
-                  -moz-perspective: 1000;
-                  -ms-perspective: 1000;
-                  perspective: 1000;
-                  -webkit-transform: translateZ(0);
-                  -moz-transform: translateZ(0);
-                  -ms-transform: translateZ(0);
-                  -o-transform: translateZ(0);
-                }
-
-                @keyframes fade-in {
-                  from {
-                    opacity: 0;
-                  }
-                  to {
-                    opacity: 1;
-                  }
-
-                }
-
-                .modal {
-                  display: block;
-                  flex-direction: column;
-                  position: absolute;
-                  z-index: 1;
-                  left: 0;
-                  top: 0;
-                  width: 50%;
-                  height: 50%;
-                  overflow: auto;
-                  background-color: var(--color-light);
-                  background: var(--color-light);
-                  border: var(--color-primary) var(--modal-border-width) solid;
-                  resize: both;
-                  box-shadow: var(--box-shadow-highlight);
-                  z-index: 15;
-                  overflow-x: hidden;
-                  overflow-y: hidden;
-                  transition: bottom 0.5s;
-                  animation: fade-in 0.5s;
-
-                }
-
-                .title-actions-modal .modal-action-buttons {
-                  display: flex;
-                  flex-direction: row;
-                  flex-grow: 1;
-                  width: 30%;
-                }
-
-                .title-actions-modal .title-actions-modal-title {
-                  display: flex;
-                  flex-direction: row;
-                  flex-grow: 1;
-                  text-align: center;
-                  justify-content: center;
-                  align-items: center;
-                  width: 36.6%;
-                  font-size: var(--size-sm);
-                }
-
-                .title-actions-modal .spacer {
-                  display: flex;
-                  flex-direction: row;
-                  flex-grow: 1;
-                  width: 33.3%;
-                }
-
-                .modal-window-title {
-                  cursor: move;
-                  height: var(--size-lg);
-                  font-size: var(--size-md);
-                  display: flex;
-                  align-items: center;
-                  background-color: var(--color-accent-1);
-                  color: var(--color-text-main);
-                  justify-content: flex-start;
-                  border-bottom: var(--color-primary) 3px solid;
-                  box-shadow: var(--box-shadow-highlight);
-                  width: 100%;
-                  padding-left: var(--top-level-padding-side);
-                }
-
-                .modal-window-title:hover {
-                  background-color: var(--color-secondary);
-                }
-
-                .title-actions-modal h3 {
-                  text-align: left;
-                }
-
-                .user-description {
-                  color: var(--color-primary);
-                  font-size: var(--size-sm);
-                }
-
-                .user-description, .user-submitted {
-                  padding: var(--size-xs);
-                  margin-bottom: var(--size-md);
-                  border: var(--color-primary) 1px solid;
-                }
-
-                .user-description:hover, .user-submitted:hover {
-                  box-shadow: var(--box-shadow-highlight-mild);
-                }
-
-                @media screen and (max-width: 1100px) {
-                  .modal-window-title {
-                    font-size: var(--size-xs);
-                  }
-                }
-
-                .text-link-button {
-                  color: var(--text-color);
-                  text-decoration: none;
-                  cursor: pointer;
-                  transition: text-indent 0.5s;
-                  font-size: var(--size-sm);
-                  background: transparent;
-                  border: 0;
-                }
-
-                @media screen and (max-width: 600px) {
-                  .text-link-button {
-                    font-size: var(--size-sm);
-                  }
-                }
-
-                .text-link-button--selected {
-                  color: var(--color-primary);
-                  font-weight: bolder;
-                }
-
-                .text-link-button:hover {
-                  color: var(--color-primary);
-                  text-shadow: var(--text-shadow-highlight);
-                }
-
-                .modal-content {
-                  flex-grow: 1;
-                  height: 100%;
-                  overflow: hidden;
-                  overflow-y: hidden;
-                  background-color: var(--color-light);
-                  background: var(--color-light);
-                }
-
-                .modal-content-post-share {
-                  display: flex;
-                  flex-direction: column;
-                  width: 100%;
-                  height: calc(100% - var(--size-lg));
-                  background: var(--color-light);
-                  align-items: flex-start;
-                  padding: var(--size-xs);
-                  font-size: var(--size-lg);
-                  overflow-x: scroll;
-                  overflow-y: scroll;
-                }
-
-                .modal-content-post-share nav {
-                  font-size: var(--size-md);
-                  margin-bottom: var(--size-xs);
-                }
-
-
-                iframe {
-                  width: 100%;
-                  height: 100%;
-                  background: var(--color-light);
-                }
-
-                .modal-content-post {
-                  padding: var(--size-md);
-                  overflow-y: scroll;
-                  height: calc(100% - var(--size-xl) - var(--size-lg));
-                  background: var(--color-light);
-                }
-
-                .story-summary-statistics {
-                  font-size: var(--size-xss);
-                  text-align: center;
-                  font-style: italic;
-                }
-
-                .modal-content-post h3 {
-                  text-align: center;
-                }
-
-                .modal-content-post .story-text {
-                  font-size: var(--size-xs);
-                }
-
-                .modal-content-post p {
-                  font-size: var(--size-xs);
-                  word-wrap: break-word;
-                }
-
-                .modal-content-post code, a, pre {
-                  word-wrap: break-word;
-                }
-
-                .comment {
-                  font-size: var(--size-xs);
-                  padding: var(--size-xs);
-                  margin: var(--size-xs);
-                  border: var(--color-primary) 1px solid;
-                  background: var(--color-light);
-                  min-width: 10vw;
-                  transition: all 0.5s;
-                  animation: fade-in 0.5s;
-                }
-
-                @media screen and (max-width: 600px) {
-                  .comment {
-                    font-size: var(--size-xxs);
-                    padding: var(--size-xxs);
-                    margin: var(--size-xxs);
-                    min-width: 33vw;
-                  }
-                }
-
-                .modal-content-post .comment p {
-                  margin-top: 0;
-                }
-
-                .comment:hover {
-                  box-shadow: var(--box-shadow-highlight-mild);
-                }
-
-
-                .title-content {
-                  position: fixed;
-                  height: var(--size-lg);
-                  width: 100%;
-                  display: flex;
-                  flex-direction: row;
-                  justify-content: flex-start;
-                  align-items: baseline;
-                  padding-left: var(--top-level-padding-side);
-                  background: var(--color-accent-1);
-                  width: 100%;
-                  z-index: 10;
-                }
-
-                .title-content:hover {
-                  background: var(--color-secondary);
-                }
-
-                .title-content h1 {
-                  margin: 0 var(--size-xs) 0 0;
-                }
-
-                .main-content {
-                  background-image: var(--backgound-linear-gradient);
-                  padding-left: var(--top-level-padding-side);
-                  padding-right: var(--top-level-padding-side);
-                  height: calc(100vh - var(--size-lg));
-                  max-height: calc(100vh - var(--size-lg));
-                  overflow-y: scroll;
-                  padding-top: var(--size-lg);
-                }
-
-                .main-content > section {
-                  transition: all 0.5s;
-                  animation: fade-in 0.5s;
-                }
-
-                .story-container {
-                  margin-top: var(--size-xxs);
-                  margin-bottom: var(--size-xxs);
-                  text-rendering: optimizeSpeed;
-                }
-
-                .story-container span {
-                  color: var(--color-text-main);
-                  font-size: var(--size-sm);
-                  cursor: pointer;
-                }
-
-                .story-container span:hover {
-                  color: transparent;
-                  font-weight: bold;
-                  text-indent: 5px;
-                  transition: text-indent 0.5s;
-                  text-shadow: var(--text-shadow-highlight);
-                }
-
-                .story-container span:hover::before {
-                  display: inline-block;
-                  content: "->";
-                }
-
-                .settings-content {
-                  display: flex;
-                  flex-direction: column;
-                  align-items: flex-start;
-                  justify-content: left;
-                  padding-top: var(--size-xxs);
-                }
-
-                .setting-element {
-                  display: flex;
-                  flex-direction: row;
-                  align-items: center;
-                  justify-content: space-between;
-                  padding: var(--size-xxs);
-                }
-
-                .setting-element:hover {
-                  background: var(--color-secondary);
-                }
-
-                .setting-name {
-                  min-width: var(--size-xxl);
-                }
-
-                .setting-new-value-input {
-                  background: transparent;
-                  border: 0;
-                }
-
-                .setting-apply-button, .setting-reset-button {
-                  height: var(--size-md);
-                }
-
-                .settings-content button {
-                  margin-left: var(--size-xs);
-                }
-
-                .theme-buttons-row button {
-                  margin-bottom: var(--size-xs);
-                  height: var(--size-md);
-                }
-
-                .about-text button {
-                  margin-bottom: var(--size-xs);
-                  height: var(--size-md);
-                }
+    @keyframes c{
+      0%,100%{box-shadow: 0.66rem 0 0 transparent}
+      50%    {box-shadow: 0.66rem 0 0 var(--color-primary)  }
+    }
+
+
+                                    @keyframes subtleGlowWarble {
+                              0% {
+                                filter: brightness(100%) opacity(1) saturate(100%) contrast(100%);
+                              }
+                              25% {
+                                filter: brightness(105%) opacity(0.95) saturate(105%) contrast(105%);
+                              }
+                              50% {
+                                filter: brightness(100%) opacity(1) saturate(100%) contrast(100%);
+                              }
+                              75% {
+                                filter: brightness(95%) opacity(1.05) saturate(95%) contrast(95%);
+                              }
+                              100% {
+                                filter: brightness(100%) opacity(1) saturate(100%) contrast(100%);
+                              }
+                            }
+
+                                /* Glitch Animation */
+                                /*
+                                * Inspired by https://codepen.io/mattgrosswork/pen/VwprebG
+                                */
+
+                                .layers {
+                                  position: relative;
+                                }
+
+                                .layers::before,
+                                .layers::after {
+                                  content: attr(data-text);
+                                  position: absolute;
+                                  width: 110%;
+                                  z-index: -1;
+                                }
+
+                                .layers::before {
+                                  top: 10px;
+                                  left: 15px;
+                                  color: var(--color-primary);
+                                }
+
+                                        .layers::after {
+                                          top: 5px;
+                                          left: -10px;
+                                          color: var(--color-secondary);
+                                    }
+
+                                        .single-path {
+                                          clip-path: polygon(
+                                            0% 12%,
+                                            53% 12%,
+                                            53% 26%,
+                                            25% 26%,
+                                            25% 86%,
+                                            31% 86%,
+                                            31% 0%,
+                                            53% 0%,
+                                            53% 84%,
+                                            92% 84%,
+                                            92% 82%,
+                                            70% 82%,
+                                            70% 29%,
+                                            78% 29%,
+                                            78% 65%,
+                                            69% 65%,
+                                            69% 66%,
+                                            77% 66%,
+                                            77% 45%,
+                                            85% 45%,
+                                            85% 26%,
+                                            97% 26%,
+                                            97% 28%,
+                                            84% 28%,
+                                            84% 34%,
+                                            54% 34%,
+                                            54% 89%,
+                                            30% 89%,
+                                            30% 58%,
+                                            83% 58%,
+                                            83% 5%,
+                                            68% 5%,
+                                            68% 36%,
+                                            62% 36%,
+                                            62% 1%,
+                                            12% 1%,
+                                            12% 34%,
+                                            60% 34%,
+                                            60% 57%,
+                                            98% 57%,
+                                            98% 83%,
+                                            1% 83%,
+                                            1% 53%,
+                                            91% 53%,
+                                            91% 84%,
+                                            8% 84%,
+                                            8% 83%,
+                                            4% 83%
+                                          );
+                                        }
+
+                                        .paths {
+                                          animation: paths 5s step-end infinite;
+                                        }
+
+                                        @keyframes paths {
+                                          0% {
+                                            clip-path: polygon(
+                                              0% 43%,
+                                              83% 43%,
+                                              83% 22%,
+                                              23% 22%,
+                                              23% 24%,
+                                              91% 24%,
+                                              91% 26%,
+                                              18% 26%,
+                                              18% 83%,
+                                              29% 83%,
+                                              29% 17%,
+                                              41% 17%,
+                                              41% 39%,
+                                              18% 39%,
+                                              18% 82%,
+                                              54% 82%,
+                                              54% 88%,
+                                              19% 88%,
+                                              19% 4%,
+                                              39% 4%,
+                                              39% 14%,
+                                              76% 14%,
+                                              76% 52%,
+                                              23% 52%,
+                                              23% 35%,
+                                              19% 35%,
+                                              19% 8%,
+                                              36% 8%,
+                                              36% 31%,
+                                              73% 31%,
+                                              73% 16%,
+                                              1% 16%,
+                                              1% 56%,
+                                              50% 56%,
+                                              50% 8%
+                                            );
+                                          }
+
+                                          5% {
+                                            clip-path: polygon(
+                                              0% 29%,
+                                              44% 29%,
+                                              44% 83%,
+                                              94% 83%,
+                                              94% 56%,
+                                              11% 56%,
+                                              11% 64%,
+                                              94% 64%,
+                                              94% 70%,
+                                              88% 70%,
+                                              88% 32%,
+                                              18% 32%,
+                                              18% 96%,
+                                              10% 96%,
+                                              10% 62%,
+                                              9% 62%,
+                                              9% 84%,
+                                              68% 84%,
+                                              68% 50%,
+                                              52% 50%,
+                                              52% 55%,
+                                              35% 55%,
+                                              35% 87%,
+                                              25% 87%,
+                                              25% 39%,
+                                              15% 39%,
+                                              15% 88%,
+                                              52% 88%
+                                            );
+                                          }
+
+                                          30% {
+                                            clip-path: polygon(
+                                              0% 53%,
+                                              93% 53%,
+                                              93% 62%,
+                                              68% 62%,
+                                              68% 37%,
+                                              97% 37%,
+                                              97% 89%,
+                                              13% 89%,
+                                              13% 45%,
+                                              51% 45%,
+                                              51% 88%,
+                                              17% 88%,
+                                              17% 54%,
+                                              81% 54%,
+                                              81% 75%,
+                                              79% 75%,
+                                              79% 76%,
+                                              38% 76%,
+                                              38% 28%,
+                                              61% 28%,
+                                              61% 12%,
+                                              55% 12%,
+                                              55% 62%,
+                                              68% 62%,
+                                              68% 51%,
+                                              0% 51%,
+                                              0% 92%,
+                                              63% 92%,
+                                              63% 4%,
+                                              65% 4%
+                                            );
+                                          }
+
+                                          45% {
+                                            clip-path: polygon(
+                                              0% 33%,
+                                              2% 33%,
+                                              2% 69%,
+                                              58% 69%,
+                                              58% 94%,
+                                              55% 94%,
+                                              55% 25%,
+                                              33% 25%,
+                                              33% 85%,
+                                              16% 85%,
+                                              16% 19%,
+                                              5% 19%,
+                                              5% 20%,
+                                              79% 20%,
+                                              79% 96%,
+                                              93% 96%,
+                                              93% 50%,
+                                              5% 50%,
+                                              5% 74%,
+                                              55% 74%,
+                                              55% 57%,
+                                              96% 57%,
+                                              96% 59%,
+                                              87% 59%,
+                                              87% 65%,
+                                              82% 65%,
+                                              82% 39%,
+                                              63% 39%,
+                                              63% 92%,
+                                              4% 92%,
+                                              4% 36%,
+                                              24% 36%,
+                                              24% 70%,
+                                              1% 70%,
+                                              1% 43%,
+                                              15% 43%,
+                                              15% 28%,
+                                              23% 28%,
+                                              23% 71%,
+                                              90% 71%,
+                                              90% 86%,
+                                              97% 86%,
+                                              97% 1%,
+                                              60% 1%,
+                                              60% 67%,
+                                              71% 67%,
+                                              71% 91%,
+                                              17% 91%,
+                                              17% 14%,
+                                              39% 14%,
+                                              39% 30%,
+                                              58% 30%,
+                                              58% 11%,
+                                              52% 11%,
+                                              52% 83%,
+                                              68% 83%
+                                            );
+                                          }
+
+                                          76% {
+                                            clip-path: polygon(
+                                              0% 26%,
+                                              15% 26%,
+                                              15% 73%,
+                                              72% 73%,
+                                              72% 70%,
+                                              77% 70%,
+                                              77% 75%,
+                                              8% 75%,
+                                              8% 42%,
+                                              4% 42%,
+                                              4% 61%,
+                                              17% 61%,
+                                              17% 12%,
+                                              26% 12%,
+                                              26% 63%,
+                                              73% 63%,
+                                              73% 43%,
+                                              90% 43%,
+                                              90% 67%,
+                                              50% 67%,
+                                              50% 41%,
+                                              42% 41%,
+                                              42% 46%,
+                                              50% 46%,
+                                              50% 84%,
+                                              96% 84%,
+                                              96% 78%,
+                                              49% 78%,
+                                              49% 25%,
+                                              63% 25%,
+                                              63% 14%
+                                            );
+                                          }
+
+                                          90% {
+                                            clip-path: polygon(
+                                              0% 41%,
+                                              13% 41%,
+                                              13% 6%,
+                                              87% 6%,
+                                              87% 93%,
+                                              10% 93%,
+                                              10% 13%,
+                                              89% 13%,
+                                              89% 6%,
+                                              3% 6%,
+                                              3% 8%,
+                                              16% 8%,
+                                              16% 79%,
+                                              0% 79%,
+                                              0% 99%,
+                                              92% 99%,
+                                              92% 90%,
+                                              5% 90%,
+                                              5% 60%,
+                                              0% 60%,
+                                              0% 48%,
+                                              89% 48%,
+                                              89% 13%,
+                                              80% 13%,
+                                              80% 43%,
+                                              95% 43%,
+                                              95% 19%,
+                                              80% 19%,
+                                              80% 85%,
+                                              38% 85%,
+                                              38% 62%
+                                            );
+                                          }
+
+                                          1%,
+                                          7%,
+                                          33%,
+                                          47%,
+                                          78%,
+                                          93% {
+                                            clip-path: none;
+                                          }
+                                        }
+
+                                        .movement {
+                                          /* Normally this position would be absolute & on the layers, set to relative here so we can see it on the div */
+                                          position: relative;
+                                          animation: movement 8s step-end infinite;
+                                        }
+
+                                        @keyframes movement {
+                                          0% {
+                                            top: 0px;
+                                            left: -20px;
+                                          }
+
+                                          15% {
+                                            top: 10px;
+                                            left: 10px;
+                                          }
+
+                                          60% {
+                                            top: 5px;
+                                            left: -10px;
+                                          }
+
+                                          75% {
+                                            top: -5px;
+                                            left: 20px;
+                                          }
+
+                                          100% {
+                                            top: 10px;
+                                            left: 5px;
+                                          }
+                                        }
+
+                                        .opacity {
+                                          animation: opacity 5s step-end infinite;
+                                        }
+
+                                        @keyframes opacity {
+                                          0% {
+                                            opacity: 0.1;
+                                          }
+
+                                          5% {
+                                            opacity: 0.7;
+                                          }
+
+                                          30% {
+                                            opacity: 0.4;
+                                          }
+
+                                          45% {
+                                            opacity: 0.6;
+                                          }
+
+                                          76% {
+                                            opacity: 0.4;
+                                          }
+
+                                          90% {
+                                            opacity: 0.8;
+                                          }
+
+                                          1%,
+                                          7%,
+                                          33%,
+                                          47%,
+                                          78%,
+                                          93% {
+                                            opacity: 0;
+                                          }
+                                        }
+
+                                        .font {
+                                          animation: font 7s step-end infinite;
+                                        }
+
+                                          @keyframes font {
+                                              0% {
+                                                font-weight: 100;
+                                                color: var(--color-primary);
+                                                filter: blur(3px);
+                                              }
+
+                                              20% {
+                                                font-weight: 500;
+                                                color: var(--color-light);
+                                                filter: blur(0);
+                                              }
+
+                                              50% {
+                                                font-weight: 300;
+                                                color: var(--color-accent-2);
+                                                filter: blur(2px);
+                                              }
+
+                                              60% {
+                                                font-weight: 700;
+                                                color: var(--color-accent-1);
+                                                filter: blur(0);
+                                              }
+
+                                              90% {
+                                                font-weight: 500;
+                                                color: var(--color-primary);
+                                                filter: blur(6px);
+                                              }
+                                            }
+
+                                            .glitch {
+                                              animation: paths 3s step-end infinite;
+                                            }
+
+                                            .glitch::before {
+                                              animation: paths 5s step-end infinite, opacity 5s step-end infinite,
+                                                font 8s step-end infinite, movement 10s step-end infinite;
+                                            }
+
+                                            .glitch::after {
+                                              animation: paths 5s step-end infinite, opacity 5s step-end infinite,
+                                                font 7s step-end infinite, movement 8s step-end infinite;
+                                            }
+
+                                            .glitch-slow {
+                                              animation: paths 10s step-end infinite;
+                                            }
+
+                                            .glitch-slow::before {
+                                              animation: paths 5s step-end infinite, opacity 5s step-end infinite,
+                                                font 8s step-end infinite, movement 10s step-end infinite;
+                                            }
+
+                                            .glitch-slow::after {
+                                              animation: paths 5s step-end infinite, opacity 5s step-end infinite,
+                                                font 7s step-end infinite, movement 8s step-end infinite;
+                                            }
+
+                                            ::-webkit-scrollbar {
+                                              width: var(--size-lg);
+                                              min-width: var(--size-lg);
+                                            }
+
+                                            ::-webkit-scrollbar-track {
+                                              background: var(--color-accent-1);
+                                            }
+
+                                            ::-webkit-scrollbar-thumb {
+                                              background: var(--color-primary);
+                                              border-radius: 0px;
+                                              min-height: var(--size-xxl);
+                                              z-index: 100;
+                                            }
+
+                                            ::-webkit-scrollbar-track:active {
+                                              background: var(--color-secondary);
+                                            }
+
+                                            ::-webkit-scrollbar-track:hover {
+                                              background: var(--color-secondary);
+                                            }
+
+                                            ::-webkit-scrollbar-thumb:active {
+                                              box-shadow: 1px 3px var(--text-color);
+                                            }
+
+                                            ::-webkit-scrollbar-thumb:hover {
+                                              box-shadow: 1px 3px var(--color-text-main);
+                                            }
+
+                                            body {
+                                              margin: 0;
+                                              padding: 0;
+                                              height: 100%;
+                                              width: 100%;
+                                              overflow: hidden;
+                                            }
+
+                                            h1 {
+                                              font-size: var(--size-md);
+                                              text-align: center;
+                                              color: transparent;
+                                              text-shadow: var(--text-shadow-highlight);
+                                              font-weight: bold;
+                                            }
+
+                                            h3 {
+                                              margin-top: 0;
+                                              margin-bottom: var(--size-xs);
+                                              color: var(--color-primary);
+                                            }
+
+                                            pre, code {
+                                              word-break: break-word;
+                                              word-wrap: break-word;
+                                              text-wrap: wrap;
+                                            }
+
+                                            .use-gpu-rendering {
+                                              -webkit-transform: translate3d(0, 0, 0);
+                                              -moz-transform: translate3d(0, 0, 0);
+                                              -ms-transform: translate3d(0, 0, 0);
+                                              transform: translate3d(0, 0, 0);
+                                              -webkit-backface-visibility: hidden;
+                                              -moz-backface-visibility: hidden;
+                                              -ms-backface-visibility: hidden;
+                                              backface-visibility: hidden;
+                                              -webkit-perspective: 1000;
+                                              -moz-perspective: 1000;
+                                              -ms-perspective: 1000;
+                                              perspective: 1000;
+                                              -webkit-transform: translateZ(0);
+                                              -moz-transform: translateZ(0);
+                                              -ms-transform: translateZ(0);
+                                              -o-transform: translateZ(0);
+                                            }
+
+                                            @keyframes fade-in {
+                                              from {
+                                                opacity: 0;
+                                              }
+                                              to {
+                                                opacity: 1;
+                                              }
+
+                                            }
+
+                                            .modal {
+                                              display: block;
+                                              flex-direction: column;
+                                              position: absolute;
+                                              z-index: 1;
+                                              left: 0;
+                                              top: 0;
+                                              width: 50%;
+                                              height: 50%;
+                                              overflow: auto;
+                                              background-color: var(--color-light);
+                                              background: var(--color-light);
+                                              border: var(--color-primary) var(--modal-border-width) solid;
+                                              resize: both;
+                                              box-shadow: var(--box-shadow-highlight);
+                                              z-index: 15;
+                                              overflow-x: hidden;
+                                              overflow-y: hidden;
+                                              transition: bottom 0.5s;
+                                              animation: fade-in 0.5s;
+
+                                            }
+
+                                            .title-actions-modal .modal-action-buttons {
+                                              display: flex;
+                                              flex-direction: row;
+                                              flex-grow: 1;
+                                              width: 30%;
+                                            }
+
+                                            .title-actions-modal .title-actions-modal-title {
+                                              display: flex;
+                                              flex-direction: row;
+                                              flex-grow: 1;
+                                              text-align: center;
+                                              justify-content: center;
+                                              align-items: center;
+                                              width: 36.6%;
+                                              font-size: var(--size-sm);
+                                            }
+
+                                            .title-actions-modal .spacer {
+                                              display: flex;
+                                              flex-direction: row;
+                                              flex-grow: 1;
+                                              width: 33.3%;
+                                            }
+
+                                            .modal-window-title {
+                                              cursor: move;
+                                              height: var(--size-lg);
+                                              font-size: var(--size-md);
+                                              display: flex;
+                                              align-items: center;
+                                              background-color: var(--color-accent-1);
+                                              color: var(--color-text-main);
+                                              justify-content: flex-start;
+                                              border-bottom: var(--color-primary) 3px solid;
+                                              box-shadow: var(--box-shadow-highlight);
+                                              width: 100%;
+                                              padding-left: var(--top-level-padding-side);
+                                              animation: subtleGlowWarble 3s infinite ease-in-out;
+                                            }
+
+                                            .modal-window-title:hover {
+                                              background-color: var(--color-secondary);
+                                            }
+
+                                            .title-actions-modal h3 {
+                                              text-align: left;
+                                            }
+
+                                            .user-description {
+                                              color: var(--color-primary);
+                                              font-size: var(--size-sm);
+                                            }
+
+                                            .user-description, .user-submitted {
+                                              padding: var(--size-xs);
+                                              margin-bottom: var(--size-md);
+                                              border: var(--color-primary) 1px solid;
+                                            }
+
+                                            .user-description:hover, .user-submitted:hover {
+                                              box-shadow: var(--box-shadow-highlight-mild);
+                                            }
+
+                                            @media screen and (max-width: 1100px) {
+                                              .modal-window-title {
+                                                font-size: var(--size-xs);
+                                              }
+                                            }
+
+                                            .text-link-button {
+                                              color: var(--text-color);
+                                              text-decoration: none;
+                                              cursor: pointer;
+                                              transition: text-indent 0.5s;
+                                              font-size: var(--size-sm);
+                                              background: transparent;
+                                              border: 0;
+                                            }
+
+                                            @media screen and (max-width: 600px) {
+                                              .text-link-button {
+                                                font-size: var(--size-sm);
+                                              }
+                                            }
+
+                                            .text-link-button--selected {
+                                              color: var(--color-primary);
+                                              font-weight: bolder;
+                                            }
+
+                                            .text-link-button:hover {
+                                              color: var(--color-primary);
+                                              text-shadow: var(--text-shadow-highlight);
+                                            }
+
+                                            .modal-content {
+                                              flex-grow: 1;
+                                              height: 100%;
+                                              overflow: hidden;
+                                              overflow-y: hidden;
+                                              background-color: var(--color-light);
+                                              background: var(--color-light);
+                                            }
+
+                                            .modal-content-post-share {
+                                              display: flex;
+                                              flex-direction: column;
+                                              width: 100%;
+                                              height: calc(100% - var(--size-lg));
+                                              background: var(--color-light);
+                                              align-items: flex-start;
+                                              padding: var(--size-xs);
+                                              font-size: var(--size-lg);
+                                              overflow-x: scroll;
+                                              overflow-y: scroll;
+                                            }
+
+                                            .modal-content-post-share nav {
+                                              font-size: var(--size-md);
+                                              margin-bottom: var(--size-xs);
+                                            }
+
+
+                                            iframe {
+                                              width: 100%;
+                                              height: 100%;
+                                              background: var(--color-light);
+                                            }
+
+                                            .modal-content-post {
+                                              padding: var(--size-md);
+                                              overflow-y: scroll;
+                                              height: calc(100% - var(--size-xl) - var(--size-lg));
+                                              background: var(--color-light);
+                                            }
+
+                                            .story-summary-statistics {
+                                              font-size: var(--size-xss);
+                                              text-align: center;
+                                              font-style: italic;
+                                            }
+
+                                            .modal-content-post h3 {
+                                              text-align: center;
+                                            }
+
+                                            .modal-content-post .story-text {
+                                              font-size: var(--size-xs);
+                                            }
+
+                                            .modal-content-post p {
+                                              font-size: var(--size-xs);
+                                              word-wrap: break-word;
+                                            }
+
+                                            .modal-content-post code, a, pre {
+                                              word-wrap: break-word;
+                                            }
+
+                                            .comment {
+                                              font-size: var(--size-xs);
+                                              padding: var(--size-xs);
+                                              margin: var(--size-xs);
+                                              border: var(--color-primary) 1px solid;
+                                              background: var(--color-light);
+                                              min-width: 10vw;
+                                              transition: all 0.5s;
+                                              animation: fade-in 0.5s;
+                                            }
+
+                                            @media screen and (max-width: 600px) {
+                                              .comment {
+                                                font-size: var(--size-xxs);
+                                                padding: var(--size-xxs);
+                                                margin: var(--size-xxs);
+                                                min-width: 33vw;
+                                              }
+                                            }
+
+                                            .modal-content-post .comment p {
+                                              margin-top: 0;
+                                            }
+
+                                            .comment:hover {
+                                              box-shadow: var(--box-shadow-highlight-mild);
+                                            }
+
+
+                                            .title-content {
+                                              position: fixed;
+                                              height: var(--size-lg);
+                                              width: 100%;
+                                              display: flex;
+                                              flex-direction: row;
+                                              justify-content: flex-start;
+                                              align-items: baseline;
+                                              padding-left: var(--top-level-padding-side);
+                                              background: var(--color-accent-1);
+                                              width: 100%;
+                                              z-index: 10;
+                                            }
+
+                                            .title-content:hover {
+                                              background: var(--color-secondary);
+                                            }
+
+                                            .title-content h1 {
+                                              margin: 0 var(--size-xs) 0 0;
+                                            }
+
+                                            .main-content {
+                                              background-image: var(--backgound-linear-gradient);
+                                              padding-left: var(--top-level-padding-side);
+                                              padding-right: var(--top-level-padding-side);
+                                              height: calc(100vh - var(--size-lg));
+                                              max-height: calc(100vh - var(--size-lg));
+                                              overflow-y: scroll;
+                                              padding-top: var(--size-lg);
+                                            }
+
+                                            .main-content > section {
+                                              transition: all 0.5s;
+                                              animation: fade-in 0.5s;
+                                            }
+
+                                            .story-container {
+                                              margin-top: var(--size-xxs);
+                                              margin-bottom: var(--size-xxs);
+                                              text-rendering: optimizeSpeed;
+                                            }
+
+                                            .story-container span {
+                                              color: var(--color-text-main);
+                                              font-size: var(--size-sm);
+                                              cursor: pointer;
+                                            }
+
+                                            .story-container span:hover {
+                                              color: transparent;
+                                              font-weight: bold;
+                                              text-indent: 5px;
+                                              transition: text-indent 0.5s;
+                                              text-shadow: var(--text-shadow-highlight);
+                                            }
+
+                                            .story-container span:hover::before {
+                                              display: inline-block;
+                                              content: "->";
+                                            }
+
+                                            .settings-content {
+                                              display: flex;
+                                              flex-direction: column;
+                                              align-items: flex-start;
+                                              justify-content: left;
+                                              padding-top: var(--size-xxs);
+                                              animation: fade-in 0.5s;
+                                            }
+
+                                            .setting-element {
+                                              display: flex;
+                                              flex-direction: row;
+                                              align-items: center;
+                                              justify-content: space-between;
+                                              padding: var(--size-xxs);
+                                            }
+
+                                            .setting-element:hover {
+                                              background: var(--color-secondary);
+                                            }
+
+                                            .setting-name {
+                                              min-width: var(--size-xxl);
+                                            }
+
+                                            .setting-new-value-input {
+                                              background: transparent;
+                                              border: 0;
+                                            }
+
+                                            .setting-apply-button, .setting-reset-button {
+                                              height: var(--size-md);
+                                            }
+
+                                            .settings-content button {
+                                              margin-left: var(--size-xs);
+                                            }
+
+                                            .theme-buttons-row button {
+                                              margin-bottom: var(--size-xs);
+                                              height: var(--size-md);
+                                            }
+
+                                            .about-text button {
+                                              margin-bottom: var(--size-xs);
+                                              height: var(--size-md);
+                                            }
   </style>
 
   <!-- Constants -->
@@ -3063,7 +3112,9 @@
 
       <main class="modal-content">
         <section id="modal-content-post-${userId}" class="modal-content-post">
-          <div class="user-details">Loading...</div>
+          <div class="user-details">
+            <span class="type"><span>Loading...</span></span>
+          </div>
         </section>
       </main>`;
 
@@ -3276,7 +3327,7 @@
             <div class="comments">
               ${
                 story.descendants
-                  ? '<span id="loading-comments">Loading Comments...</span>'
+                  ? '<span id="loading-comments" class="type"><span>Loading...</span></span>'
                   : ""
               }
             </div>
