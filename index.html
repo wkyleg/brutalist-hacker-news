@@ -363,13 +363,14 @@
         <section id="pwa-install-instructions" class="pwa-install-section">
           <h3>ADD TO HOME SCREEN (PWA SUPPORT)</h3>
           <p>
-            Follow these steps to add this site to your Home Screen or desktop
-            for quick access, just like an app!
+            This site is a Progressive Web App (PWA), which is a web page that
+            can be installed as an app on most devices. This allows for a more
+            app-like experience. To install this page as an app, follow these
+            instructions:
           </p>
 
-          <h4>On Android:</h4>
+          <h4>Android</h4>
           <ol>
-            <li>Open the website in your browser.</li>
             <li>
               Tap the menu icon (3 dots in upper right-hand corner) and tap 'Add
               to Home screen'.
@@ -380,9 +381,8 @@
             </li>
           </ol>
 
-          <h4>On iOS:</h4>
+          <h4>iOS</h4>
           <ol>
-            <li>Open the website in Safari on your iPhone or iPad.</li>
             <li>
               Tap the 'Share' button (the square with an arrow pointing out of
               it) at the bottom of the screen.
@@ -396,9 +396,8 @@
             </li>
           </ol>
 
-          <h4>On Chrome Desktop:</h4>
+          <h4>Chrome/Brave/Opera</h4>
           <ol>
-            <li>Open the website in Chrome on your computer.</li>
             <li>
               Look for a '+' icon in the address bar at the right or an
               'Install' icon in the right side of the address bar.
@@ -408,15 +407,24 @@
             </li>
           </ol>
 
-          <h4>On Microsoft Edge Desktop:</h4>
+          <h4>Microsoft Edge</h4>
           <ol>
-            <li>Open the website in Edge on your computer.</li>
             <li>
               Click on the 'Settings and more' menu (3 dots in upper right-hand
               corner) or look for an 'Install' icon on the right side of the
               address bar.
             </li>
             <li>Select 'Apps' > 'Install this site as an app'.</li>
+            <li>Enter a name for the app and confirm the installation.</li>
+          </ol>
+
+          <h4>Firefox</h4>
+          <ol>
+            <li>
+              Click on the 'Page Actions' menu (3 dots in the address bar) or
+              look for an 'Install' icon on the right side of the address bar.
+            </li>
+            <li>Select 'Install Site as App'.</li>
             <li>Enter a name for the app and confirm the installation.</li>
           </ol>
         </section>
@@ -430,18 +438,41 @@
             href="https://brutalist-web.design/"
             title="A popular page about brutalist web design"
           >
-            brutalist web design </a
-          >. Built no libraries, only vanilla HTML/JavaScript/CSS and the Hacker
-          News API. This page is a minimalist and accessible reader for Hacker
-          News.
+            Brutalist Web Design
+          </a>
+          and <a href="http://vanilla-js.com/">Vanilla JavaScript</a>. Built no
+          libraries, only vanilla HTML/JavaScript/CSS and the Hacker News API.
+          The goal of this project is to create a minimmalist Hacker News reader
+          that is accessible and easy to use. This page is also an exploration
+          of brutalist and cyberpunk aesthetics in web design. Acknowledgements
+          to the
+          <a
+            href="https://news.ycombinator.com/"
+            title="The original Hacker News website"
+            data-allow-external="true"
+            >original Hacker News website</a
+          >
+          for their API and
+          <a
+            href="https://codepen.io/mattgrosswork/pen/VwprebG"
+            data-allow-external="true"
+          >
+            Matt Gross</a
+          >
+          for the glitch animation used in the title bar.
+
           <br />
           <br />
-          You can contribute to the development of this page on
+          You can contribute to the development of this page or give a star on
           <a
             href="https://github.com/wkyleg/brutalist-hacker-news"
             title="The git repository for this website"
-            >GitHub</a
+            data-allow-external="true"
+            >GitHub.</a
           >
+          New themes are welcomed! If you have a theme you'd like to see on this
+          page, please submit a pull request or open an issue on the GitHub
+          repository.
 
           <br />
           <br />
@@ -1702,7 +1733,6 @@
      * @returns {string}
      */
     function sanitize(html) {
-     
       const doc = _parser.parseFromString(html, "text/html");
 
       // Remove script tags
@@ -1838,6 +1868,9 @@
               target.getAttribute("target") === "_blank")
           ) {
             e.preventDefault(); // Prevent default link behavior
+            // Check for data-allow-external="true"
+            if (target.getAttribute("data-allow-external") === "true")
+              return window.open(target.href, "_blank");
             launchLinkModal(target.href);
           }
         }
@@ -3353,7 +3386,11 @@
         story.parent ? `| <a id="parent-comment">In Thread</a>` : ""
       }
             </p>
-            ${story.text ? `<p class="story-text">${sanitize(story.text)}</p>` : ""}
+            ${
+              story.text
+                ? `<p class="story-text">${sanitize(story.text)}</p>`
+                : ""
+            }
             <div class="comments">
               ${
                 story.descendants
