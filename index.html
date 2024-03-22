@@ -1138,14 +1138,14 @@
 
                 }
 
-                .user-modal .modal-action-buttons {
+                .title-actions-modal .modal-action-buttons {
                   display: flex;
                   flex-direction: row;
                   flex-grow: 1;
                   width: 30%;
                 }
 
-                .user-modal .user-modal-title {
+                .title-actions-modal .title-actions-modal-title {
                   display: flex;
                   flex-direction: row;
                   flex-grow: 1;
@@ -1156,7 +1156,7 @@
                   font-size: var(--size-sm);
                 }
 
-                .user-modal .spacer {
+                .title-actions-modal .spacer {
                   display: flex;
                   flex-direction: row;
                   flex-grow: 1;
@@ -1182,7 +1182,7 @@
                   background-color: var(--color-secondary);
                 }
 
-                .user-modal h3 {
+                .title-actions-modal h3 {
                   text-align: left;
                 }
 
@@ -1758,7 +1758,7 @@
               target.getAttribute("target") === "_blank")
           ) {
             e.preventDefault(); // Prevent default link behavior
-            window.open(target.href, "_blank"); // Open the link in a new tab
+            launchLinkModal(target.href);
           }
         }
       });
@@ -2818,7 +2818,7 @@
       modal.classList.add(
         "modal",
         "share-modal",
-        "user-modal",
+        "title-actions-modal",
         "use-gpu-rendering"
       );
 
@@ -2830,11 +2830,11 @@
           </nav>
           ${
             !isMobileDevice()
-              ? "<nav id='modal-window-title-maximize' class='text-link-button' title='Toggle Full Screen'>[⛶]</nav>"
+              ? "<nav id='modal-window-title-maximize' class='text-link-button' title='Toggle Full Screen'>&#9675;</nav>"
               : ""
           }
         </div>
-        <div class="user-modal-title">Share</div>
+        <div class="title-actions-modal-title">Share</div>
         <div class="spacer"></div>
       </header>
       <main class="modal-content">
@@ -3043,7 +3043,7 @@
 
     function UserModal(userId) {
       const modal = document.createElement("div");
-      modal.classList.add("modal", "user-modal", "use-gpu-rendering");
+      modal.classList.add("modal", "title-actions-modal", "use-gpu-rendering");
 
       modal.innerHTML = `<header class="modal-window-title" role="dialog" aria-modal="true">
         <div class="modal-action-buttons">
@@ -3056,7 +3056,7 @@
               : ""
           }
         </div>
-        <div class="user-modal-title">${userId}</div>
+        <div class="title-actions-modal-title">${userId}</div>
         <div class="spacer"></div>
       </header>
 
@@ -3137,6 +3137,73 @@
     function launchUserModal(userId) {
       makeModalDragable(document.body.appendChild(new UserModal(userId)));
       addProfileModalToURL(userId);
+    }
+
+    function LinkModal(url) {
+      const modal = document.createElement("div");
+      modal.classList.add(
+        "modal",
+        "use-gpu-rendering",
+        "link-modal",
+        "title-actions-modal"
+      );
+
+      modal.innerHTML = `<header class="modal-window-title" role="dialog" aria-modal="true">
+        <nav id="close-button-link" class="text-link-button" title="Close Modal">
+          [X]
+        </nav>
+        ${
+          !isMobileDevice()
+            ? "<nav id='modal-window-title-maximize' class='text-link-button' title='Toggle Full Screen'>[⛶]</nav>"
+            : ""
+        }
+        <nav id="open-link" class="text-link-button" title='Open In New Tab'>
+          [➕]
+        </nav>
+        <nav id="share-link" class="text-link-button" title="Share Link">
+          [🌐]
+        </nav>
+      </header>
+
+      <main class="modal-content">
+        <iframe id="link-iframe" src="${url}"></iframe>
+      </main>`;
+
+      useModalHeaderDoubleTapResize(modal);
+      makeModalDragable(modal);
+      setModalDisplayDefaultSize(modal);
+
+      modal
+        .querySelector(`#close-button-link`)
+        .addEventListener("click", () => {
+          modal.remove();
+        });
+
+      if (!isMobileDevice()) {
+        modal
+          .querySelector(`#modal-window-title-maximize`)
+          .addEventListener("click", () => {
+            if (isModalMaximized(modal)) {
+              setModalDisplayDefaultSize(modal);
+            } else {
+              maximizeModal(modal);
+            }
+          });
+      }
+
+      modal.querySelector(`#open-link`).addEventListener("click", () => {
+        window.open(url, "_blank");
+      });
+
+      modal
+        .querySelector(`#share-link`)
+        .addEventListener("click", () => launchShareModal());
+
+      return modal;
+    }
+
+    function launchLinkModal(url) {
+      makeModalDragable(document.body.appendChild(new LinkModal(url)));
     }
 
     /**
