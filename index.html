@@ -2801,6 +2801,18 @@
       );
     }
 
+    function useModalHeaderDoubleTapResize(modal) {
+      modal
+        .querySelector(".modal-window-title")
+        .addEventListener("dblclick", (event) => {
+          if (isModalMaximized(modal)) {
+            setModalDisplayDefaultSize(modal);
+          } else {
+            maximizeModal(modal);
+          }
+        });
+    }
+
     function ShareModal() {
       const modal = document.createElement("div");
       modal.classList.add(
@@ -2840,6 +2852,8 @@
         </div>
       </main>
       `;
+
+      useModalHeaderDoubleTapResize(modal);
 
       // Use smaller sizing for this modal
       setModalDisplayDefaultSize(modal, "99%", "99%", "42%", "16.6%");
@@ -3052,6 +3066,8 @@
         </section>
       </main>`;
 
+      useModalHeaderDoubleTapResize(modal);
+
       setModalDisplayDefaultSize(modal);
 
       modal
@@ -3131,8 +3147,7 @@
      */
     function StoryModal(story) {
       const modal = document.createElement("div");
-      modal.classList.add("modal");
-      modal.classList.add("use-gpu-rendering");
+      modal.classList.add("modal", "use-gpu-rendering");
 
       const datePosted = formatDate(story.time);
 
@@ -3199,6 +3214,8 @@
             </div>
           </section>
       </main>`;
+
+      useModalHeaderDoubleTapResize(modal);
 
       setModalDisplayDefaultSize(modal);
 
