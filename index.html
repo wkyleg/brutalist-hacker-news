@@ -1274,6 +1274,10 @@
                                               animation: subtleGlowWarble 3s infinite ease-in-out;
                                             }
 
+                                            .modal-window.title nav {
+                                              z-index: 100;
+                                            }
+
                                             .modal-window-title:hover {
                                               background-color: var(--color-secondary);
                                             }
@@ -2920,6 +2924,14 @@
 
       // Handle drag functionality from touch screen
       modalTitleElement.addEventListener("touchstart", (event) => {
+        // Make sure this ignores events from nav buttons
+        if (event.target.tagName === "NAV") {
+          // Propagate click event to button and handle normally 
+          // TODO: handle this bug better
+          event.target.click();
+          return;
+        }
+
         touchPosition3 = event.changedTouches[0].clientX;
         touchPosition4 = event.changedTouches[0].clientY;
       });
