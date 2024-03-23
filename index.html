@@ -350,6 +350,7 @@
           <button id="button-theme-los-angeles">L0S@NGeLE$</button>
           <button id="button-theme-hash">ʜᴀѕн</button>
           <button id="button-theme-block-cipher">███ɃŁØ₵ƙ₵ᎥƤђɆя███</button>
+          <button id="button-theme-samizdat">самиздат</button>
         </div>
 
         <br />
@@ -2612,6 +2613,15 @@
         "--color-light": "#FFFF00",
         "--color-text-main": "#000000",
       },
+      samizdat: {
+        "--color-primary": "#CC0000",
+        "--color-secondary": "#FFD700",
+        "--color-accent-1": "#CC0000",
+        "--color-accent-2": "#545454",
+        "--color-dark": "#000000",
+        "--color-light": "#fff700",
+        "--color-text-main": "#000000",
+      },
     };
 
     const applyTheme = (theme) => {
@@ -2926,7 +2936,7 @@
       modalTitleElement.addEventListener("touchstart", (event) => {
         // Make sure this ignores events from nav buttons
         if (event.target.tagName === "NAV") {
-          // Propagate click event to button and handle normally 
+          // Propagate click event to button and handle normally
           // TODO: handle this bug better
           event.target.click();
           return;
