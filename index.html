@@ -3006,7 +3006,7 @@
      * @returns {void}
      */
     function scrollToTop() {
-      window.scrollTo(0, 0);
+      document.querySelector("body").scrollIntoView({ behavior: "smooth" });
     }
 
     /**
@@ -3034,6 +3034,7 @@
      * @returns {string}
      */
     function generateLoadingString(length) {
+      // TODO: rewrite with reduce
       let result = "";
       for (let i = 0; i < length; i++) {
         result += ANIMATION_CHARACTERS_STRING.charAt(
@@ -3046,6 +3047,7 @@
     /**
      * Precomputes loading strings for the loading animation
      * @returns {Promise<string[]>}
+     * TODO:reqrite with loop
      */
     async function precomputeLoadingStrings() {
       const loadingStrings = [];
@@ -3071,6 +3073,7 @@
     /**
      * Initializes the loading animation
      * @returns {void}
+     * TODO have generic function for batch DOM inserts
      */
     function initializeLoadingAnimation() {
       const fragment = document.createDocumentFragment();
@@ -3096,6 +3099,7 @@
       desktopHeight = "50%",
       desktopWidth = "50%"
     ) {
+      // TODO: refactor this
       if (isMobileDevice()) {
         modal.style.width =
           "calc(100vw - var(--modal-border-width) - var(--modal-border-width))";
@@ -3164,6 +3168,8 @@
         });
     }
 
+    // TODO: reqrite modal share and maximize listeners to be reusable
+
     function ShareModal() {
       const modal = document.createElement("div");
       modal.classList.add(
@@ -3207,14 +3213,17 @@
       useModalHeaderDoubleTapResize(modal);
 
       // Use smaller sizing for this modal
+      // TODO: key these values for share modal as constants
       setModalDisplayDefaultSize(modal, "99%", "99%", "42%", "16.6%");
 
+      // TODO: rewrite repeatable versino of this function
       modal
         .querySelector(`#close-button-share`)
         .addEventListener("click", () => {
           modal.remove();
         });
 
+      // TODO: rewrite repeatable versino of this function
       if (!isMobileDevice()) {
         modal
           .querySelector(`#modal-window-title-maximize`)
