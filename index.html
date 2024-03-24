@@ -1551,7 +1551,8 @@
     const MILLISECONDS_IN_SECOND = 1_000;
     const TOTAL_ANIMATION_STRINGS = 100;
     const LOADING_STRING_MIN_LENGTH = 5;
-    const LOADING_STRING_MAX_LENGTH = 80;
+    const LOADING_STRING_MAX_LENGTH_MOBILE = 25;
+    const LOADING_STRING_MAX_LENGTH_DESKTOP = 80;
     const MOBILE_DEVICE_MAX_WIDTH = 600;
     const LOADING_STORY_ANIMATION_REFRESH_INTERVAL_MINIMUM = 250;
     const LOADING_STORY_ANIMATION_REFRESH_INTERVAL_MAXIMUM = 2_000;
@@ -1723,6 +1724,10 @@
       return `${HACKER_NEWS_USER_PROFILE_URL}${id}`;
     }
 
+    function isMobileDevice() {
+      return window.innerWidth < MOBILE_DEVICE_MAX_WIDTH;
+    }
+
     /**
      * Utility for handling state and side effects, listening for changes
      * @param {any} initialState
@@ -1780,10 +1785,6 @@
       }
 
       return doc.body.innerHTML;
-    }
-
-    function isMobileDevice() {
-      return window.innerWidth < MOBILE_DEVICE_MAX_WIDTH;
     }
 
     function shareOnTwitter(url) {
@@ -3061,7 +3062,10 @@
         loadingStrings.push(
           generateLoadingString(
             Math.random() *
-              (LOADING_STRING_MAX_LENGTH - LOADING_STRING_MIN_LENGTH) +
+              ((isMobileDevice()
+                ? LOADING_STRING_MAX_LENGTH_MOBILE
+                : LOADING_STRING_MAX_LENGTH_DESKTOP) -
+                LOADING_STRING_MIN_LENGTH) +
               LOADING_STRING_MIN_LENGTH
           )
         );
@@ -3809,7 +3813,9 @@
         (loadingContainer.innerHTML = `<span>${generateLoadingString(
           getRandomNumberBetween(
             LOADING_STRING_MIN_LENGTH,
-            LOADING_STRING_MAX_LENGTH
+            isMobileDevice()
+              ? LOADING_STRING_MAX_LENGTH_MOBILE
+              : LOADING_STRING_MAX_LENGTH_DESKTOP
           )
         )}</span>`);
 
