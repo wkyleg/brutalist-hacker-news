@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /private/
+Sitemap: https://www.brutalisthackernews.com/sitemap.xml
