@@ -1212,7 +1212,7 @@
                                             }
 
                                             .modal {
-                                              display: block;
+                                              display: flex;
                                               flex-direction: column;
                                               position: absolute;
                                               z-index: 1;
@@ -1227,8 +1227,7 @@
                                               resize: both;
                                               box-shadow: var(--box-shadow-highlight);
                                               z-index: 15;
-                                              overflow-x: hidden;
-                                              overflow-y: hidden;
+                                              overflow: auto;
                                               transition: bottom 0.5s;
                                               animation: fade-in 0.5s;
 
@@ -1263,6 +1262,7 @@
                                               cursor: move;
                                               height: var(--size-lg);
                                               font-size: var(--size-md);
+                                              position: sticky;
                                               display: flex;
                                               align-items: center;
                                               background-color: var(--color-accent-1);
@@ -1371,7 +1371,7 @@
                                             .modal-content-post {
                                               padding: var(--size-md);
                                               overflow-y: scroll;
-                                              height: calc(100% - var(--size-xl) - var(--size-lg));
+                                              height: calc(100% - var(--size-lg));
                                               background: var(--color-light);
                                             }
 
