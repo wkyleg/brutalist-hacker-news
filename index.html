@@ -1160,6 +1160,8 @@
                                               height: 100%;
                                               width: 100%;
                                               overflow: hidden;
+                                              display: flex;
+                                              flex-direction: column;
                                             }
 
                                             h1 {
@@ -1285,6 +1287,7 @@
 
                                             .title-actions-modal h3 {
                                               text-align: left;
+                                              margin-bottom: var(--size-xs);
                                             }
 
                                             .user-description {
@@ -1379,6 +1382,7 @@
                                               font-size: var(--size-xss);
                                               text-align: center;
                                               font-style: italic;
+                                              margin-top: 0;
                                             }
 
                                             .modal-content-post h3 {
@@ -1428,7 +1432,6 @@
 
 
                                             .title-content {
-                                              position: fixed;
                                               height: var(--size-lg);
                                               width: 100%;
                                               display: flex;
@@ -1456,7 +1459,6 @@
                                               height: calc(100vh - var(--size-lg));
                                               max-height: calc(100vh - var(--size-lg));
                                               overflow-y: scroll;
-                                              padding-top: var(--size-lg);
                                             }
 
                                             .main-content > section {
