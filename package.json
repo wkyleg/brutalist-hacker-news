@@ -1,0 +1,23 @@
+{
+  "name": "brutalist-hacker-news",
+  "version": "1.0.0",
+  "description": "An even more brutalist hacker news reader",
+  "main": "index.js",
+  "scripts": {
+    "lint:js": "eslint .",
+    "lint:js:fix": "eslint . --fix",
+    "lint:css": "stylelint 'index.html'"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@html-eslint/eslint-plugin": "^0.24.0",
+    "@html-eslint/parser": "^0.24.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-html": "^8.0.0",
+    "postcss-html": "^1.6.0",
+    "stylelint": "^16.3.0",
+    "stylelint-config-html": "^1.1.0",
+    "stylelint-config-standard": "^36.0.0"
+  }
+}
