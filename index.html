@@ -1027,19 +1027,19 @@
 		animation: fade-in .5s
 	}
 
-	.story-container {
+	.item-title-preview {
 		margin-top: var(--size-xxs);
 		margin-bottom: var(--size-xxs);
 		text-rendering: optimizespeed
 	}
 
-	.story-container span {
+	.item-title-preview span {
 		color: var(--color-text-main);
 		font-size: var(--size-sm);
 		cursor: pointer
 	}
 
-	.story-container span:hover {
+	.item-title-preview span:hover {
 		color: transparent;
 		font-weight: 700;
 		text-indent: 5px;
@@ -1047,7 +1047,7 @@
 		text-shadow: var(--text-shadow-highlight)
 	}
 
-	.story-container span:hover::before {
+	.item-title-preview span:hover::before {
 		display: inline-block;
 		content: "->"
 	}
@@ -2913,7 +2913,7 @@
 		// Create html element for story
 		const storyContainer = document.createElement("div");
 		storyContainer.id = storyId;
-		storyContainer.classList.add("story-container");
+		storyContainer.classList.add("item-title-preview");
 
 		// Assign random string for loading effect
 		storyContainer.innerHTML = `<span>${getRandomLoadingString()}}</span>`;
@@ -3336,7 +3336,7 @@
 	 */
 	function LoadingStoryElement() {
 		const loadingContainer = document.createElement("div");
-		loadingContainer.classList.add("story-container");
+		loadingContainer.classList.add("item-title-preview");
 
 		const animationRender = () =>
 		(loadingContainer.innerHTML = `<span>${generateLoadingString(
@@ -3556,7 +3556,7 @@
 			{ rootMargin: "0px 0px 100px 0px" }
 		);
 
-		document.querySelectorAll(".story-container").forEach((story) => {
+		document.querySelectorAll(".item-title-preview").forEach((story) => {
 			observer.observe(story);
 		});
 	}
