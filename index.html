@@ -924,7 +924,6 @@
 		display: flex;
 		flex-direction: column;
 		width: 100%;
-		height: calc(100% - var(--size-lg));
 		background: var(--color-light);
 		align-items: flex-start;
 		padding: var(--size-xs);
@@ -1147,6 +1146,12 @@
 
 <!-- API -->
 <script type="text/javascript">
+	/**
+	 * Fetches data from the Hacker News API with loading animation displayed
+	 * on main content
+	 * @param {string} url
+	 * @returns {Promise}
+	 */
 	async function getRequestWithLoadingAnimation(url) {
 		showLoadingAnimation();
 		let response;
@@ -2952,16 +2957,6 @@
       </header>
       <main class="modal-content">
         <div class="modal-content-post-share">
-            <nav id="share-twitter" class="text-link-button" title="Share on X/Twitter">Twitter</nav>
-            <nav id="share-pintrest" class="text-link-button" title="Share on Pintrest">Pintrest</nav>
-            <nav id="share-tumblr" class="text-link-button" title="Share on Tumblr">Tumblr</nav>
-            <nav id="share-facebook" class="text-link-button" title="Share on Facebook">Facebook</nav>
-            <nav id="share-linkedin" class="text-link-button" title="Share on LinkedIn">LinkedIn</nav>
-            <nav id="share-whatsapp" class="text-link-button" title="Share on WhatsApp">WhatsApp</nav>
-            <nav id="share-reddit" class="text-link-button" title="Share on Reddit">Reddit</nav>
-            <nav id="share-telegram" class="text-link-button" title="Share on Telegram">Telegram</nav>
-            <nav id="built-in" class="text-link-button" title="Share on the built in browser share feature">Native Share</nav>
-            <nav id="share-email" class="text-link-button" title="Share via Email">Email</nav>
         </div>
       </main>
       `;
@@ -2992,44 +2987,13 @@
 				});
 		}
 
-		modal.querySelector("#share-twitter").addEventListener("click", () => {
-			shareOnTwitter();
-		});
-
-		modal.querySelector("#share-facebook").addEventListener("click", () => {
-			shareOnFacebook();
-		});
-
-		modal.querySelector("#share-linkedin").addEventListener("click", () => {
-			shareOnLinkedIn();
-		});
-
-		modal.querySelector("#share-whatsapp").addEventListener("click", () => {
-			shareOnWhatsApp();
-		});
-
-		modal.querySelector("#share-reddit").addEventListener("click", () => {
-			shareOnReddit();
-		});
-
-		modal.querySelector("#share-telegram").addEventListener("click", () => {
-			shareOnTelegram();
-		});
-
-		modal.querySelector("#share-email").addEventListener("click", () => {
-			shareViaEmail();
-		});
-
-		modal.querySelector("#share-pintrest").addEventListener("click", () => {
-			shareOnPintrest();
-		});
-
-		modal.querySelector("#share-tumblr").addEventListener("click", () => {
-			shareOnTumblr();
-		});
-
-		modal.querySelector("#built-in").addEventListener("click", () => {
-			builtInShare();
+		SHARE_OPTIONS.map((shareOption) => {
+			const shareButton = document.createElement("nav");
+			shareButton.classList.add("text-link-button");
+			shareButton.id = `share-${shareOption}`;
+			shareButton.innerHTML = shareOption.name
+			shareButton.onclick = shareOption.callback;
+			modal.querySelector(".modal-content-post-share").appendChild(shareButton);
 		});
 
 		return modal;
