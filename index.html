@@ -1427,91 +1427,92 @@
 <script type="text/javascript">
   // TODO: remove coupling with DOM state
   async function getRequestWithLoadingAnimation(url) {
-  	showLoadingAnimation();
-  	let response;
-  	try {
-  		response = await fetch(url);
-  		if (!response.ok)
-  			throw new Error(`HTTP error! status: ${response.status}`);
-  	} catch (error) {
-  		console.error(error);
-  		hideLoadingAnimation();
-  		throw error;
-  	} finally {
-  		hideLoadingAnimation();
-  	}
+    showLoadingAnimation();
+    let response;
+    try {
+      response = await fetch(url);
+      if (!response.ok)
+        throw new Error(`HTTP error! status: ${response.status}`);
+    } catch (error) {
+      console.error(error);
+      hideLoadingAnimation();
+      throw error;
+    } finally {
+      hideLoadingAnimation();
+    }
 
-  	return response.json();
+    return response.json();
   }
 
   const itemCache = new Map();
 
+
+  /**
+   * Regarding the Hacker News API:
+   * Stories, comments, jobs, Ask HNs and even polls are just items. They're
+   * identified by their ids, which are unique integers, and live under
+   * /v0/item/<id>.
+   *
+   * All items have some of the following properties:
+   * [Field]  [Description]
+   * id	      The item's unique id.
+   * deleted	True if the item is deleted.
+   * type    	The type of item. One of "job", "story", "comment", "poll", or "pollopt".
+   * by	      The username of the item's author.
+   * time	    Creation date of the item, in Unix Time.
+   * text    	The comment, story or poll text. HTML.
+   * dead	    true if the item is dead.
+   * parent  	The comment's parent: either another comment or the relevant story.
+   * poll	    The pollopt's associated poll.
+   * kids	    The ids of the item's comments, in ranked display order.
+   * url     	The URL of the story.
+   * score	  The story's score, or the votes for a pollopt.
+   * title	  The title of the story, poll or job. HTML.
+   * parts	  A list of related pollopts, in display order.
+   *
+   * For example, see: https://hacker-news.firebaseio.com/v0/item/8863.json?print=pretty
+   * for an example of a post.
+   * 
+   * See more info about the Hacker News API: https://github.com/HackerNews/API
+   */
+
   const API = {
-  	topStories: () =>
-  		getRequestWithLoadingAnimation(`${HACKER_NEWS_API_URL}topstories.json`),
-  	newStories: () =>
-  		getRequestWithLoadingAnimation(`${HACKER_NEWS_API_URL}newstories.json`),
-  	bestStories: () =>
-  		getRequestWithLoadingAnimation(
-  			`${HACKER_NEWS_API_URL}beststories.json`
-  		),
-  	askStories: () =>
-  		getRequestWithLoadingAnimation(`${HACKER_NEWS_API_URL}askstories.json`),
-  	showStories: () =>
-  		getRequestWithLoadingAnimation(
-  			`${HACKER_NEWS_API_URL}showstories.json`
-  		),
-  	jobStories: () =>
-  		getRequestWithLoadingAnimation(`${HACKER_NEWS_API_URL}jobstories.json`),
-  	/**
- * Stories, comments, jobs, Ask HNs and even polls are just items. They're
- * identified by their ids, which are unique integers, and live under
- * /v0/item/<id>.
- *
- * All items have some of the following properties:
-      [Field]     [Description]
-      id	        The item's unique id.
-      deleted	    true if the item is deleted.
-      type    	The type of item. One of "job", "story", "comment", "poll", or "pollopt".
-      by	        The username of the item's author.
-      time	    Creation date of the item, in Unix Time.
-      text    	The comment, story or poll text. HTML.
-      dead	    true if the item is dead.
-      parent  	The comment's parent: either another comment or the relevant story.
-      poll	    The pollopt's associated poll.
-      kids	    The ids of the item's comments, in ranked display order.
-      url     	The URL of the story.
-      score	    The story's score, or the votes for a pollopt.
-      title	    The title of the story, poll or job. HTML.
-      parts	    A list of related pollopts, in display order.
-      descendants	In the case of stories or polls, the total comment count.
-  *
-  * For example, a story: https://hacker-news.firebaseio.com/v0/item/8863.json?print=pretty
-  *
-  *
-  * @param {number} id
-  *
-  */
-  	item: (id) => {
-  		if (itemCache.has(id)) return Promise.resolve(itemCache.get(id));
-  		return fetch(`${HACKER_NEWS_API_URL}item/${id}.json`)
-  			.then((response) => response.json())
-  			.then((item) => {
-  				itemCache.set(id, item);
-  				return item;
-  			})
-  			.catch((error) => console.error(error));
-  	},
-  	user: (id) => {
-  		if (itemCache.has(id)) return Promise.resolve(itemCache.get(id));
-  		return fetch(`${HACKER_NEWS_API_URL}user/${id}.json`)
-  			.then((response) => response.json())
-  			.then((item) => {
-  				itemCache.set(id, item);
-  				return item;
-  			})
-  			.catch((error) => console.error(error));
-  	},
+    topStories: () =>
+      getRequestWithLoadingAnimation(`${HACKER_NEWS_API_URL}topstories.json`),
+    newStories: () =>
+      getRequestWithLoadingAnimation(`${HACKER_NEWS_API_URL}newstories.json`),
+    bestStories: () =>
+      getRequestWithLoadingAnimation(
+        `${HACKER_NEWS_API_URL}beststories.json`
+      ),
+    askStories: () =>
+      getRequestWithLoadingAnimation(`${HACKER_NEWS_API_URL}askstories.json`),
+    showStories: () =>
+      getRequestWithLoadingAnimation(
+        `${HACKER_NEWS_API_URL}showstories.json`
+      ),
+    jobStories: () =>
+      getRequestWithLoadingAnimation(`${HACKER_NEWS_API_URL}jobstories.json`),
+    item: (id) => {
+      if (itemCache.has(id)) return Promise.resolve(itemCache.get(id));
+      return fetch(`${HACKER_NEWS_API_URL}item/${id}.json`)
+        .then((response) => response.json())
+        .then((item) => {
+          itemCache.set(id, item);
+          return item;
+        })
+        .catch((error) => console.error(error));
+    },
+    user: (id) => {
+      if (itemCache.has(id)) return Promise.resolve(itemCache.get(id));
+      return fetch(`${HACKER_NEWS_API_URL}user/${id}.json`)
+        .then((response) => response.json())
+        .then((item) => {
+          itemCache.set(id, item);
+          return item;
+        })
+        .catch((error) => console.error(error));
+    },
   };
 </script>
 
@@ -1524,22 +1525,22 @@
    * @returns {void}
    */
   const loop = (times, callback) => {
-  	for (let i = 0; i < times; i++) {
-  		callback(i);
-  	}
+    for (let i = 0; i < times; i++) {
+      callback(i);
+    }
   };
 
   function formatDate(timePosted) {
-  	const date = new Date(timePosted * 1000);
-  	const year = date.getFullYear();
-  	const month = String(date.getMonth() + 1).padStart(2, "0"); // JavaScript months are 0-based.
-  	const day = String(date.getDate()).padStart(2, "0");
-  	const hours = String(date.getHours()).padStart(2, "0");
-  	const minutes = String(date.getMinutes()).padStart(2, "0");
-  	const seconds = String(date.getSeconds()).padStart(2, "0");
+    const date = new Date(timePosted * 1000);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // JavaScript months are 0-based.
+    const day = String(date.getDate()).padStart(2, "0");
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    const seconds = String(date.getSeconds()).padStart(2, "0");
 
-  	// Make sure to avoid Y10K bugs
-  	return `0${year}:${month}:${day}:${hours}:${minutes}:${seconds}`;
+    // Make sure to avoid Y10K bugs
+    return `0${year}:${month}:${day}:${hours}:${minutes}:${seconds}`;
   }
 
   /**
@@ -1549,11 +1550,13 @@
    * @returns {number}
    */
   const getRandomNumberBetween = (min, max) =>
-  	Math.floor(Math.random() * (max - min + 1) + min);
+    Math.floor(Math.random() * (max - min + 1) + min);
 
-  function isMobileDevice() {
-  	return window.innerWidth < MOBILE_DEVICE_MAX_WIDTH;
-  }
+  /** 
+   * Returns true of in mobile sized screen 
+   * @returns {boolean}
+   */
+  const isMobileDevice = () => window.innerWidth < MOBILE_DEVICE_MAX_WIDTH;
 
   /**
    * Utility for handling state and side effects, listening for changes
@@ -1562,27 +1565,27 @@
    * @returns {object}
    */
   function reactive(initialState, sideEffect) {
-  	let state = initialState;
-  	const current = () => state;
+    let state = initialState;
+    const current = () => state;
 
-  	const update = (newState) => {
-  		state = newState;
-  		sideEffect(state);
-  	};
+    const update = (newState) => {
+      state = newState;
+      sideEffect(state);
+    };
 
-  	const observers = [];
-  	const subscribe = (observer) => observers.push(observer);
+    const observers = [];
+    const subscribe = (observer) => observers.push(observer);
 
-  	const notify = () => {
-  		observers.forEach((observer) => observer(state));
-  	};
+    const notify = () => {
+      observers.forEach((observer) => observer(state));
+    };
 
-  	return {
-  		current,
-  		update,
-  		subscribe,
-  		notify,
-  	};
+    return {
+      current,
+      update,
+      subscribe,
+      notify,
+    };
   }
 
   const _parser = new DOMParser();
@@ -1593,114 +1596,114 @@
    * @returns {string}
    */
   function sanitize(html) {
-  	const doc = _parser.parseFromString(html, "text/html");
+    const doc = _parser.parseFromString(html, "text/html");
 
-  	// Remove script tags
-  	doc.querySelectorAll("script").forEach((script) => script.remove());
+    // Remove script tags
+    doc.querySelectorAll("script").forEach((script) => script.remove());
 
-  	// Sanitize attributes
-  	const elements = doc.body.getElementsByTagName("*");
-  	for (let i = 0; i < elements.length; i++) {
-  		const attrs = elements[i].attributes;
-  		for (let j = attrs.length - 1; j >= 0; j--) {
-  			const attrName = attrs[j].name.toLowerCase();
-  			const attrValue = attrs[j].value.toLowerCase();
-  			if (attrName.startsWith("on") || attrValue.includes("javascript:")) {
-  				elements[i].removeAttribute(attrs[j].name);
-  			}
-  		}
-  	}
+    // Sanitize attributes
+    const elements = doc.body.getElementsByTagName("*");
+    for (let i = 0; i < elements.length; i++) {
+      const attrs = elements[i].attributes;
+      for (let j = attrs.length - 1; j >= 0; j--) {
+        const attrName = attrs[j].name.toLowerCase();
+        const attrValue = attrs[j].value.toLowerCase();
+        if (attrName.startsWith("on") || attrValue.includes("javascript:")) {
+          elements[i].removeAttribute(attrs[j].name);
+        }
+      }
+    }
 
-  	return doc.body.innerHTML;
+    return doc.body.innerHTML;
   }
 
   function shareOnTwitter(url) {
-  	window.open(
-  		`${TWITTER_SHARE_URL}${url || window.location.href}`,
-  		"_blank"
-  	);
+    window.open(
+      `${TWITTER_SHARE_URL}${url || window.location.href}`,
+      "_blank"
+    );
   }
 
   function shareOnFacebook(url) {
-  	window.open(
-  		`${FACEBOOK_SHARE_URL}${url || window.location.href}`,
-  		"_blank"
-  	);
+    window.open(
+      `${FACEBOOK_SHARE_URL}${url || window.location.href}`,
+      "_blank"
+    );
   }
 
   function shareOnLinkedIn(url) {
-  	window.open(
-  		`${LINKEDIN_SHARE_URL}${url || window.location.href}`,
-  		"_blank"
-  	);
+    window.open(
+      `${LINKEDIN_SHARE_URL}${url || window.location.href}`,
+      "_blank"
+    );
   }
 
   const shareOnWhatsApp = (url) =>
-  	window.open(
-  		`${WHATSAPP_SHARE_URL}${url || window.location.href}`,
-  		"_blank"
-  	);
+    window.open(
+      `${WHATSAPP_SHARE_URL}${url || window.location.href}`,
+      "_blank"
+    );
 
   const shareOnReddit = (url) =>
-  	window.open(
-  		`${REDDIT_SHARE_URL}${url || window.location.href}`,
-  		"_blank"
-  	);
+    window.open(
+      `${REDDIT_SHARE_URL}${url || window.location.href}`,
+      "_blank"
+    );
 
   const shareOnTelegram = (url) =>
-  	window.open(`${TELEGRAM_URL}${url || window.location.href}`, "_blank");
+    window.open(`${TELEGRAM_URL}${url || window.location.href}`, "_blank");
 
   const shareViaEmail = (url) =>
-  	window.open(`${EMAIL_SHARE_URL}${url || window.location.href}`, "_blank");
+    window.open(`${EMAIL_SHARE_URL}${url || window.location.href}`, "_blank");
 
   const shareOnPintrest = () => {
-  	window.open(
-  		`https://pinterest.com/pin/create/button/?url=${encodeURIComponent(
-  			window.location.href
-  		)}&media=${encodeURIComponent(
-  			MEDIA_URL
-  		)}&description=${encodeURIComponent(LINK_SHARE_DESCRIPTION)}`
-  	);
+    window.open(
+      `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(
+        window.location.href
+      )}&media=${encodeURIComponent(
+        MEDIA_URL
+      )}&description=${encodeURIComponent(LINK_SHARE_DESCRIPTION)}`
+    );
   };
 
   const shareOnTumblr = () => {
-  	window.open(
-  		`https://www.tumblr.com/widgets/share/tool?canonicalUrl=${encodeURIComponent(
-  			window.location.href
-  		)}&title=${encodeURIComponent(
-  			"BRUTALIST HACKER NEWS"
-  		)}&caption=${encodeURIComponent(
-  			"A Hacker News reader inspired by Brutalist Web Design"
-  		)}&tags=${encodeURIComponent(
-  			"brutalist,hackernews,webdesign,cyberpunk,accesibility"
-  		)}`
-  	);
+    window.open(
+      `https://www.tumblr.com/widgets/share/tool?canonicalUrl=${encodeURIComponent(
+        window.location.href
+      )}&title=${encodeURIComponent(
+        "BRUTALIST HACKER NEWS"
+      )}&caption=${encodeURIComponent(
+        "A Hacker News reader inspired by Brutalist Web Design"
+      )}&tags=${encodeURIComponent(
+        "brutalist,hackernews,webdesign,cyberpunk,accesibility"
+      )}`
+    );
   };
 
   function builtInShare() {
-  	if (!!navigator.canShare && navigator.canShare() && !!navigator.share) {
-  		navigator
-  			.share({
-  				title: "Check out this article on Brutalist Hacker News",
-  				text: "Check out this article on Brutalist Hacker News",
-  				url: window.location.href,
-  			})
-  		// .then(() => console.log("Successful share"))
-  			.catch(shareViaEmail);
-  	} else {
-  		shareViaEmail();
-  	}
+    if (!!navigator.canShare && navigator.canShare() && !!navigator.share) {
+      navigator
+        .share({
+          title: "Check out this article on Brutalist Hacker News",
+          text: "Check out this article on Brutalist Hacker News",
+          url: window.location.href,
+        })
+        // .then(() => console.log("Successful share"))
+        .catch(shareViaEmail);
+    } else {
+      shareViaEmail();
+    }
   }
 
   function downloadJSONAsFile(json) {
-  	const data = JSON.stringify(json, null, 2);
-  	const blob = new Blob([data], { type: "application/json" });
-  	const url = URL.createObjectURL(blob);
-  	const a = document.createElement("a");
-  	a.href = url;
-  	a.download = "data.json";
-  	a.click();
-  	URL.revokeObjectURL(url);
+    const data = JSON.stringify(json, null, 2);
+    const blob = new Blob([data], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "data.json";
+    a.click();
+    URL.revokeObjectURL(url);
   }
 
   /**
@@ -1708,864 +1711,860 @@
    * @returns {void}
    */
   function initLinkClickInterceptBehavior() {
-  	document.body.addEventListener("click", function (e) {
-  		// Check if the clicked element is a link or inside a link
-  		let target = e.target;
-  		while (target != null && target.tagName !== "A") {
-  			target = target.parentElement;
-  		}
+    document.body.addEventListener("click", function (e) {
+      // Check if the clicked element is a link or inside a link
+      let target = e.target;
+      while (target != null && target.tagName !== "A") {
+        target = target.parentElement;
+      }
 
-  		// If a link was clicked
-  		if (target && target.tagName === "A") {
-  			// Check if it's an external link or you want to force it to open in a new tab
-  			if (
-  				target.getAttribute("href") &&
+      // If a link was clicked
+      if (target && target.tagName === "A") {
+        // Check if it's an external link or you want to force it to open in a new tab
+        if (
+          target.getAttribute("href") &&
           (target.getAttribute("href").startsWith("http") ||
             target.getAttribute("target") === "_blank")
-  			) {
-  				e.preventDefault(); // Prevent default link behavior
-  				// Check for data-allow-external="true"
-  				if (target.getAttribute("data-allow-external") === "true")
-  					return window.open(target.href, "_blank");
-  				launchLinkModal(target.href);
-  			}
-  		}
-  	});
+        ) {
+          e.preventDefault(); // Prevent default link behavior
+          // Check for data-allow-external="true"
+          if (target.getAttribute("data-allow-external") === "true")
+            return window.open(target.href, "_blank");
+          launchLinkModal(target.href);
+        }
+      }
+    });
   }
 </script>
 
 <!-- Favorites -->
 <script>
   const getFavorites = () =>
-  	JSON.parse(localStorage.getItem("favorites")) || [];
+    JSON.parse(localStorage.getItem("favorites")) || [];
 
   const setFavorites = (favorites) =>
-  	localStorage.setItem("favorites", JSON.stringify(favorites));
+    localStorage.setItem("favorites", JSON.stringify(favorites));
 
-  function isStoryFavorited(storyId) {
-  	return getFavorites().includes(storyId);
-  }
+  const isStoryFavorited = (storyId) => getFavorites().includes(storyId);
 
   function renderFavorites() {
-  	const favoriteStoriesElement =
+    const favoriteStoriesElement =
       document.querySelector("#favorites-outlet");
-  	favoriteStoriesElement.innerHTML = "";
-  	const fragment = document.createDocumentFragment();
-  	getFavorites().forEach((storyId) => {
-  		fragment.appendChild(new StoryListElement(storyId, true));
-  	});
-  	favoriteStoriesElement.appendChild(fragment);
-  	return favoriteStoriesElement;
+    favoriteStoriesElement.innerHTML = "";
+    const fragment = document.createDocumentFragment();
+    getFavorites().forEach((storyId) => {
+      fragment.appendChild(new StoryListElement(storyId, true));
+    });
+    favoriteStoriesElement.appendChild(fragment);
+    return favoriteStoriesElement;
   }
 
   function favoriteStory(storyId) {
-  	const favorites = getFavorites();
-  	if (favorites.includes(storyId)) return;
-  	favorites.push(storyId);
-  	setFavorites(favorites);
-  	renderFavorites();
+    const favorites = getFavorites();
+    if (favorites.includes(storyId)) return;
+    favorites.push(storyId);
+    setFavorites(favorites);
+    renderFavorites();
   }
 
   function unfavoriteStory(storyId) {
-  	setFavorites(getFavorites().filter((id) => id !== storyId));
-  	renderFavorites();
+    setFavorites(getFavorites().filter((id) => id !== storyId));
+    renderFavorites();
   }
 
   function clearAllFavorites() {
-  	setFavorites([]);
-  	renderFavorites();
+    setFavorites([]);
+    renderFavorites();
   }
 
   const downloadFavorites = () => downloadJSONAsFile(getFavorites());
 
   const attachFavoritesListeners = () => {
-  	document
-  		.querySelector("#clear-all-favorites-button")
-  		.addEventListener("click", clearAllFavorites);
+    document
+      .querySelector("#clear-all-favorites-button")
+      .addEventListener("click", clearAllFavorites);
 
-  	document
-  		.querySelector("#download-favorites-button")
-  		.addEventListener("click", downloadFavorites);
+    document
+      .querySelector("#download-favorites-button")
+      .addEventListener("click", downloadFavorites);
   };
 </script>
 
 <!-- Settings -->
 <script type="text/javascript">
   const SETTINGS = {
-  	COLOR_PRIMARY: "--color-primary",
-  	COLOR_SECONDARY: "--color-secondary",
-  	COLOR_ACCENT_1: "--color-accent-1",
-  	COLOR_ACCENT_2: "--color-accent-2",
-  	COLOR_DARK: "--color-dark",
-  	COLOR_LIGHT: "--color-light",
-  	COLOR_TEXT_MAIN: "--color-text-main",
+    COLOR_PRIMARY: "--color-primary",
+    COLOR_SECONDARY: "--color-secondary",
+    COLOR_ACCENT_1: "--color-accent-1",
+    COLOR_ACCENT_2: "--color-accent-2",
+    COLOR_DARK: "--color-dark",
+    COLOR_LIGHT: "--color-light",
+    COLOR_TEXT_MAIN: "--color-text-main",
   };
 
   const SETTING__DEFAULT_VALUES = {
-  	[SETTINGS.COLOR_PRIMARY]: "#e30613",
-  	[SETTINGS.COLOR_SECONDARY]: "#ffed00",
-  	[SETTINGS.COLOR_ACCENT_1]: "#f6d365",
-  	[SETTINGS.COLOR_ACCENT_2]: "#fda085",
-  	[SETTINGS.COLOR_DARK]: "#3c3c3c",
-  	[SETTINGS.COLOR_LIGHT]: "#FFFFFF",
-  	[SETTINGS.COLOR_TEXT_MAIN]: "#2f4f4f",
+    [SETTINGS.COLOR_PRIMARY]: "#e30613",
+    [SETTINGS.COLOR_SECONDARY]: "#ffed00",
+    [SETTINGS.COLOR_ACCENT_1]: "#f6d365",
+    [SETTINGS.COLOR_ACCENT_2]: "#fda085",
+    [SETTINGS.COLOR_DARK]: "#3c3c3c",
+    [SETTINGS.COLOR_LIGHT]: "#FFFFFF",
+    [SETTINGS.COLOR_TEXT_MAIN]: "#2f4f4f",
   };
 
   const themes = {
-  	default: {
-  		...SETTING__DEFAULT_VALUES,
-  	},
-  	hacker: {
-  		"--color-primary": "#00ff00",
-  		"--color-secondary": "#ff00ff",
-  		"--color-accent-1": "#ff0000",
-  		"--color-accent-2": "#0000ff",
-  		"--color-dark": "#000000",
-  		"--color-light": "#ffffff",
-  		"--color-text-main": "#00ff00",
-  	},
-  	l33t: {
-  		"--color-primary": "#08fdd8",
-  		"--color-secondary": "#f800ff",
-  		"--color-accent-1": "#1b1b1b",
-  		"--color-accent-2": "#333333",
-  		"--color-dark": "#080808",
-  		"--color-light": "#f0f0f0",
-  		"--color-text-main": "#0033FF",
-  	},
-  	"dream-pop": {
-  		"--color-primary": "#ff77aa",
-  		"--color-secondary": "#cc99ff",
-  		"--color-accent-1": "#ff99ee",
-  		"--color-accent-2": "#d1b3ff",
-  		"--color-dark": "#342a4e",
-  		"--color-light": "#fff0f5",
-  		"--color-text-main": "##808080",
-  	},
-  	"solar-flare": {
-  		"--color-primary": "#ffffff",
-  		"--color-secondary": "#000000",
-  		"--color-accent-1": "#ff0000",
-  		"--color-accent-2": "#ffff00",
-  		"--color-dark": "#000000",
-  		"--color-light": "#ffffff",
-  		"--color-text-main": "#282828",
-  	},
-  	hippie: {
-  		"--color-primary": "#fabd2f",
-  		"--color-secondary": "#d3869b",
-  		"--color-accent-1": "#83a598",
-  		"--color-accent-2": "#b8bb26",
-  		"--color-dark": "#282828",
-  		"--color-light": "#ebdbb2",
-  		"--color-text-main": "#996b00",
-  	},
-  	"neon-concrete": {
-  		"--color-primary": "#00D9FF",
-  		"--color-secondary": "#FF007F",
-  		"--color-accent-1": "#8C8C8C",
-  		"--color-accent-2": "#9A9A9A",
-  		"--color-dark": "#1A1A1A",
-  		"--color-light": "#E5E5E5",
-  		"--color-text-main": "#757575",
-  	},
-  	solarpunk: {
-  		"--color-primary": "#ff8c00",
-  		"--color-secondary": "#7ec850",
-  		"--color-accent-1": "#ffd700",
-  		"--color-accent-2": "#40e0d0",
-  		"--color-dark": "#005a51",
-  		"--color-light": "#f0f8ff",
-  		"--color-text-main": "#3c6e71",
-  	},
-  	hyperreality: {
-  		"--color-primary": "#00ff00",
-  		"--color-secondary": "#000000",
-  		"--color-accent-1": "#1A1A1A",
-  		"--color-accent-2": "#333333",
-  		"--color-dark": "#0a0a0a",
-  		"--color-light": "#9A9A9A",
-  		"--color-text-main": "#00ff00",
-  	},
-  	"cybernetic-dream": {
-  		"--color-primary": "#00D1B2",
-  		"--color-secondary": "#FF3860",
-  		"--color-accent-1": "#3273DC",
-  		"--color-accent-2": "#F5F5F5",
-  		"--color-dark": "#363636",
-  		"--color-light": "#FFFFFF",
-  		"--color-text-main": "#4A4A4A",
-  	},
-  	steampunk: {
-  		"--color-primary": "#bca136",
-  		"--color-secondary": "#7b3f00",
-  		"--color-accent-1": "#cc7722",
-  		"--color-accent-2": "#967117",
-  		"--color-dark": "#3c3022",
-  		"--color-light": "#f0e68c",
-  		"--color-text-main": "#5d4c46",
-  	},
-  	"petal-dream": {
-  		"--color-primary": "#F78FB3",
-  		"--color-secondary": "#CF9FFF",
-  		"--color-accent-1": "#A4DEFF",
-  		"--color-accent-2": "#FFD670",
-  		"--color-dark": "#7E5475",
-  		"--color-light": "#ffdbe1",
-  		"--color-text-main": "#e85995",
-  	},
-  	"neo-tokyo": {
-  		"--color-primary": "#DC143C",
-  		"--color-secondary": "#FFC0CB",
-  		"--color-accent-1": "#87CEEB",
-  		"--color-accent-2": "#32CD32",
-  		"--color-dark": "#00008B",
-  		"--color-light": "#FFFFFF",
-  		"--color-text-main": "#2F4F4F",
-  	},
-  	china: {
-  		"--color-primary": "#A80000",
-  		"--color-secondary": "#FFD700",
-  		"--color-accent-1": "#00A86B",
-  		"--color-accent-2": "#8B4513",
-  		"--color-dark": "#000000",
-  		"--color-light": "#FFFAF0",
-  		"--color-text-main": "#363636",
-  	},
-  	"sakura-matsuri": {
-  		"--color-primary": "#FF69B4",
-  		"--color-secondary": "#FFD700",
-  		"--color-accent-1": "#FF6347",
-  		"--color-accent-2": "#FF1493",
-  		"--color-dark": "#000000",
-  		"--color-light": "#FFFAF0",
-  		"--color-text-main": "#363636",
-  	},
-  	merc: {
-  		"--color-primary": "#4B5320",
-  		"--color-secondary": "#78866B",
-  		"--color-accent-1": "#6B8E23",
-  		"--color-accent-2": "#806B2A",
-  		"--color-dark": "#3C341F",
-  		"--color-light": "#F0E68C",
-  		"--color-text-main": "#333333",
-  	},
-  	"sao-paulo": {
-  		"--color-primary": "#FFD700",
-  		"--color-secondary": "#C0C0C0",
-  		"--color-accent-1": "#008000",
-  		"--color-accent-2": "#A52A2A",
-  		"--color-dark": "#333333",
-  		"--color-light": "#F0F0F0",
-  		"--color-text-main": "#000000",
-  	},
-  	lagos: {
-  		"--color-primary": "#4DB848",
-  		"--color-secondary": "#FFC107",
-  		"--color-accent-1": "#00ACC1",
-  		"--color-accent-2": "#E91E63",
-  		"--color-dark": "#263238",
-  		"--color-light": "#E0E0E0",
-  		"--color-text-main": "#2b6b00",
-  	},
-  	nyc: {
-  		"--color-primary": "#4d4d4d",
-  		"--color-secondary": "#999999",
-  		"--color-accent-1": "#b3b3b3",
-  		"--color-accent-2": "#e6e6e6",
-  		"--color-dark": "#333333",
-  		"--color-light": "#f2f2f2",
-  		"--color-text-main": "#1a1a1a",
-  	},
-  	greyscale: {
-  		"--color-primary": "#0a0a0a",
-  		"--color-secondary": "#bfbfbf",
-  		"--color-accent-1": "#d9d9d9",
-  		"--color-accent-2": "#bfbfbf",
-  		"--color-dark": "#050505",
-  		"--color-light": "#ffffff",
-  		"--color-text-main": "#0a0a0a",
-  	},
-  	"street-magic": {
-  		"--color-primary": "#ffcc00",
-  		"--color-secondary": "#ff6600",
-  		"--color-accent-1": "#ff0000",
-  		"--color-accent-2": "#6600ff",
-  		"--color-dark": "#000000",
-  		"--color-light": "#ffffff",
-  		"--color-text-main": "#000000",
-  	},
-  	washington: {
-  		"--color-primary": "#B22234",
-  		"--color-secondary": "#3C3B6E",
-  		"--color-accent-1": "#FFFFFF",
-  		"--color-accent-2": "#F0EDEE",
-  		"--color-dark": "#212529",
-  		"--color-light": "#F0E68C",
-  		"--color-text-main": "#002D62",
-  	},
-  	rainbow: {
-  		"--color-primary": "#FF69B4",
-  		"--color-secondary": "#00BFFF",
-  		"--color-accent-1": "#FFD700",
-  		"--color-accent-2": "#32CD32",
-  		"--color-dark": "#8B008B",
-  		"--color-light": "#F0E68C",
-  		"--color-text-main": "#2F4F4F",
-  	},
-  	miami: {
-  		"--color-primary": "#ff9f1c",
-  		"--color-secondary": "#2ec4b6",
-  		"--color-accent-1": "#ffbf69",
-  		"--color-accent-2": "#cbf3f0",
-  		"--color-dark": "#011627",
-  		"--color-light": "#fdfffc",
-  		"--color-text-main": "#011627",
-  	},
-  	"neo-vegas": {
-  		"--color-primary": "#ff4500",
-  		"--color-secondary": "#ffd700",
-  		"--color-accent-1": "#008b8b",
-  		"--color-accent-2": "#8b4513",
-  		"--color-dark": "#282828",
-  		"--color-light": "#f0e68c",
-  		"--color-text-main": "#5c0075",
-  	},
+    default: {
+      ...SETTING__DEFAULT_VALUES,
+    },
+    hacker: {
+      "--color-primary": "#00ff00",
+      "--color-secondary": "#ff00ff",
+      "--color-accent-1": "#ff0000",
+      "--color-accent-2": "#0000ff",
+      "--color-dark": "#000000",
+      "--color-light": "#ffffff",
+      "--color-text-main": "#00ff00",
+    },
+    l33t: {
+      "--color-primary": "#08fdd8",
+      "--color-secondary": "#f800ff",
+      "--color-accent-1": "#1b1b1b",
+      "--color-accent-2": "#333333",
+      "--color-dark": "#080808",
+      "--color-light": "#f0f0f0",
+      "--color-text-main": "#0033FF",
+    },
+    "dream-pop": {
+      "--color-primary": "#ff77aa",
+      "--color-secondary": "#cc99ff",
+      "--color-accent-1": "#ff99ee",
+      "--color-accent-2": "#d1b3ff",
+      "--color-dark": "#342a4e",
+      "--color-light": "#fff0f5",
+      "--color-text-main": "##808080",
+    },
+    "solar-flare": {
+      "--color-primary": "#ffffff",
+      "--color-secondary": "#000000",
+      "--color-accent-1": "#ff0000",
+      "--color-accent-2": "#ffff00",
+      "--color-dark": "#000000",
+      "--color-light": "#ffffff",
+      "--color-text-main": "#282828",
+    },
+    hippie: {
+      "--color-primary": "#fabd2f",
+      "--color-secondary": "#d3869b",
+      "--color-accent-1": "#83a598",
+      "--color-accent-2": "#b8bb26",
+      "--color-dark": "#282828",
+      "--color-light": "#ebdbb2",
+      "--color-text-main": "#996b00",
+    },
+    "neon-concrete": {
+      "--color-primary": "#00D9FF",
+      "--color-secondary": "#FF007F",
+      "--color-accent-1": "#8C8C8C",
+      "--color-accent-2": "#9A9A9A",
+      "--color-dark": "#1A1A1A",
+      "--color-light": "#E5E5E5",
+      "--color-text-main": "#757575",
+    },
+    solarpunk: {
+      "--color-primary": "#ff8c00",
+      "--color-secondary": "#7ec850",
+      "--color-accent-1": "#ffd700",
+      "--color-accent-2": "#40e0d0",
+      "--color-dark": "#005a51",
+      "--color-light": "#f0f8ff",
+      "--color-text-main": "#3c6e71",
+    },
+    hyperreality: {
+      "--color-primary": "#00ff00",
+      "--color-secondary": "#000000",
+      "--color-accent-1": "#1A1A1A",
+      "--color-accent-2": "#333333",
+      "--color-dark": "#0a0a0a",
+      "--color-light": "#9A9A9A",
+      "--color-text-main": "#00ff00",
+    },
+    "cybernetic-dream": {
+      "--color-primary": "#00D1B2",
+      "--color-secondary": "#FF3860",
+      "--color-accent-1": "#3273DC",
+      "--color-accent-2": "#F5F5F5",
+      "--color-dark": "#363636",
+      "--color-light": "#FFFFFF",
+      "--color-text-main": "#4A4A4A",
+    },
+    steampunk: {
+      "--color-primary": "#bca136",
+      "--color-secondary": "#7b3f00",
+      "--color-accent-1": "#cc7722",
+      "--color-accent-2": "#967117",
+      "--color-dark": "#3c3022",
+      "--color-light": "#f0e68c",
+      "--color-text-main": "#5d4c46",
+    },
+    "petal-dream": {
+      "--color-primary": "#F78FB3",
+      "--color-secondary": "#CF9FFF",
+      "--color-accent-1": "#A4DEFF",
+      "--color-accent-2": "#FFD670",
+      "--color-dark": "#7E5475",
+      "--color-light": "#ffdbe1",
+      "--color-text-main": "#e85995",
+    },
+    "neo-tokyo": {
+      "--color-primary": "#DC143C",
+      "--color-secondary": "#FFC0CB",
+      "--color-accent-1": "#87CEEB",
+      "--color-accent-2": "#32CD32",
+      "--color-dark": "#00008B",
+      "--color-light": "#FFFFFF",
+      "--color-text-main": "#2F4F4F",
+    },
+    china: {
+      "--color-primary": "#A80000",
+      "--color-secondary": "#FFD700",
+      "--color-accent-1": "#00A86B",
+      "--color-accent-2": "#8B4513",
+      "--color-dark": "#000000",
+      "--color-light": "#FFFAF0",
+      "--color-text-main": "#363636",
+    },
+    "sakura-matsuri": {
+      "--color-primary": "#FF69B4",
+      "--color-secondary": "#FFD700",
+      "--color-accent-1": "#FF6347",
+      "--color-accent-2": "#FF1493",
+      "--color-dark": "#000000",
+      "--color-light": "#FFFAF0",
+      "--color-text-main": "#363636",
+    },
+    merc: {
+      "--color-primary": "#4B5320",
+      "--color-secondary": "#78866B",
+      "--color-accent-1": "#6B8E23",
+      "--color-accent-2": "#806B2A",
+      "--color-dark": "#3C341F",
+      "--color-light": "#F0E68C",
+      "--color-text-main": "#333333",
+    },
+    "sao-paulo": {
+      "--color-primary": "#FFD700",
+      "--color-secondary": "#C0C0C0",
+      "--color-accent-1": "#008000",
+      "--color-accent-2": "#A52A2A",
+      "--color-dark": "#333333",
+      "--color-light": "#F0F0F0",
+      "--color-text-main": "#000000",
+    },
+    lagos: {
+      "--color-primary": "#4DB848",
+      "--color-secondary": "#FFC107",
+      "--color-accent-1": "#00ACC1",
+      "--color-accent-2": "#E91E63",
+      "--color-dark": "#263238",
+      "--color-light": "#E0E0E0",
+      "--color-text-main": "#2b6b00",
+    },
+    nyc: {
+      "--color-primary": "#4d4d4d",
+      "--color-secondary": "#999999",
+      "--color-accent-1": "#b3b3b3",
+      "--color-accent-2": "#e6e6e6",
+      "--color-dark": "#333333",
+      "--color-light": "#f2f2f2",
+      "--color-text-main": "#1a1a1a",
+    },
+    greyscale: {
+      "--color-primary": "#0a0a0a",
+      "--color-secondary": "#bfbfbf",
+      "--color-accent-1": "#d9d9d9",
+      "--color-accent-2": "#bfbfbf",
+      "--color-dark": "#050505",
+      "--color-light": "#ffffff",
+      "--color-text-main": "#0a0a0a",
+    },
+    "street-magic": {
+      "--color-primary": "#ffcc00",
+      "--color-secondary": "#ff6600",
+      "--color-accent-1": "#ff0000",
+      "--color-accent-2": "#6600ff",
+      "--color-dark": "#000000",
+      "--color-light": "#ffffff",
+      "--color-text-main": "#000000",
+    },
+    washington: {
+      "--color-primary": "#B22234",
+      "--color-secondary": "#3C3B6E",
+      "--color-accent-1": "#FFFFFF",
+      "--color-accent-2": "#F0EDEE",
+      "--color-dark": "#212529",
+      "--color-light": "#F0E68C",
+      "--color-text-main": "#002D62",
+    },
+    rainbow: {
+      "--color-primary": "#FF69B4",
+      "--color-secondary": "#00BFFF",
+      "--color-accent-1": "#FFD700",
+      "--color-accent-2": "#32CD32",
+      "--color-dark": "#8B008B",
+      "--color-light": "#F0E68C",
+      "--color-text-main": "#2F4F4F",
+    },
+    miami: {
+      "--color-primary": "#ff9f1c",
+      "--color-secondary": "#2ec4b6",
+      "--color-accent-1": "#ffbf69",
+      "--color-accent-2": "#cbf3f0",
+      "--color-dark": "#011627",
+      "--color-light": "#fdfffc",
+      "--color-text-main": "#011627",
+    },
+    "neo-vegas": {
+      "--color-primary": "#ff4500",
+      "--color-secondary": "#ffd700",
+      "--color-accent-1": "#008b8b",
+      "--color-accent-2": "#8b4513",
+      "--color-dark": "#282828",
+      "--color-light": "#f0e68c",
+      "--color-text-main": "#5c0075",
+    },
 
-  	moto: {
-  		"--color-primary": "#FF0000",
-  		"--color-secondary": "#211E1E",
-  		"--color-accent-1": "#087E8B",
-  		"--color-accent-2": "#F2C641",
-  		"--color-dark": "#0B3C5D",
-  		"--color-light": "#E0E1DD",
-  		"--color-text-main": "#ff0000",
-  	},
-  	delhi: {
-  		"--color-primary": "#C8102E",
-  		"--color-secondary": "#FFD700",
-  		"--color-accent-1": "#008000",
-  		"--color-accent-2": "#FFFFFF",
-  		"--color-dark": "#4B5320",
-  		"--color-light": "#FADA5E",
-  		"--color-text-main": "#000000",
-  	},
-  	"cyber-citrus": {
-  		"--color-primary": "#FF8C00",
-  		"--color-secondary": "#FFD700",
-  		"--color-accent-1": "#9C4F00",
-  		"--color-accent-2": "#FFA500",
-  		"--color-dark": "#2F4F4F",
-  		"--color-light": "#fff266",
-  		"--color-text-main": "#664b00",
-  	},
-  	purple: {
-  		"--color-primary": "#8e44ad",
-  		"--color-secondary": "#9b59b6",
-  		"--color-accent-1": "#d2b4de",
-  		"--color-accent-2": "#f1e3f3",
-  		"--color-dark": "#2c3e50",
-  		"--color-light": "#ecf0f1",
-  		"--color-text-main": "#2c3e50",
-  	},
-  	noir: {
-  		"--color-primary": "#303030",
-  		"--color-secondary": "#0a0a0a",
-  		"--color-accent-1": "#262626",
-  		"--color-accent-2": "#333333",
-  		"--color-dark": "#000000",
-  		"--color-light": "#141414",
-  		"--color-text-main": "#575757",
-  	},
-  	vaporwave: {
-  		"--color-primary": "#ff71ce",
-  		"--color-secondary": "#01cdfe",
-  		"--color-accent-1": "#05ffa1",
-  		"--color-accent-2": "#b967ff",
-  		"--color-dark": "#21094e",
-  		"--color-light": "#e0c3fc",
-  		"--color-text-main": "#ffffff",
-  	},
-  	fuji: {
-  		"--color-primary": "#FFC0CB",
-  		"--color-secondary": "#ADD8E6",
-  		"--color-accent-1": "#FFFFFF",
-  		"--color-accent-2": "#B0E0E6",
-  		"--color-dark": "#778899",
-  		"--color-light": "#FFF0F5",
-  		"--color-text-main": "#2F4F4F",
-  	},
+    moto: {
+      "--color-primary": "#FF0000",
+      "--color-secondary": "#211E1E",
+      "--color-accent-1": "#087E8B",
+      "--color-accent-2": "#F2C641",
+      "--color-dark": "#0B3C5D",
+      "--color-light": "#E0E1DD",
+      "--color-text-main": "#ff0000",
+    },
+    delhi: {
+      "--color-primary": "#C8102E",
+      "--color-secondary": "#FFD700",
+      "--color-accent-1": "#008000",
+      "--color-accent-2": "#FFFFFF",
+      "--color-dark": "#4B5320",
+      "--color-light": "#FADA5E",
+      "--color-text-main": "#000000",
+    },
+    "cyber-citrus": {
+      "--color-primary": "#FF8C00",
+      "--color-secondary": "#FFD700",
+      "--color-accent-1": "#9C4F00",
+      "--color-accent-2": "#FFA500",
+      "--color-dark": "#2F4F4F",
+      "--color-light": "#fff266",
+      "--color-text-main": "#664b00",
+    },
+    purple: {
+      "--color-primary": "#8e44ad",
+      "--color-secondary": "#9b59b6",
+      "--color-accent-1": "#d2b4de",
+      "--color-accent-2": "#f1e3f3",
+      "--color-dark": "#2c3e50",
+      "--color-light": "#ecf0f1",
+      "--color-text-main": "#2c3e50",
+    },
+    noir: {
+      "--color-primary": "#303030",
+      "--color-secondary": "#0a0a0a",
+      "--color-accent-1": "#262626",
+      "--color-accent-2": "#333333",
+      "--color-dark": "#000000",
+      "--color-light": "#141414",
+      "--color-text-main": "#575757",
+    },
+    vaporwave: {
+      "--color-primary": "#ff71ce",
+      "--color-secondary": "#01cdfe",
+      "--color-accent-1": "#05ffa1",
+      "--color-accent-2": "#b967ff",
+      "--color-dark": "#21094e",
+      "--color-light": "#e0c3fc",
+      "--color-text-main": "#ffffff",
+    },
+    fuji: {
+      "--color-primary": "#FFC0CB",
+      "--color-secondary": "#ADD8E6",
+      "--color-accent-1": "#FFFFFF",
+      "--color-accent-2": "#B0E0E6",
+      "--color-dark": "#778899",
+      "--color-light": "#FFF0F5",
+      "--color-text-main": "#2F4F4F",
+    },
 
-  	y2k: {
-  		"--color-primary": "#00FF00",
-  		"--color-secondary": "#FF69B4",
-  		"--color-accent-1": "#0000FF",
-  		"--color-accent-2": "#FFD700",
-  		"--color-dark": "#000080",
-  		"--color-light": "#FFFFFF",
-  		"--color-text-main": "#000000",
-  	},
-  	"the-spectacle": {
-  		"--color-primary": "#E03E3E",
-  		"--color-secondary": "#0A8F08",
-  		"--color-accent-1": "#FFD700",
-  		"--color-accent-2": "#6A0DAD",
-  		"--color-dark": "#212529",
-  		"--color-light": "#F8F9FA",
-  		"--color-text-main": "#333333",
-  	},
-  	"pastel-goth": {
-  		"--color-primary": "#8A4F7D",
-  		"--color-secondary": "#4A4063",
-  		"--color-accent-1": "#F4BEEE",
-  		"--color-accent-2": "#9E768F",
-  		"--color-dark": "#22223B",
-  		"--color-light": "#FFFFFF",
-  		"--color-text-main": "#4A4A4A",
-  	},
-  	"k-punk": {
-  		"--color-primary": "#0A0A0A",
-  		"--color-secondary": "#D32F2F",
-  		"--color-accent-1": "#303F9F",
-  		"--color-accent-2": "#FBC02D",
-  		"--color-dark": "#000000",
-  		"--color-light": "#F5F5F5",
-  		"--color-text-main": "#ff0000",
-  	},
-  	scene: {
-  		"--color-primary": "#35465C",
-  		"--color-secondary": "#A77DC2",
-  		"--color-accent-1": "#58C9B9",
-  		"--color-accent-2": "#F4ACB7",
-  		"--color-dark": "#263238",
-  		"--color-light": "#ECEFF1",
-  		"--color-text-main": "#b25ed9",
-  	},
-  	sleeze: {
-  		"--color-primary": "#C2185B",
-  		"--color-secondary": "#00E5FF",
-  		"--color-accent-1": "#CDDC39",
-  		"--color-accent-2": "#FFEB3B",
-  		"--color-dark": "#212121",
-  		"--color-light": "#F5F5F5",
-  		"--color-text-main": "#ad8800",
-  	}, //
-  	aero: {
-  		"--color-primary": "#3C9EE7",
-  		"--color-secondary": "#EDE9E6",
-  		"--color-accent-1": "#4CAE50",
-  		"--color-accent-2": "#FFA500",
-  		"--color-dark": "#003366",
-  		"--color-light": "#FFFFFF",
-  		"--color-text-main": "#4D4D4D",
-  	},
-  	valley: {
-  		"--color-primary": "#FF6600",
-  		"--color-secondary": "#0A84FF",
-  		"--color-accent-1": "#FF1744",
-  		"--color-accent-2": "#FFEA00",
-  		"--color-dark": "#000000",
-  		"--color-light": "#FFFFFF",
-  		"--color-text-main": "#424242",
-  	},
-  	plastic: {
-  		"--color-primary": "#13CA91",
-  		"--color-secondary": "#FF48C4",
-  		"--color-accent-1": "#00B2FF",
-  		"--color-accent-2": "#FFEB3B",
-  		"--color-dark": "#6A1B9A",
-  		"--color-light": "#B2F2EF",
-  		"--color-text-main": "#cc8b00",
-  	},
-  	zine: {
-  		"--color-primary": "#F4D03F",
-  		"--color-secondary": "#E74C3C",
-  		"--color-accent-1": "#3498DB",
-  		"--color-accent-2": "#2ECC71",
-  		"--color-dark": "#34495E",
-  		"--color-light": "#ECF0F1",
-  		"--color-text-main": "#2C3E50",
-  	},
-  	bicycle: {
-  		"--color-primary": "#6495ED",
-  		"--color-secondary": "#F0F8FF",
-  		"--color-accent-1": "#FFD700",
-  		"--color-accent-2": "#D3D3D3",
-  		"--color-dark": "#000080",
-  		"--color-light": "#FFFFFF",
-  		"--color-text-main": "#2F4F4F",
-  	},
-  	mp3: {
-  		"--color-primary": "#4A90E2",
-  		"--color-secondary": "#AAB8C2",
-  		"--color-accent-1": "#F8E71C",
-  		"--color-accent-2": "#D0021B",
-  		"--color-dark": "#4A4A4A",
-  		"--color-light": "#FFFFFF",
-  		"--color-text-main": "#000000",
-  	},
-  	away: {
-  		"--color-primary": "#8A2BE2",
-  		"--color-secondary": "#DEB887",
-  		"--color-accent-1": "#FF69B4",
-  		"--color-accent-2": "#00FF7F",
-  		"--color-dark": "#000080",
-  		"--color-light": "#F5F5DC",
-  		"--color-text-main": "#000000",
-  	},
-  	space: {
-  		"--color-primary": "#3B5998",
-  		"--color-secondary": "#D9E6F2",
-  		"--color-accent-1": "#FF4500",
-  		"--color-accent-2": "#FFD700",
-  		"--color-dark": "#333333",
-  		"--color-light": "#FFFFFF",
-  		"--color-text-main": "#000000",
-  	},
-  	irc: {
-  		"--color-primary": "#0C7BDC",
-  		"--color-secondary": "#E1E8ED",
-  		"--color-accent-1": "#F44336",
-  		"--color-accent-2": "#FFEB3B",
-  		"--color-dark": "#37474F",
-  		"--color-light": "#FFFFFF",
-  		"--color-text-main": "#212121",
-  	},
-  	bbs: {
-  		"--color-primary": "#00FF00",
-  		"--color-secondary": "#000000",
-  		"--color-accent-1": "#FFFF00",
-  		"--color-accent-2": "#FF00FF",
-  		"--color-dark": "#FFFFFF",
-  		"--color-light": "#008000",
-  		"--color-text-main": "#FFFFFF",
-  	},
-  	psyc: {
-  		"--color-primary": "#DF00FF",
-  		"--color-secondary": "#FFD700",
-  		"--color-accent-1": "#00FF00",
-  		"--color-accent-2": "#FF007F",
-  		"--color-dark": "#0000FF",
-  		"--color-light": "#FFA500",
-  		"--color-text-main": "#FFFFFF",
-  	},
-  	1984: {
-  		"--color-primary": "#00A0D6",
-  		"--color-secondary": "#FF0090",
-  		"--color-accent-1": "#08F7FE",
-  		"--color-accent-2": "#FE53BB",
-  		"--color-dark": "#020122",
-  		"--color-light": "#F5F5F5",
-  		"--color-text-main": "#333333",
-  	},
-  	board: {
-  		"--color-primary": "#E94E77",
-  		"--color-secondary": "#0CDBD3",
-  		"--color-accent-1": "#FCF300",
-  		"--color-accent-2": "#66FF00",
-  		"--color-dark": "#202020",
-  		"--color-light": "#F8F8F8",
-  		"--color-text-main": "#202020",
-  	},
-  	terminal: {
-  		"--color-primary": "#FFD700",
-  		"--color-secondary": "#000000",
-  		"--color-accent-1": "#FF0000",
-  		"--color-accent-2": "#00FF00",
-  		"--color-dark": "#0000FF",
-  		"--color-light": "#FFFFFF",
-  		"--color-text-main": "#000000",
-  	},
-  	sudo: {
-  		"--color-primary": "#000000",
-  		"--color-secondary": "#000000",
-  		"--color-accent-1": "#000000",
-  		"--color-accent-2": "#000000",
-  		"--color-dark": "#000000",
-  		"--color-light": "#00FF00",
-  		"--color-text-main": "#000000",
-  	},
-  	korea: {
-  		"--color-primary": "#d22630",
-  		"--color-secondary": "#003478",
-  		"--color-accent-1": "#fcc419",
-  		"--color-accent-2": "#6799ff",
-  		"--color-dark": "#2e2e2e",
-  		"--color-light": "#f3f3f3",
-  		"--color-text-main": "#101010",
-  	},
-  	1999: {
-  		"--color-primary": "#00C3FF",
-  		"--color-secondary": "#FC28FB",
-  		"--color-accent-1": "#D0C310",
-  		"--color-accent-2": "#0CFEFE",
-  		"--color-dark": "#050505",
-  		"--color-light": "#F0F0F0",
-  		"--color-text-main": "#ff47a0;",
-  	},
-  	y10k: {
-  		"--color-primary": "#0a0f0d",
-  		"--color-secondary": "#1c3b3a",
-  		"--color-accent-1": "#4a7070",
-  		"--color-accent-2": "#729595",
-  		"--color-dark": "#050708",
-  		"--color-light": "#cfd8dc",
-  		"--color-text-main": "#00444d",
-  	},
-  	spiral: {
-  		"--color-primary": "#5698c4",
-  		"--color-secondary": "#7a6fbe",
-  		"--color-accent-1": "#9ad3de",
-  		"--color-accent-2": "#ffffff",
-  		"--color-dark": "#353535",
-  		"--color-light": "#f4f4f4",
-  		"--color-text-main": "#353535",
-  	},
-  	radio: {
-  		"--color-primary": "#6D4C41",
-  		"--color-secondary": "#3E2723",
-  		"--color-accent-1": "#D7CCC8",
-  		"--color-accent-2": "#A1887F",
-  		"--color-dark": "#1B0000",
-  		"--color-light": "#fbedc1;",
-  		"--color-text-main": "#01411e",
-  	},
-  	nakamoto: {
-  		"--color-primary": "#f2a900",
-  		"--color-secondary": "#8a8a8a",
-  		"--color-accent-1": "#4d4d4d",
-  		"--color-accent-2": "#ffffff",
-  		"--color-dark": "#000000",
-  		"--color-light": "#ffffff",
-  		"--color-text-main": "#f2a900",
-  	},
-  	"space-age": {
-  		"--color-primary": "#0b3d91",
-  		"--color-secondary": "#ffffff",
-  		"--color-accent-1": "#ff6f61",
-  		"--color-accent-2": "#ffd700",
-  		"--color-dark": "#000080",
-  		"--color-light": "#f8f9fa",
-  		"--color-text-main": "595959;",
-  	},
-  	uranium: {
-  		"--color-primary": "#4F7942",
-  		"--color-secondary": "#7FFFD4",
-  		"--color-accent-1": "#A7D30C",
-  		"--color-accent-2": "#E6E6FA",
-  		"--color-dark": "#003300",
-  		"--color-light": "#F0FFF0",
-  		"--color-text-main": "#4F7942",
-  	},
-  	plutonium: {
-  		"--color-primary": "#A40000",
-  		"--color-secondary": "#37ff00",
-  		"--color-accent-1": "#FF4500",
-  		"--color-accent-2": "#C0C0C0",
-  		"--color-dark": "#800000",
-  		"--color-light": "#dedede",
-  		"--color-text-main": "#730c0c",
-  	},
-  	"eliptic-curve": {
-  		"--color-primary": "#d4d41c",
-  		"--color-secondary": "#CB99C9",
-  		"--color-accent-1": "#FFBCD9",
-  		"--color-accent-2": "#A2A2D0",
-  		"--color-dark": "#000000",
-  		"--color-light": "#FFFFFF",
-  		"--color-text-main": "#4B0082",
-  	},
-  	"exit-node": {
-  		"--color-primary": "#8B0000",
-  		"--color-secondary": "#FF4500",
-  		"--color-accent-1": "#ff2600",
-  		"--color-accent-2": "#ad0000",
-  		"--color-dark": "#ff0000",
-  		"--color-light": "#ff0000",
-  		"--color-text-main": "#ecdfdf",
-  	},
-  	"numbers-station": {
-  		"--color-primary": "#505050",
-  		"--color-secondary": "#756400",
-  		"--color-accent-1": "#8B4513",
-  		"--color-accent-2": "#A9A9A9",
-  		"--color-dark": "#2F4F4F",
-  		"--color-light": "#F5F5F5",
-  		"--color-text-main": "#3d3d3d",
-  	},
-  	salmon: {
-  		"--color-primary": "#FF9A8A",
-  		"--color-secondary": "#FFD1AC",
-  		"--color-accent-1": "#FFB4A2",
-  		"--color-accent-2": "#E29587",
-  		"--color-dark": "#C6726B",
-  		"--color-light": "#FFF0E3",
-  		"--color-text-main": "#5C3A4D",
-  	},
-  	qubit: {
-  		"--color-primary": "#0C7C59",
-  		"--color-secondary": "#FF6B6B",
-  		"--color-accent-1": "#FFE66D",
-  		"--color-accent-2": "#4ECDC4",
-  		"--color-dark": "#253031",
-  		"--color-light": "#F7FFF7",
-  		"--color-text-main": "#00a300",
-  	},
-  	"san-francisco": {
-  		"--color-primary": "#FFA500",
-  		"--color-secondary": "#FFD700",
-  		"--color-accent-1": "#008080",
-  		"--color-accent-2": "#DA70D6",
-  		"--color-dark": "#696969",
-  		"--color-light": "#F5F5F5",
-  		"--color-text-main": "#000000",
-  	},
-  	"los-angeles": {
-  		"--color-primary": "#FFCC00",
-  		"--color-secondary": "#C0C0C0",
-  		"--color-accent-1": "#00AEEF",
-  		"--color-accent-2": "#FF6E4A",
-  		"--color-dark": "#2D2D2D",
-  		"--color-light": "#FFFFFF",
-  		"--color-text-main": "#000000",
-  	},
-  	hash: {
-  		"--color-primary": "#FF00FF",
-  		"--color-secondary": "#00FF00",
-  		"--color-accent-1": "#FFFF00",
-  		"--color-accent-2": "#00FFFF",
-  		"--color-dark": "#FF4500",
-  		"--color-light": "#7F00FF",
-  		"--color-text-main": "#c2c2c2",
-  	},
-  	"block-cipher": {
-  		"--color-primary": "#00FF00",
-  		"--color-secondary": "#00FF00",
-  		"--color-accent-1": "#F57C13",
-  		"--color-accent-2": "#F57C13",
-  		"--color-dark": "#C0C0C0",
-  		"--color-light": "#FFFF00",
-  		"--color-text-main": "#000000",
-  	},
-  	samizdat: {
-  		"--color-primary": "#CC0000",
-  		"--color-secondary": "#FFD700",
-  		"--color-accent-1": "#CC0000",
-  		"--color-accent-2": "#545454",
-  		"--color-dark": "#000000",
-  		"--color-light": "#fff700",
-  		"--color-text-main": "#000000",
-  	},
+    y2k: {
+      "--color-primary": "#00FF00",
+      "--color-secondary": "#FF69B4",
+      "--color-accent-1": "#0000FF",
+      "--color-accent-2": "#FFD700",
+      "--color-dark": "#000080",
+      "--color-light": "#FFFFFF",
+      "--color-text-main": "#000000",
+    },
+    "the-spectacle": {
+      "--color-primary": "#E03E3E",
+      "--color-secondary": "#0A8F08",
+      "--color-accent-1": "#FFD700",
+      "--color-accent-2": "#6A0DAD",
+      "--color-dark": "#212529",
+      "--color-light": "#F8F9FA",
+      "--color-text-main": "#333333",
+    },
+    "pastel-goth": {
+      "--color-primary": "#8A4F7D",
+      "--color-secondary": "#4A4063",
+      "--color-accent-1": "#F4BEEE",
+      "--color-accent-2": "#9E768F",
+      "--color-dark": "#22223B",
+      "--color-light": "#FFFFFF",
+      "--color-text-main": "#4A4A4A",
+    },
+    "k-punk": {
+      "--color-primary": "#0A0A0A",
+      "--color-secondary": "#D32F2F",
+      "--color-accent-1": "#303F9F",
+      "--color-accent-2": "#FBC02D",
+      "--color-dark": "#000000",
+      "--color-light": "#F5F5F5",
+      "--color-text-main": "#ff0000",
+    },
+    scene: {
+      "--color-primary": "#35465C",
+      "--color-secondary": "#A77DC2",
+      "--color-accent-1": "#58C9B9",
+      "--color-accent-2": "#F4ACB7",
+      "--color-dark": "#263238",
+      "--color-light": "#ECEFF1",
+      "--color-text-main": "#b25ed9",
+    },
+    sleeze: {
+      "--color-primary": "#C2185B",
+      "--color-secondary": "#00E5FF",
+      "--color-accent-1": "#CDDC39",
+      "--color-accent-2": "#FFEB3B",
+      "--color-dark": "#212121",
+      "--color-light": "#F5F5F5",
+      "--color-text-main": "#ad8800",
+    }, //
+    aero: {
+      "--color-primary": "#3C9EE7",
+      "--color-secondary": "#EDE9E6",
+      "--color-accent-1": "#4CAE50",
+      "--color-accent-2": "#FFA500",
+      "--color-dark": "#003366",
+      "--color-light": "#FFFFFF",
+      "--color-text-main": "#4D4D4D",
+    },
+    valley: {
+      "--color-primary": "#FF6600",
+      "--color-secondary": "#0A84FF",
+      "--color-accent-1": "#FF1744",
+      "--color-accent-2": "#FFEA00",
+      "--color-dark": "#000000",
+      "--color-light": "#FFFFFF",
+      "--color-text-main": "#424242",
+    },
+    plastic: {
+      "--color-primary": "#13CA91",
+      "--color-secondary": "#FF48C4",
+      "--color-accent-1": "#00B2FF",
+      "--color-accent-2": "#FFEB3B",
+      "--color-dark": "#6A1B9A",
+      "--color-light": "#B2F2EF",
+      "--color-text-main": "#cc8b00",
+    },
+    zine: {
+      "--color-primary": "#F4D03F",
+      "--color-secondary": "#E74C3C",
+      "--color-accent-1": "#3498DB",
+      "--color-accent-2": "#2ECC71",
+      "--color-dark": "#34495E",
+      "--color-light": "#ECF0F1",
+      "--color-text-main": "#2C3E50",
+    },
+    bicycle: {
+      "--color-primary": "#6495ED",
+      "--color-secondary": "#F0F8FF",
+      "--color-accent-1": "#FFD700",
+      "--color-accent-2": "#D3D3D3",
+      "--color-dark": "#000080",
+      "--color-light": "#FFFFFF",
+      "--color-text-main": "#2F4F4F",
+    },
+    mp3: {
+      "--color-primary": "#4A90E2",
+      "--color-secondary": "#AAB8C2",
+      "--color-accent-1": "#F8E71C",
+      "--color-accent-2": "#D0021B",
+      "--color-dark": "#4A4A4A",
+      "--color-light": "#FFFFFF",
+      "--color-text-main": "#000000",
+    },
+    away: {
+      "--color-primary": "#8A2BE2",
+      "--color-secondary": "#DEB887",
+      "--color-accent-1": "#FF69B4",
+      "--color-accent-2": "#00FF7F",
+      "--color-dark": "#000080",
+      "--color-light": "#F5F5DC",
+      "--color-text-main": "#000000",
+    },
+    space: {
+      "--color-primary": "#3B5998",
+      "--color-secondary": "#D9E6F2",
+      "--color-accent-1": "#FF4500",
+      "--color-accent-2": "#FFD700",
+      "--color-dark": "#333333",
+      "--color-light": "#FFFFFF",
+      "--color-text-main": "#000000",
+    },
+    irc: {
+      "--color-primary": "#0C7BDC",
+      "--color-secondary": "#E1E8ED",
+      "--color-accent-1": "#F44336",
+      "--color-accent-2": "#FFEB3B",
+      "--color-dark": "#37474F",
+      "--color-light": "#FFFFFF",
+      "--color-text-main": "#212121",
+    },
+    bbs: {
+      "--color-primary": "#00FF00",
+      "--color-secondary": "#000000",
+      "--color-accent-1": "#FFFF00",
+      "--color-accent-2": "#FF00FF",
+      "--color-dark": "#FFFFFF",
+      "--color-light": "#008000",
+      "--color-text-main": "#FFFFFF",
+    },
+    psyc: {
+      "--color-primary": "#DF00FF",
+      "--color-secondary": "#FFD700",
+      "--color-accent-1": "#00FF00",
+      "--color-accent-2": "#FF007F",
+      "--color-dark": "#0000FF",
+      "--color-light": "#FFA500",
+      "--color-text-main": "#FFFFFF",
+    },
+    1984: {
+      "--color-primary": "#00A0D6",
+      "--color-secondary": "#FF0090",
+      "--color-accent-1": "#08F7FE",
+      "--color-accent-2": "#FE53BB",
+      "--color-dark": "#020122",
+      "--color-light": "#F5F5F5",
+      "--color-text-main": "#333333",
+    },
+    board: {
+      "--color-primary": "#E94E77",
+      "--color-secondary": "#0CDBD3",
+      "--color-accent-1": "#FCF300",
+      "--color-accent-2": "#66FF00",
+      "--color-dark": "#202020",
+      "--color-light": "#F8F8F8",
+      "--color-text-main": "#202020",
+    },
+    terminal: {
+      "--color-primary": "#FFD700",
+      "--color-secondary": "#000000",
+      "--color-accent-1": "#FF0000",
+      "--color-accent-2": "#00FF00",
+      "--color-dark": "#0000FF",
+      "--color-light": "#FFFFFF",
+      "--color-text-main": "#000000",
+    },
+    sudo: {
+      "--color-primary": "#000000",
+      "--color-secondary": "#000000",
+      "--color-accent-1": "#000000",
+      "--color-accent-2": "#000000",
+      "--color-dark": "#000000",
+      "--color-light": "#00FF00",
+      "--color-text-main": "#000000",
+    },
+    korea: {
+      "--color-primary": "#d22630",
+      "--color-secondary": "#003478",
+      "--color-accent-1": "#fcc419",
+      "--color-accent-2": "#6799ff",
+      "--color-dark": "#2e2e2e",
+      "--color-light": "#f3f3f3",
+      "--color-text-main": "#101010",
+    },
+    1999: {
+      "--color-primary": "#00C3FF",
+      "--color-secondary": "#FC28FB",
+      "--color-accent-1": "#D0C310",
+      "--color-accent-2": "#0CFEFE",
+      "--color-dark": "#050505",
+      "--color-light": "#F0F0F0",
+      "--color-text-main": "#ff47a0;",
+    },
+    y10k: {
+      "--color-primary": "#0a0f0d",
+      "--color-secondary": "#1c3b3a",
+      "--color-accent-1": "#4a7070",
+      "--color-accent-2": "#729595",
+      "--color-dark": "#050708",
+      "--color-light": "#cfd8dc",
+      "--color-text-main": "#00444d",
+    },
+    spiral: {
+      "--color-primary": "#5698c4",
+      "--color-secondary": "#7a6fbe",
+      "--color-accent-1": "#9ad3de",
+      "--color-accent-2": "#ffffff",
+      "--color-dark": "#353535",
+      "--color-light": "#f4f4f4",
+      "--color-text-main": "#353535",
+    },
+    radio: {
+      "--color-primary": "#6D4C41",
+      "--color-secondary": "#3E2723",
+      "--color-accent-1": "#D7CCC8",
+      "--color-accent-2": "#A1887F",
+      "--color-dark": "#1B0000",
+      "--color-light": "#fbedc1;",
+      "--color-text-main": "#01411e",
+    },
+    nakamoto: {
+      "--color-primary": "#f2a900",
+      "--color-secondary": "#8a8a8a",
+      "--color-accent-1": "#4d4d4d",
+      "--color-accent-2": "#ffffff",
+      "--color-dark": "#000000",
+      "--color-light": "#ffffff",
+      "--color-text-main": "#f2a900",
+    },
+    "space-age": {
+      "--color-primary": "#0b3d91",
+      "--color-secondary": "#ffffff",
+      "--color-accent-1": "#ff6f61",
+      "--color-accent-2": "#ffd700",
+      "--color-dark": "#000080",
+      "--color-light": "#f8f9fa",
+      "--color-text-main": "595959;",
+    },
+    uranium: {
+      "--color-primary": "#4F7942",
+      "--color-secondary": "#7FFFD4",
+      "--color-accent-1": "#A7D30C",
+      "--color-accent-2": "#E6E6FA",
+      "--color-dark": "#003300",
+      "--color-light": "#F0FFF0",
+      "--color-text-main": "#4F7942",
+    },
+    plutonium: {
+      "--color-primary": "#A40000",
+      "--color-secondary": "#37ff00",
+      "--color-accent-1": "#FF4500",
+      "--color-accent-2": "#C0C0C0",
+      "--color-dark": "#800000",
+      "--color-light": "#dedede",
+      "--color-text-main": "#730c0c",
+    },
+    "eliptic-curve": {
+      "--color-primary": "#d4d41c",
+      "--color-secondary": "#CB99C9",
+      "--color-accent-1": "#FFBCD9",
+      "--color-accent-2": "#A2A2D0",
+      "--color-dark": "#000000",
+      "--color-light": "#FFFFFF",
+      "--color-text-main": "#4B0082",
+    },
+    "exit-node": {
+      "--color-primary": "#8B0000",
+      "--color-secondary": "#FF4500",
+      "--color-accent-1": "#ff2600",
+      "--color-accent-2": "#ad0000",
+      "--color-dark": "#ff0000",
+      "--color-light": "#ff0000",
+      "--color-text-main": "#ecdfdf",
+    },
+    "numbers-station": {
+      "--color-primary": "#505050",
+      "--color-secondary": "#756400",
+      "--color-accent-1": "#8B4513",
+      "--color-accent-2": "#A9A9A9",
+      "--color-dark": "#2F4F4F",
+      "--color-light": "#F5F5F5",
+      "--color-text-main": "#3d3d3d",
+    },
+    salmon: {
+      "--color-primary": "#FF9A8A",
+      "--color-secondary": "#FFD1AC",
+      "--color-accent-1": "#FFB4A2",
+      "--color-accent-2": "#E29587",
+      "--color-dark": "#C6726B",
+      "--color-light": "#FFF0E3",
+      "--color-text-main": "#5C3A4D",
+    },
+    qubit: {
+      "--color-primary": "#0C7C59",
+      "--color-secondary": "#FF6B6B",
+      "--color-accent-1": "#FFE66D",
+      "--color-accent-2": "#4ECDC4",
+      "--color-dark": "#253031",
+      "--color-light": "#F7FFF7",
+      "--color-text-main": "#00a300",
+    },
+    "san-francisco": {
+      "--color-primary": "#FFA500",
+      "--color-secondary": "#FFD700",
+      "--color-accent-1": "#008080",
+      "--color-accent-2": "#DA70D6",
+      "--color-dark": "#696969",
+      "--color-light": "#F5F5F5",
+      "--color-text-main": "#000000",
+    },
+    "los-angeles": {
+      "--color-primary": "#FFCC00",
+      "--color-secondary": "#C0C0C0",
+      "--color-accent-1": "#00AEEF",
+      "--color-accent-2": "#FF6E4A",
+      "--color-dark": "#2D2D2D",
+      "--color-light": "#FFFFFF",
+      "--color-text-main": "#000000",
+    },
+    hash: {
+      "--color-primary": "#FF00FF",
+      "--color-secondary": "#00FF00",
+      "--color-accent-1": "#FFFF00",
+      "--color-accent-2": "#00FFFF",
+      "--color-dark": "#FF4500",
+      "--color-light": "#7F00FF",
+      "--color-text-main": "#c2c2c2",
+    },
+    "block-cipher": {
+      "--color-primary": "#00FF00",
+      "--color-secondary": "#00FF00",
+      "--color-accent-1": "#F57C13",
+      "--color-accent-2": "#F57C13",
+      "--color-dark": "#C0C0C0",
+      "--color-light": "#FFFF00",
+      "--color-text-main": "#000000",
+    },
+    samizdat: {
+      "--color-primary": "#CC0000",
+      "--color-secondary": "#FFD700",
+      "--color-accent-1": "#CC0000",
+      "--color-accent-2": "#545454",
+      "--color-dark": "#000000",
+      "--color-light": "#fff700",
+      "--color-text-main": "#000000",
+    },
   };
 
   const applyTheme = (theme) => {
-  	Object.entries(theme).forEach(([key, value]) => {
-  		setCSSVariable(key, value);
-  		saveSettingToLocalStorage(key, value);
-  		updateSettingInputWithCurrentValue(key);
-  	});
+    Object.entries(theme).map(([key, value]) => {
+      setCSSVariable(key, value);
+      saveSettingToLocalStorage(key, value);
+      updateSettingInputWithCurrentValue(key);
+    });
   };
 
   const convertToHexString = (rgba) => {
-  	const [r, g, b, a] = rgba
-  		.substring(5, rgba.length - 1)
-  		.replace(/ /g, "")
-  		.split(",");
-  	return `#${parseInt(r).toString(16)}${parseInt(g).toString(16)}${parseInt(
-  		b
-  	).toString(16)}`;
+    const [r, g, b, a] = rgba
+      .substring(5, rgba.length - 1)
+      .replace(/ /g, "")
+      .split(",");
+    return `#${parseInt(r).toString(16)}${parseInt(g).toString(16)}${parseInt(
+      b
+    ).toString(16)}`;
   };
 
   const asColorSelectorInputValue = (string) => {
-  	if (string.startsWith("#")) {
-  		return string;
-  	}
-  	return convertToHexString(string);
+    if (string.startsWith("#")) return string;
+    return convertToHexString(string);
   };
 
   const getCSSVariable = (variable) =>
-  	getComputedStyle(document.documentElement).getPropertyValue(variable);
+    getComputedStyle(document.documentElement).getPropertyValue(variable);
 
   const setCSSVariable = (variable, value) =>
-  	document.documentElement.style.setProperty(variable, value);
+    document.documentElement.style.setProperty(variable, value);
 
   const loadSettingsFromLocalStorage = () => {
-  	Object.entries(SETTINGS).forEach(([_, value]) => {
-  		const storedValue = localStorage.getItem(value);
-  		if (storedValue) {
-  			setCSSVariable(value, storedValue);
-  		}
-  	});
+    Object.entries(SETTINGS).forEach(([_, value]) => {
+      const storedValue = localStorage.getItem(value);
+      if (storedValue) {
+        setCSSVariable(value, storedValue);
+      }
+    });
   };
 
   const saveSettingToLocalStorage = (setting, value) => {
-  	localStorage.setItem(setting, value);
+    localStorage.setItem(setting, value);
   };
 
   const changeSetting = (setting, value) => {
-  	setCSSVariable(setting, value);
-  	saveSettingToLocalStorage(setting, value);
+    setCSSVariable(setting, value);
+    saveSettingToLocalStorage(setting, value);
   };
 
   const updateSettingInputWithCurrentValue = (setting) => {
-  	document.querySelector(`#setting-input${setting}`).value =
+    document.querySelector(`#setting-input${setting}`).value =
       asColorSelectorInputValue(getCSSVariable(setting));
   };
 
   const resetSetting = (setting) => {
-  	changeSetting(setting, SETTING__DEFAULT_VALUES[setting]);
-  	updateSettingInputWithCurrentValue(setting);
+    changeSetting(setting, SETTING__DEFAULT_VALUES[setting]);
+    updateSettingInputWithCurrentValue(setting);
   };
 
   const downloadCurrentColorTheme = () => {
-  	const theme = {};
-  	Object.entries(SETTINGS).forEach(([_, value]) => {
-  		theme[value] = getCSSVariable(value);
-  	});
-  	downloadJSONAsFile(theme);
+    const theme = {};
+    Object.entries(SETTINGS).forEach(([_, value]) => {
+      theme[value] = getCSSVariable(value);
+    });
+    downloadJSONAsFile(theme);
   };
 
   const initializeSettings = () => {
-  	Object.entries(SETTINGS).forEach(([_, value]) => {
-  		try {
-  			const storedValue = localStorage.getItem(value);
-  			if (!storedValue) {
-  				setCSSVariable(value, SETTING__DEFAULT_VALUES[value]);
-  				saveSettingToLocalStorage(value, SETTING__DEFAULT_VALUES[value]);
-  			}
+    Object.entries(SETTINGS).forEach(([_, value]) => {
+      try {
+        const storedValue = localStorage.getItem(value);
+        if (!storedValue) {
+          setCSSVariable(value, SETTING__DEFAULT_VALUES[value]);
+          saveSettingToLocalStorage(value, SETTING__DEFAULT_VALUES[value]);
+        }
 
-  			updateSettingInputWithCurrentValue(value);
+        updateSettingInputWithCurrentValue(value);
 
-  			document
-  				.querySelector(`#apply-setting${value}`)
-  				.addEventListener("click", () => {
-  					changeSetting(
-  						value,
-  						document.querySelector(`#setting-input${value}`).value
-  					);
-  				});
+        document
+          .querySelector(`#apply-setting${value}`)
+          .addEventListener("click", () => {
+            changeSetting(
+              value,
+              document.querySelector(`#setting-input${value}`).value
+            );
+          });
 
-  			document
-  				.querySelector(`#reset-setting${value}`)
-  				.addEventListener("click", () => resetSetting(value));
-  		} catch (e) {
-  			console.error(e);
-  			resetSetting(value);
-  		}
-  	});
+        document
+          .querySelector(`#reset-setting${value}`)
+          .addEventListener("click", () => resetSetting(value));
+      } catch (e) {
+        console.error(e);
+        resetSetting(value);
+      }
+    });
 
-  	document
-  		.querySelector("#download-theme-button")
-  		.addEventListener("click", downloadCurrentColorTheme);
+    document
+      .querySelector("#download-theme-button")
+      .addEventListener("click", downloadCurrentColorTheme);
 
-  	Object.entries(themes).forEach(([key, value]) => {
-  		document
-  			.querySelector(`#button-theme-${key}`)
-  			.addEventListener("click", () => applyTheme(value));
-  	});
+    Object.entries(themes).forEach(([key, value]) => {
+      document
+        .querySelector(`#button-theme-${key}`)
+        .addEventListener("click", () => applyTheme(value));
+    });
 
-  	document.getElementById("share-website").addEventListener("click", () => {
-  		window.launchShareModal();
+    document.getElementById("share-website").addEventListener("click", () => {
+      window.launchShareModal();
   	});
   };
 </script>
@@ -2576,14 +2575,14 @@
    * Navigation options
    */
   const NAVIGATION_OPTIONS = {
-  	TOP: "top",
-  	NEW: "new",
-  	BEST: "best",
-  	ASK: "ask",
-  	SHOW: "show",
-  	JOB: "job",
-  	FAVORITES: "favorites",
-  	SETTINGS: "settings",
+    TOP: "top",
+    NEW: "new",
+    BEST: "best",
+    ASK: "ask",
+    SHOW: "show",
+    JOB: "job",
+    FAVORITES: "favorites",
+    SETTINGS: "settings",
   };
 
   /**
@@ -2592,122 +2591,122 @@
    * @returns {void}
    */
   function updateDOMForNavigationOption(option) {
-  	Object.entries(NAVIGATION_OPTIONS).forEach(([_, value]) => {
-  		if (value === option) {
-  			document
-  				.querySelector(`#nav-button-${value}`)
-  				.classList.add("text-link-button-selected");
-  		} else {
-  			document
-  				.querySelector(`#nav-button-${value}`)
-  				.classList.remove("text-link-button-selected");
-  		}
-  		document.querySelector(`#${value}-outlet`).style.display =
+    Object.entries(NAVIGATION_OPTIONS).forEach(([_, value]) => {
+      if (value === option) {
+        document
+          .querySelector(`#nav-button-${value}`)
+          .classList.add("text-link-button-selected");
+      } else {
+        document
+          .querySelector(`#nav-button-${value}`)
+          .classList.remove("text-link-button-selected");
+      }
+      document.querySelector(`#${value}-outlet`).style.display =
         value === option ? "block" : "none";
-  	});
+    });
   }
 
   function launchModalsFromNavigationParams() {
-  	const currentURL = new URL(window.location.href);
+    const currentURL = new URL(window.location.href);
 
-  	const storyModalIdList = currentURL.searchParams.get("storyModalIdList");
-  	if (storyModalIdList) {
-  		const storyIds = storyModalIdList.split(",");
-  		storyIds.forEach((storyId) => {
-  			API.item(storyId).then((story) => launchStoryModal(story));
-  		});
-  	}
+    const storyModalIdList = currentURL.searchParams.get("storyModalIdList");
+    if (storyModalIdList) {
+      const storyIds = storyModalIdList.split(",");
+      storyIds.forEach((storyId) => {
+        API.item(storyId).then((story) => launchStoryModal(story));
+      });
+    }
 
-  	const profileModalIdList =
+    const profileModalIdList =
       currentURL.searchParams.get("profileModalIdList");
-  	if (profileModalIdList) {
-  		const profileIds = profileModalIdList.split(",");
-  		profileIds.forEach((profileId) => {
-  			launchUserModal(profileId);
-  		});
-  	}
+    if (profileModalIdList) {
+      const profileIds = profileModalIdList.split(",");
+      profileIds.forEach((profileId) => {
+        launchUserModal(profileId);
+      });
+    }
   }
 
   function addStoryModalToURL(storyId) {
-  	const currentURL = new URL(window.location.href);
-  	const currentStoryModalIdList =
+    const currentURL = new URL(window.location.href);
+    const currentStoryModalIdList =
       currentURL.searchParams.get("storyModalIdList");
 
-  	if (currentStoryModalIdList) {
-  		if (!currentStoryModalIdList.split(",").includes(storyId.toString())) {
-  			currentURL.searchParams.set(
-  				"storyModalIdList",
-  				`${currentStoryModalIdList},${storyId}`
-  			);
-  		}
-  	} else {
-  		currentURL.searchParams.set("storyModalIdList", storyId);
-  	}
-  	window.history.pushState({}, "", currentURL);
+    if (currentStoryModalIdList) {
+      if (!currentStoryModalIdList.split(",").includes(storyId.toString())) {
+        currentURL.searchParams.set(
+          "storyModalIdList",
+          `${currentStoryModalIdList},${storyId}`
+        );
+      }
+    } else {
+      currentURL.searchParams.set("storyModalIdList", storyId);
+    }
+    window.history.pushState({}, "", currentURL);
   }
 
   function removeStoryModalFromURL(storyId) {
-  	const currentURL = new URL(window.location.href);
+    const currentURL = new URL(window.location.href);
 
-  	const currentStoryModalIdList =
+    const currentStoryModalIdList =
       currentURL.searchParams.get("storyModalIdList");
 
-  	if (currentStoryModalIdList) {
-  		const storyIds = currentStoryModalIdList.split(",");
-  		const newStoryIds = storyIds.filter((id) => id !== storyId.toString());
-  		if (newStoryIds.length > 0) {
-  			currentURL.searchParams.set(
-  				"storyModalIdList",
-  				newStoryIds.join(",")
-  			);
-  		} else {
-  			currentURL.searchParams.delete("storyModalIdList");
-  		}
-  	}
-  	window.history.pushState({}, "", currentURL);
+    if (currentStoryModalIdList) {
+      const storyIds = currentStoryModalIdList.split(",");
+      const newStoryIds = storyIds.filter((id) => id !== storyId.toString());
+      if (newStoryIds.length > 0) {
+        currentURL.searchParams.set(
+          "storyModalIdList",
+          newStoryIds.join(",")
+        );
+      } else {
+        currentURL.searchParams.delete("storyModalIdList");
+      }
+    }
+    window.history.pushState({}, "", currentURL);
   }
 
   function addProfileModalToURL(profileId) {
-  	const currentURL = new URL(window.location.href);
-  	const currentProfileModalIdList =
+    const currentURL = new URL(window.location.href);
+    const currentProfileModalIdList =
       currentURL.searchParams.get("profileModalIdList");
 
-  	if (currentProfileModalIdList) {
-  		if (
-  			!currentProfileModalIdList.split(",").includes(profileId.toString())
-  		) {
-  			currentURL.searchParams.set(
-  				"profileModalIdList",
-  				`${currentProfileModalIdList},${profileId}`
-  			);
-  		}
-  	} else {
-  		currentURL.searchParams.set("profileModalIdList", profileId);
-  	}
-  	window.history.pushState({}, "", currentURL);
+    if (currentProfileModalIdList) {
+      if (
+        !currentProfileModalIdList.split(",").includes(profileId.toString())
+      ) {
+        currentURL.searchParams.set(
+          "profileModalIdList",
+          `${currentProfileModalIdList},${profileId}`
+        );
+      }
+    } else {
+      currentURL.searchParams.set("profileModalIdList", profileId);
+    }
+    window.history.pushState({}, "", currentURL);
   }
 
   function removeProfileModalFromURL(profileId) {
-  	const currentURL = new URL(window.location.href);
+    const currentURL = new URL(window.location.href);
 
-  	const currentProfileModalIdList =
+    const currentProfileModalIdList =
       currentURL.searchParams.get("profileModalIdList");
 
-  	if (currentProfileModalIdList) {
-  		const profileIds = currentProfileModalIdList.split(",");
-  		const newProfileIds = profileIds.filter(
-  			(id) => id !== profileId.toString()
-  		);
-  		if (newProfileIds.length > 0) {
-  			currentURL.searchParams.set(
-  				"profileModalIdList",
-  				newProfileIds.join(",")
-  			);
-  		} else {
-  			currentURL.searchParams.delete("profileModalIdList");
-  		}
-  	}
-  	window.history.pushState({}, "", currentURL);
+    if (currentProfileModalIdList) {
+      const profileIds = currentProfileModalIdList.split(",");
+      const newProfileIds = profileIds.filter(
+        (id) => id !== profileId.toString()
+      );
+      if (newProfileIds.length > 0) {
+        currentURL.searchParams.set(
+          "profileModalIdList",
+          newProfileIds.join(",")
+        );
+      } else {
+        currentURL.searchParams.delete("profileModalIdList");
+      }
+    }
+    window.history.pushState({}, "", currentURL);
   }
 
   /**
@@ -2715,30 +2714,30 @@
    * @returns {void}
    */
   function attachNavigationButtonClickListeners() {
-  	Object.entries(NAVIGATION_OPTIONS).forEach(([_, value]) => {
-  		document
-  			.querySelector(`#nav-button-${value}`)
-  			.addEventListener("click", () => {
-  				navigationState.update(value);
-  			});
-  	});
+    Object.entries(NAVIGATION_OPTIONS).forEach(([_, value]) => {
+      document
+        .querySelector(`#nav-button-${value}`)
+        .addEventListener("click", () => {
+          navigationState.update(value);
+        });
+    });
   }
 
   function applyInitialNavigationState() {
-  	const currentURL = new URL(window.location.href);
-  	const currentPath = currentURL.pathname.split("/").pop();
-  	if (Object.values(NAVIGATION_OPTIONS).includes(currentPath)) {
-  		navigationState.update(currentPath);
-  	} else {
-  		navigationState.update(NAVIGATION_OPTIONS.TOP);
-  	}
+    const currentURL = new URL(window.location.href);
+    const currentPath = currentURL.pathname.split("/").pop();
+    if (Object.values(NAVIGATION_OPTIONS).includes(currentPath)) {
+      navigationState.update(currentPath);
+    } else {
+      navigationState.update(NAVIGATION_OPTIONS.TOP);
+    }
   }
 
   function applyCurrentNavigationStateToURL() {
-  	const currentURL = new URL(window.location.href);
-  	const currentPath = currentURL.pathname.split("/").pop();
-  	currentURL.pathname = `/${navigationState.current()}`;
-  	window.history.pushState({}, "", currentURL);
+    const currentURL = new URL(window.location.href);
+    const currentPath = currentURL.pathname.split("/").pop();
+    currentURL.pathname = `/${navigationState.current()}`;
+    window.history.pushState({}, "", currentURL);
   }
 </script>
 
@@ -2750,85 +2749,85 @@
    * @returns {void}
    */
   function makeModalDragable(element) {
-  	let mousePosition1 = 0,
-  		mousePosition2 = 0,
-  		mousePosition3 = 0,
-  		mousePosition4 = 0;
+    let mousePosition1 = 0,
+      mousePosition2 = 0,
+      mousePosition3 = 0,
+      mousePosition4 = 0;
 
-  	let touchPosition1 = 0,
-  		touchPosition2 = 0,
-  		touchPosition3 = 0,
-  		touchPosition4 = 0;
+    let touchPosition1 = 0,
+      touchPosition2 = 0,
+      touchPosition3 = 0,
+      touchPosition4 = 0;
 
-  	const modalTitleElement = element.querySelector(".modal-window-title");
+    const modalTitleElement = element.querySelector(".modal-window-title");
 
-  	// Handle drag functionality from touch screen
-  	modalTitleElement.addEventListener("touchstart", (event) => {
-  		// Make sure this ignores events from nav buttons
-  		if (event.target.tagName === "NAV") {
-  			// Propagate click event to button and handle normally
-  			// TODO: handle this bug better
-  			event.target.click();
-  			return;
-  		}
+    // Handle drag functionality from touch screen
+    modalTitleElement.addEventListener("touchstart", (event) => {
+      // Make sure this ignores events from nav buttons
+      if (event.target.tagName === "NAV") {
+        // Propagate click event to button and handle normally
+        // TODO: handle this bug better
+        event.target.click();
+        return;
+      }
 
-  		touchPosition3 = event.changedTouches[0].clientX;
-  		touchPosition4 = event.changedTouches[0].clientY;
-  	});
-  	modalTitleElement.addEventListener("touchend", () => {
-  		touchPosition1 = 0;
-  		touchPosition2 = 0;
-  		touchPosition3 = 0;
-  		touchPosition4 = 0;
-  	});
-  	modalTitleElement.addEventListener("touchcancel", () => {
-  		touchPosition1 = 0;
-  		touchPosition2 = 0;
-  		touchPosition3 = 0;
-  		touchPosition4 = 0;
-  	});
-  	modalTitleElement.addEventListener("touchmove", (event) => {
-  		event.preventDefault();
-  		touchPosition1 = touchPosition3 - event.changedTouches[0].clientX;
-  		touchPosition2 = touchPosition4 - event.changedTouches[0].clientY;
-  		touchPosition3 = event.changedTouches[0].clientX;
-  		touchPosition4 = event.changedTouches[0].clientY;
-  		element.style.top = element.offsetTop - touchPosition2 + "px";
-  		element.style.left = element.offsetLeft - touchPosition1 + "px";
-  	});
+      touchPosition3 = event.changedTouches[0].clientX;
+      touchPosition4 = event.changedTouches[0].clientY;
+    });
+    modalTitleElement.addEventListener("touchend", () => {
+      touchPosition1 = 0;
+      touchPosition2 = 0;
+      touchPosition3 = 0;
+      touchPosition4 = 0;
+    });
+    modalTitleElement.addEventListener("touchcancel", () => {
+      touchPosition1 = 0;
+      touchPosition2 = 0;
+      touchPosition3 = 0;
+      touchPosition4 = 0;
+    });
+    modalTitleElement.addEventListener("touchmove", (event) => {
+      event.preventDefault();
+      touchPosition1 = touchPosition3 - event.changedTouches[0].clientX;
+      touchPosition2 = touchPosition4 - event.changedTouches[0].clientY;
+      touchPosition3 = event.changedTouches[0].clientX;
+      touchPosition4 = event.changedTouches[0].clientY;
+      element.style.top = element.offsetTop - touchPosition2 + "px";
+      element.style.left = element.offsetLeft - touchPosition1 + "px";
+    });
 
-  	// Handle Drag Functionality from mouse
-  	modalTitleElement.onmousedown = dragMouseDown;
-  	modalTitleElement.ontouchstart = dragMouseDown;
+    // Handle Drag Functionality from mouse
+    modalTitleElement.onmousedown = dragMouseDown;
+    modalTitleElement.ontouchstart = dragMouseDown;
 
-  	function dragMouseDown(e) {
-  		e = e || window.event;
-  		e.preventDefault();
-  		// Get the mouse cursor position at startup:
-  		mousePosition3 = e.clientX;
-  		mousePosition4 = e.clientY;
-  		document.onmouseup = closeMouseDragElement;
-  		// Call a function whenever the cursor moves:
-  		document.onmousemove = mouseElementDrag;
-  	}
+    function dragMouseDown(e) {
+      e = e || window.event;
+      e.preventDefault();
+      // Get the mouse cursor position at startup:
+      mousePosition3 = e.clientX;
+      mousePosition4 = e.clientY;
+      document.onmouseup = closeMouseDragElement;
+      // Call a function whenever the cursor moves:
+      document.onmousemove = mouseElementDrag;
+    }
 
-  	function mouseElementDrag(e) {
-  		e = e || window.event;
-  		e.preventDefault();
-  		// Calculate the new cursor position:
-  		mousePosition1 = mousePosition3 - e.clientX;
-  		mousePosition2 = mousePosition4 - e.clientY;
-  		mousePosition3 = e.clientX;
-  		mousePosition4 = e.clientY;
-  		element.style.top = element.offsetTop - mousePosition2 + "px";
-  		element.style.left = element.offsetLeft - mousePosition1 + "px";
-  	}
+    function mouseElementDrag(e) {
+      e = e || window.event;
+      e.preventDefault();
+      // Calculate the new cursor position:
+      mousePosition1 = mousePosition3 - e.clientX;
+      mousePosition2 = mousePosition4 - e.clientY;
+      mousePosition3 = e.clientX;
+      mousePosition4 = e.clientY;
+      element.style.top = element.offsetTop - mousePosition2 + "px";
+      element.style.left = element.offsetLeft - mousePosition1 + "px";
+    }
 
-  	function closeMouseDragElement() {
-  		// Stop moving when mouse button is released:
-  		document.onmouseup = null;
-  		document.onmousemove = null;
-  	}
+    function closeMouseDragElement() {
+      // Stop moving when mouse button is released:
+      document.onmouseup = null;
+      document.onmousemove = null;
+    }
   }
 
   /**
@@ -2836,7 +2835,7 @@
    * @returns {void}
    */
   function scrollToTop() {
-  	document.querySelector("body").scrollIntoView({ behavior: "smooth" });
+    document.querySelector("body").scrollIntoView({ behavior: "smooth" });
   }
 
   /**
@@ -2844,8 +2843,8 @@
    * @returns {void}
    */
   function showLoadingAnimation() {
-  	scrollToTop();
-  	document.querySelector("#loading-outlet").style.display = "block";
+    scrollToTop();
+    document.querySelector("#loading-outlet").style.display = "block";
   }
 
   /**
@@ -2853,8 +2852,8 @@
    * @returns {void}
    */
   function hideLoadingAnimation() {
-  	scrollToTop();
-  	document.querySelector("#loading-outlet").style.display = "none";
+    scrollToTop();
+    document.querySelector("#loading-outlet").style.display = "none";
   }
 
   /**
@@ -2864,14 +2863,14 @@
    * @returns {string}
    */
   function generateLoadingString(length) {
-  	// TODO: rewrite with reduce
-  	let result = "";
-  	for (let i = 0; i < length; i++) {
-  		result += ANIMATION_CHARACTERS_STRING.charAt(
-  			Math.floor(Math.random() * ANIMATION_CHARACTERS_STRING.length)
-  		);
-  	}
-  	return result;
+    // TODO: rewrite with reduce
+    let result = "";
+    for (let i = 0; i < length; i++) {
+      result += ANIMATION_CHARACTERS_STRING.charAt(
+        Math.floor(Math.random() * ANIMATION_CHARACTERS_STRING.length)
+      );
+    }
+    return result;
   }
 
   /**
@@ -2880,20 +2879,20 @@
    * TODO:reqrite with loop
    */
   async function precomputeLoadingStrings() {
-  	const loadingStrings = [];
-  	for (let i = 0; i < TOTAL_ANIMATION_STRINGS; i++) {
-  		loadingStrings.push(
-  			generateLoadingString(
-  				Math.random() *
+    const loadingStrings = [];
+    for (let i = 0; i < TOTAL_ANIMATION_STRINGS; i++) {
+      loadingStrings.push(
+        generateLoadingString(
+          Math.random() *
           ((isMobileDevice()
-          	? LOADING_STRING_MAX_LENGTH_MOBILE
-          	: LOADING_STRING_MAX_LENGTH_DESKTOP) -
+            ? LOADING_STRING_MAX_LENGTH_MOBILE
+            : LOADING_STRING_MAX_LENGTH_DESKTOP) -
             LOADING_STRING_MIN_LENGTH) +
           LOADING_STRING_MIN_LENGTH
-  			)
-  		);
-  	}
-  	return loadingStrings;
+        )
+      );
+    }
+    return loadingStrings;
   }
 
   /**
@@ -2901,7 +2900,7 @@
    * @returns {string}
    */
   const getRandomLoadingString = () =>
-  	loadingStrings[Math.floor(Math.random() * TOTAL_ANIMATION_STRINGS)];
+    loadingStrings[Math.floor(Math.random() * TOTAL_ANIMATION_STRINGS)];
 
   /**
    * Initializes the loading animation
@@ -2909,11 +2908,11 @@
    * TODO have generic function for batch DOM inserts
    */
   function initializeLoadingAnimation() {
-  	const fragment = document.createDocumentFragment();
-  	loop(LOADING_ANIMATION_NUMBER_OF_ROWS, (i) =>
-  		fragment.append(new LoadingStoryElement())
-  	);
-  	document.querySelector("#loading-outlet").appendChild(fragment);
+    const fragment = document.createDocumentFragment();
+    loop(LOADING_ANIMATION_NUMBER_OF_ROWS, (i) =>
+      fragment.append(new LoadingStoryElement())
+    );
+    document.querySelector("#loading-outlet").appendChild(fragment);
   }
 </script>
 
@@ -2926,54 +2925,54 @@
   const storyElementLoadingCallbacks = {};
 
   function setModalDisplayDefaultSize(
-  	modal,
-  	mobileHeight = "99%",
-  	mobileWidth = "98%",
-  	desktopHeight = "50%",
-  	desktopWidth = "50%"
+    modal,
+    mobileHeight = "99%",
+    mobileWidth = "98%",
+    desktopHeight = "50%",
+    desktopWidth = "50%"
   ) {
-  	// TODO: refactor this
-  	if (isMobileDevice()) {
-  		modal.style.width =
+    // TODO: refactor this
+    if (isMobileDevice()) {
+      modal.style.width =
         "calc(100vw - var(--modal-border-width) - var(--modal-border-width))";
-  		modal.style.height =
+      modal.style.height =
         "calc(100vh - var(--modal-border-width) - var(--modal-border-width))";
-  		modal.style.top = "0";
-  		modal.style.left = "0";
-  	} else {
-  		modal.style.width = desktopWidth;
-  		modal.style.height = desktopHeight;
-  		modal.style.left =
+      modal.style.top = "0";
+      modal.style.left = "0";
+    } else {
+      modal.style.width = desktopWidth;
+      modal.style.height = desktopHeight;
+      modal.style.left =
         25 +
         getRandomNumberBetween(
-        	-MODAL_POSITION_RANDOM_OFFSET,
-        	MODAL_POSITION_RANDOM_OFFSET
+          -MODAL_POSITION_RANDOM_OFFSET,
+          MODAL_POSITION_RANDOM_OFFSET
         ) +
         "%";
-  		modal.style.top =
+      modal.style.top =
         25 +
         getRandomNumberBetween(
-        	-MODAL_POSITION_RANDOM_OFFSET,
-        	MODAL_POSITION_RANDOM_OFFSET
+          -MODAL_POSITION_RANDOM_OFFSET,
+          MODAL_POSITION_RANDOM_OFFSET
         ) +
         "%";
-  	}
+    }
   }
 
   function maximizeModal(modal) {
-  	if (isMobileDevice()) {
-  		modal.style.width = "99%";
-  		modal.style.height = "99%";
-  		modal.style.top = "0";
-  		modal.style.left = "0";
-  	} else {
-  		modal.style.width =
+    if (isMobileDevice()) {
+      modal.style.width = "99%";
+      modal.style.height = "99%";
+      modal.style.top = "0";
+      modal.style.left = "0";
+    } else {
+      modal.style.width =
         "calc(100vw - var(--modal-border-width) - var(--modal-border-width))";
-  		modal.style.height =
+      modal.style.height =
         "calc(100vh - var(--modal-border-width) - var(--modal-border-width))";
-  		modal.style.top = "0";
-  		modal.style.left = "0";
-  	}
+      modal.style.top = "0";
+      modal.style.left = "0";
+    }
   }
 
   /**
@@ -2982,46 +2981,46 @@
    * @returns {boolean}
    */
   function isModalMaximized(modal) {
-  	const rect = modal.getBoundingClientRect();
-  	return (
-  		rect.width > window.innerWidth * 0.9 ||
+    const rect = modal.getBoundingClientRect();
+    return (
+      rect.width > window.innerWidth * 0.9 ||
       rect.height > window.innerHeight * 0.9
-  	);
+    );
   }
 
   function useModalHeaderDoubleTapResize(modal) {
-  	modal
-  		.querySelector(".modal-window-title")
-  		.addEventListener("dblclick", () => {
-  			if (isModalMaximized(modal)) {
-  				setModalDisplayDefaultSize(modal);
-  			} else {
-  				maximizeModal(modal);
-  			}
-  		});
+    modal
+      .querySelector(".modal-window-title")
+      .addEventListener("dblclick", () => {
+        if (isModalMaximized(modal)) {
+          setModalDisplayDefaultSize(modal);
+        } else {
+          maximizeModal(modal);
+        }
+      });
   }
 
   // TODO: reqrite modal share and maximize listeners to be reusable
 
   function ShareModal() {
-  	const modal = document.createElement("div");
-  	modal.classList.add(
-  		"modal",
-  		"share-modal",
-  		"title-actions-modal",
-  		"use-gpu-rendering"
-  	);
+    const modal = document.createElement("div");
+    modal.classList.add(
+      "modal",
+      "share-modal",
+      "title-actions-modal",
+      "use-gpu-rendering"
+    );
 
-  	modal.innerHTML = `
+    modal.innerHTML = `
       <header class="modal-window-title" role="dialog" aria-modal="true">
         <div class="modal-action-buttons">
           <nav id="close-button-share" class="text-link-button" title="Close Modal">
             [X]
           </nav>
           ${!isMobileDevice()
-  		? "<nav id='modal-window-title-maximize' class='text-link-button' title='Toggle Full Screen'>[+]</nav>"
-  		: ""
-  }
+        ? "<nav id='modal-window-title-maximize' class='text-link-button' title='Toggle Full Screen'>[+]</nav>"
+        : ""
+      }
         </div>
         <div class="title-actions-modal-title">Share</div>
         <div class="spacer"></div>
@@ -3042,140 +3041,140 @@
       </main>
       `;
 
-  	useModalHeaderDoubleTapResize(modal);
+    useModalHeaderDoubleTapResize(modal);
 
-  	// Use smaller sizing for this modal
-  	// TODO: key these values for share modal as constants
-  	setModalDisplayDefaultSize(modal, "99%", "99%", "42%", "16.6%");
+    // Use smaller sizing for this modal
+    // TODO: key these values for share modal as constants
+    setModalDisplayDefaultSize(modal, "99%", "99%", "42%", "16.6%");
 
-  	// TODO: rewrite repeatable versino of this function
-  	modal
-  		.querySelector("#close-button-share")
-  		.addEventListener("click", () => {
-  			modal.remove();
-  		});
+    // TODO: rewrite repeatable versino of this function
+    modal
+      .querySelector("#close-button-share")
+      .addEventListener("click", () => {
+        modal.remove();
+      });
 
-  	// TODO: rewrite repeatable versino of this function
-  	if (!isMobileDevice()) {
-  		modal
-  			.querySelector("#modal-window-title-maximize")
-  			.addEventListener("click", () => {
-  				if (isModalMaximized(modal)) {
-  					setModalDisplayDefaultSize(modal);
-  				} else {
-  					maximizeModal(modal);
-  				}
-  			});
-  	}
+    // TODO: rewrite repeatable versino of this function
+    if (!isMobileDevice()) {
+      modal
+        .querySelector("#modal-window-title-maximize")
+        .addEventListener("click", () => {
+          if (isModalMaximized(modal)) {
+            setModalDisplayDefaultSize(modal);
+          } else {
+            maximizeModal(modal);
+          }
+        });
+    }
 
-  	modal.querySelector("#share-twitter").addEventListener("click", () => {
-  		shareOnTwitter();
-  	});
+    modal.querySelector("#share-twitter").addEventListener("click", () => {
+      shareOnTwitter();
+    });
 
-  	modal.querySelector("#share-facebook").addEventListener("click", () => {
-  		shareOnFacebook();
-  	});
+    modal.querySelector("#share-facebook").addEventListener("click", () => {
+      shareOnFacebook();
+    });
 
-  	modal.querySelector("#share-linkedin").addEventListener("click", () => {
-  		shareOnLinkedIn();
-  	});
+    modal.querySelector("#share-linkedin").addEventListener("click", () => {
+      shareOnLinkedIn();
+    });
 
-  	modal.querySelector("#share-whatsapp").addEventListener("click", () => {
-  		shareOnWhatsApp();
-  	});
+    modal.querySelector("#share-whatsapp").addEventListener("click", () => {
+      shareOnWhatsApp();
+    });
 
-  	modal.querySelector("#share-reddit").addEventListener("click", () => {
-  		shareOnReddit();
-  	});
+    modal.querySelector("#share-reddit").addEventListener("click", () => {
+      shareOnReddit();
+    });
 
-  	modal.querySelector("#share-telegram").addEventListener("click", () => {
-  		shareOnTelegram();
-  	});
+    modal.querySelector("#share-telegram").addEventListener("click", () => {
+      shareOnTelegram();
+    });
 
-  	modal.querySelector("#share-email").addEventListener("click", () => {
-  		shareViaEmail();
-  	});
+    modal.querySelector("#share-email").addEventListener("click", () => {
+      shareViaEmail();
+    });
 
-  	modal.querySelector("#share-pintrest").addEventListener("click", () => {
-  		shareOnPintrest();
-  	});
+    modal.querySelector("#share-pintrest").addEventListener("click", () => {
+      shareOnPintrest();
+    });
 
-  	modal.querySelector("#share-tumblr").addEventListener("click", () => {
-  		shareOnTumblr();
-  	});
+    modal.querySelector("#share-tumblr").addEventListener("click", () => {
+      shareOnTumblr();
+    });
 
-  	modal.querySelector("#built-in").addEventListener("click", () => {
-  		builtInShare();
-  	});
+    modal.querySelector("#built-in").addEventListener("click", () => {
+      builtInShare();
+    });
 
-  	return modal;
+    return modal;
   }
 
   function launchShareModal() {
-  	makeModalDragable(document.body.appendChild(new ShareModal()));
-  	// TODO: find a way to make modal dragable in constructor
+    makeModalDragable(document.body.appendChild(new ShareModal()));
+    // TODO: find a way to make modal dragable in constructor
   }
 
   function CommentListElement(item) {
-  	const commentContainer = document.createElement("div");
-  	commentContainer.id = item.id;
-  	commentContainer.classList.add("comment-container");
+    const commentContainer = document.createElement("div");
+    commentContainer.id = item.id;
+    commentContainer.classList.add("comment-container");
 
-  	commentContainer.innerHTML = `<div class="comment">
+    commentContainer.innerHTML = `<div class="comment">
         <p><a id="parent-comment" class="comment-by"><strong>In Thread</strong></a></p>
         <p class="comment-text">${sanitize(item.text) || "[DELETED]"}</p>
         </div>`;
 
-  	if (item.parent) {
-  		commentContainer
-  			.querySelector("#parent-comment")
-  			.addEventListener("click", () => {
-  				API.item(item.parent).then((parentItem) =>
-  					launchStoryModal(parentItem)
-  				);
-  			});
-  	}
+    if (item.parent) {
+      commentContainer
+        .querySelector("#parent-comment")
+        .addEventListener("click", () => {
+          API.item(item.parent).then((parentItem) =>
+            launchStoryModal(parentItem)
+          );
+        });
+    }
 
-  	return commentContainer;
+    return commentContainer;
   }
 
   const userProfileItemCallbacks = {};
 
   function UserSubmittedItemElement(itemId) {
-  	const storyContainer = document.createElement("div");
-  	storyContainer.id = itemId;
-  	storyContainer.classList.add("profile-item-container");
+    const storyContainer = document.createElement("div");
+    storyContainer.id = itemId;
+    storyContainer.classList.add("profile-item-container");
 
-  	storyContainer.innerHTML = `<span>${getRandomLoadingString()}</span>`;
+    storyContainer.innerHTML = `<span>${getRandomLoadingString()}</span>`;
 
-  	const loadItem = () => {
-  		API.item(itemId)
-  			.then(async (item) => {
-  				storyContainer.innerHTML = "";
-  				if (
-  					item.type === "story" ||
+    const loadItem = () => {
+      API.item(itemId)
+        .then(async (item) => {
+          storyContainer.innerHTML = "";
+          if (
+            item.type === "story" ||
             item.type === "job" ||
             item.type === "poll" ||
             item.type === "pollopt"
-  				) {
-  					storyContainer.appendChild(
-  						new StoryListElement(itemId, true, item)
-  					);
-  				} else if (item.type === "comment") {
-  					storyContainer.appendChild(new CommentListElement(item));
-  				} else {
-  					storyContainer.innerHTML = "Eᴙᴙ0ᴙ...";
-  				}
-  			})
-  			.catch((error) => {
-  				console.error(error);
-  				storyContainer.firstChild.textContent = "Eᴙᴙ0ᴙ...";
-  			});
-  	};
+          ) {
+            storyContainer.appendChild(
+              new StoryListElement(itemId, true, item)
+            );
+          } else if (item.type === "comment") {
+            storyContainer.appendChild(new CommentListElement(item));
+          } else {
+            storyContainer.innerHTML = "Eᴙᴙ0ᴙ...";
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+          storyContainer.firstChild.textContent = "Eᴙᴙ0ᴙ...";
+        });
+    };
 
-  	userProfileItemCallbacks[itemId] = loadItem;
+    userProfileItemCallbacks[itemId] = loadItem;
 
-  	return storyContainer;
+    return storyContainer;
   }
 
   /**
@@ -3185,67 +3184,67 @@
    * @returns {HTMLElement}
    */
   function StoryListElement(
-  	storyId,
-  	loadContentImmediately = false,
-  	storyPreloaded = undefined
+    storyId,
+    loadContentImmediately = false,
+    storyPreloaded = undefined
   ) {
-  	// Create html element for story
-  	const storyContainer = document.createElement("div");
-  	storyContainer.id = storyId;
-  	storyContainer.classList.add("story-container");
+    // Create html element for story
+    const storyContainer = document.createElement("div");
+    storyContainer.id = storyId;
+    storyContainer.classList.add("story-container");
 
-  	// Assign random string for loading effect
-  	storyContainer.innerHTML = `<span>${getRandomLoadingString()}}</span>`;
+    // Assign random string for loading effect
+    storyContainer.innerHTML = `<span>${getRandomLoadingString()}}</span>`;
 
-  	const renderStory = (story) => {
-  		if (story.deleted) {
-  			storyContainer.innerHTML = "<span>[DELETED]</span>";
-  			return;
-  		}
+    const renderStory = (story) => {
+      if (story.deleted) {
+        storyContainer.innerHTML = "<span>[DELETED]</span>";
+        return;
+      }
 
-  		if (story.dead) {
-  			storyContainer.innerHTML = "<span>[DEAD]</span>";
-  			return;
-  		}
+      if (story.dead) {
+        storyContainer.innerHTML = "<span>[DEAD]</span>";
+        return;
+      }
 
-  		if (story.title === undefined) {
-  			story.title = "[NO TITLE]";
-  		}
-  		storyContainer.innerHTML = `<span>${sanitize(story.title)}</span>`;
-  		storyContainer.addEventListener("click", () => launchStoryModal(story));
-  	};
+      if (story.title === undefined) {
+        story.title = "[NO TITLE]";
+      }
+      storyContainer.innerHTML = `<span>${sanitize(story.title)}</span>`;
+      storyContainer.addEventListener("click", () => launchStoryModal(story));
+    };
 
-  	const loadStory = () => {
-  		API.item(storyId)
-  			.then(async (story) => renderStory(story))
-  			.catch((error) => {
-  				console.error(error);
-  				storyContainer.firstChild.textContent = "Eᴙᴙ0ᴙ...";
-  			});
-  	};
+    const loadStory = () => {
+      API.item(storyId)
+        .then(async (story) => renderStory(story))
+        .catch((error) => {
+          console.error(error);
+          storyContainer.firstChild.textContent = "Eᴙᴙ0ᴙ...";
+        });
+    };
 
-  	if (loadContentImmediately && !storyPreloaded) loadStory();
+    if (loadContentImmediately && !storyPreloaded) loadStory();
 
-  	if (storyPreloaded) renderStory(storyPreloaded);
+    if (storyPreloaded) renderStory(storyPreloaded);
 
-  	storyElementLoadingCallbacks[storyId] = loadStory;
+    storyElementLoadingCallbacks[storyId] = loadStory;
 
-  	return storyContainer;
+    return storyContainer;
   }
 
   function UserModal(userId) {
-  	const modal = document.createElement("div");
-  	modal.classList.add("modal", "title-actions-modal", "use-gpu-rendering");
+    const modal = document.createElement("div");
+    modal.classList.add("modal", "title-actions-modal", "use-gpu-rendering");
 
-  	modal.innerHTML = `<header class="modal-window-title" role="dialog" aria-modal="true">
+    modal.innerHTML = `<header class="modal-window-title" role="dialog" aria-modal="true">
         <div class="modal-action-buttons">
           <nav id="close-button-${userId}" class="text-link-button" title="Close Modal">
             [X]
           </nav>
           ${!isMobileDevice()
-  		? "<nav id='modal-window-title-maximize' class='text-link-button' title='Toggle Full Screen'>[+]</nav>"
-  		: ""
-  }
+        ? "<nav id='modal-window-title-maximize' class='text-link-button' title='Toggle Full Screen'>[+]</nav>"
+        : ""
+      }
         </div>
         <div class="title-actions-modal-title">${userId}</div>
         <div class="spacer"></div>
@@ -3259,32 +3258,32 @@
         </section>
       </main>`;
 
-  	useModalHeaderDoubleTapResize(modal);
+    useModalHeaderDoubleTapResize(modal);
 
-  	setModalDisplayDefaultSize(modal);
+    setModalDisplayDefaultSize(modal);
 
-  	modal
-  		.querySelector(`#close-button-${userId}`)
-  		.addEventListener("click", () => {
-  			modal.remove();
-  			removeProfileModalFromURL(userId);
-  		});
+    modal
+      .querySelector(`#close-button-${userId}`)
+      .addEventListener("click", () => {
+        modal.remove();
+        removeProfileModalFromURL(userId);
+      });
 
-  	if (!isMobileDevice()) {
-  		modal
-  			.querySelector("#modal-window-title-maximize")
-  			.addEventListener("click", () => {
-  				if (isModalMaximized(modal)) {
-  					setModalDisplayDefaultSize(modal);
-  				} else {
-  					maximizeModal(modal);
-  				}
-  			});
-  	}
+    if (!isMobileDevice()) {
+      modal
+        .querySelector("#modal-window-title-maximize")
+        .addEventListener("click", () => {
+          if (isModalMaximized(modal)) {
+            setModalDisplayDefaultSize(modal);
+          } else {
+            maximizeModal(modal);
+          }
+        });
+    }
 
-  	API.user(userId).then((user) => {
-  		const userDetails = modal.querySelector(".user-details");
-  		userDetails.innerHTML = `<div class="user-description">
+    API.user(userId).then((user) => {
+      const userDetails = modal.querySelector(".user-details");
+      userDetails.innerHTML = `<div class="user-description">
             <strong>JOINED:</strong> ${formatDate(user.created)}
             <br />
             <strong>KARMA:</strong> ${user.karma || 0}
@@ -3297,58 +3296,58 @@
         </div>
         `;
 
-  		const userSubmitted = userDetails.querySelector(".user-submitted");
-  		user.submitted.forEach((storyId) => {
-  			userSubmitted.appendChild(new UserSubmittedItemElement(storyId));
-  		});
+      const userSubmitted = userDetails.querySelector(".user-submitted");
+      user.submitted.forEach((storyId) => {
+        userSubmitted.appendChild(new UserSubmittedItemElement(storyId));
+      });
 
-  		const submittedStoriesObserver = new IntersectionObserver(
-  			(entries) => {
-  				entries.forEach((entry) => {
-  					if (entry.isIntersecting) {
-  						const storyId = entry.target.id;
-  						if (userProfileItemCallbacks[storyId]) {
-  							userProfileItemCallbacks[storyId]();
-  							delete userProfileItemCallbacks[storyId];
-  						}
-  					}
-  				});
-  			},
-  			{ rootMargin: "0px 0px 100px 0px" }
-  		);
+      const submittedStoriesObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const storyId = entry.target.id;
+              if (userProfileItemCallbacks[storyId]) {
+                userProfileItemCallbacks[storyId]();
+                delete userProfileItemCallbacks[storyId];
+              }
+            }
+          });
+        },
+        { rootMargin: "0px 0px 100px 0px" }
+      );
 
-  		userSubmitted
-  			.querySelectorAll(".profile-item-container")
-  			.forEach((story) => {
-  				submittedStoriesObserver.observe(story);
-  			});
-  	});
+      userSubmitted
+        .querySelectorAll(".profile-item-container")
+        .forEach((story) => {
+          submittedStoriesObserver.observe(story);
+        });
+    });
 
-  	return modal;
+    return modal;
   }
 
   function launchUserModal(userId) {
-  	makeModalDragable(document.body.appendChild(new UserModal(userId)));
-  	addProfileModalToURL(userId);
+    makeModalDragable(document.body.appendChild(new UserModal(userId)));
+    addProfileModalToURL(userId);
   }
 
   function LinkModal(url) {
-  	const modal = document.createElement("div");
-  	modal.classList.add(
-  		"modal",
-  		"use-gpu-rendering",
-  		"link-modal",
-  		"title-actions-modal"
-  	);
+    const modal = document.createElement("div");
+    modal.classList.add(
+      "modal",
+      "use-gpu-rendering",
+      "link-modal",
+      "title-actions-modal"
+    );
 
-  	modal.innerHTML = `<header class="modal-window-title" role="dialog" aria-modal="true">
+    modal.innerHTML = `<header class="modal-window-title" role="dialog" aria-modal="true">
         <nav id="close-button-link" class="text-link-button" title="Close Modal">
           [X]
         </nav>
         ${!isMobileDevice()
-  		? "<nav id='modal-window-title-maximize' class='text-link-button' title='Toggle Full Screen'>[+]</nav>"
-  		: ""
-  }
+        ? "<nav id='modal-window-title-maximize' class='text-link-button' title='Toggle Full Screen'>[+]</nav>"
+        : ""
+      }
         <nav id="open-link" class="text-link-button" title='Open In New Tab'>
           [⬆️]
         </nav>
@@ -3361,41 +3360,41 @@
         <iframe id="link-iframe" src="${url}"></iframe>
       </main>`;
 
-  	useModalHeaderDoubleTapResize(modal);
-  	makeModalDragable(modal);
-  	setModalDisplayDefaultSize(modal);
+    useModalHeaderDoubleTapResize(modal);
+    makeModalDragable(modal);
+    setModalDisplayDefaultSize(modal);
 
-  	modal
-  		.querySelector("#close-button-link")
-  		.addEventListener("click", () => {
-  			modal.remove();
-  		});
+    modal
+      .querySelector("#close-button-link")
+      .addEventListener("click", () => {
+        modal.remove();
+      });
 
-  	if (!isMobileDevice()) {
-  		modal
-  			.querySelector("#modal-window-title-maximize")
-  			.addEventListener("click", () => {
-  				if (isModalMaximized(modal)) {
-  					setModalDisplayDefaultSize(modal);
-  				} else {
-  					maximizeModal(modal);
-  				}
-  			});
-  	}
+    if (!isMobileDevice()) {
+      modal
+        .querySelector("#modal-window-title-maximize")
+        .addEventListener("click", () => {
+          if (isModalMaximized(modal)) {
+            setModalDisplayDefaultSize(modal);
+          } else {
+            maximizeModal(modal);
+          }
+        });
+    }
 
-  	modal.querySelector("#open-link").addEventListener("click", () => {
-  		window.open(url, "_blank");
-  	});
+    modal.querySelector("#open-link").addEventListener("click", () => {
+      window.open(url, "_blank");
+    });
 
-  	modal
-  		.querySelector("#share-link")
-  		.addEventListener("click", () => launchShareModal());
+    modal
+      .querySelector("#share-link")
+      .addEventListener("click", () => launchShareModal());
 
-  	return modal;
+    return modal;
   }
 
   function launchLinkModal(url) {
-  	makeModalDragable(document.body.appendChild(new LinkModal(url)));
+    makeModalDragable(document.body.appendChild(new LinkModal(url)));
   }
 
   /**
@@ -3405,208 +3404,208 @@
    * @returns {HTMLElement}
    */
   function StoryModal(story) {
-  	const modal = document.createElement("div");
-  	modal.classList.add("modal", "use-gpu-rendering");
+    const modal = document.createElement("div");
+    modal.classList.add("modal", "use-gpu-rendering");
 
-  	const datePosted = formatDate(story.time);
+    const datePosted = formatDate(story.time);
 
-  	modal.innerHTML = `<header class="modal-window-title" role="dialog" aria-modal="true">
+    modal.innerHTML = `<header class="modal-window-title" role="dialog" aria-modal="true">
         <nav id="close-button-${story.id
-  }" class="text-link-button" title="Close Modal">
+      }" class="text-link-button" title="Close Modal">
           [X]
         </nav>
 
         ${!isMobileDevice()
-  		? "<nav id='modal-window-title-maximize' class='text-link-button' title='Toggle Full Screen'>[+]</nav>"
-  		: ""
-  }
+        ? "<nav id='modal-window-title-maximize' class='text-link-button' title='Toggle Full Screen'>[+]</nav>"
+        : ""
+      }
 
         <nav id="open-link-${story.id
-  }" class="text-link-button" title='Open In New Tab'>
+      }" class="text-link-button" title='Open In New Tab'>
           [⬆️]
         </nav>
 
         <nav id="share-story-${story.id
-  }" class="text-link-button" title="Share Story">
+      }" class="text-link-button" title="Share Story">
           [📤]
         </nav>
 
         ${story.url
-  		? "<nav id=\"toggle-url-or-post-button\" class=\"text-link-button\" title=\"Toggle Webpage Preview or Hacker News Post\"> [🖥️] </nav>"
-  		: ""
-  }
+        ? "<nav id=\"toggle-url-or-post-button\" class=\"text-link-button\" title=\"Toggle Webpage Preview or Hacker News Post\"> [🖥️] </nav>"
+        : ""
+      }
 
         ${isStoryFavorited(story.id)
-  		? `<nav id="favorite-story-button-${story.id}" class="text-link-button" title="Save/Unsave story">[♥]</button>`
-  		: `<nav id="favorite-story-button-${story.id}" class="text-link-button" title="Save/Unsave story">[♡]</button>`
-  }
+        ? `<nav id="favorite-story-button-${story.id}" class="text-link-button" title="Save/Unsave story">[♥]</button>`
+        : `<nav id="favorite-story-button-${story.id}" class="text-link-button" title="Save/Unsave story">[♡]</button>`
+      }
       </header>
 
       <main class="modal-content">
           <iframe id="story-iframe-${story.id}" src="${story.url
-  }" style="display:none;"></iframe>
+      }" style="display:none;"></iframe>
           <section id="modal-content-post-${story.id
-  }" class="modal-content-post">
+      }" class="modal-content-post">
             ${story.title ? `<h3>${sanitize(story.title)}</h3>` : ""}
             <p class="story-summary-statistics">
               By <a class="user-id">${story.by}</a> | ${datePosted} | ⧫ ${story.score
-  } | ${story.descendants || 0} comments ${story.parent ? "| <a id=\"parent-comment\">In Thread</a>" : ""
-  }
+      } | ${story.descendants || 0} comments ${story.parent ? "| <a id=\"parent-comment\">In Thread</a>" : ""
+      }
             </p>
             ${story.text
-  		? `<p class="story-text">${sanitize(story.text)}</p>`
-  		: ""
-  }
+        ? `<p class="story-text">${sanitize(story.text)}</p>`
+        : ""
+      }
             <div class="comments">
               ${story.descendants
-  		? "<span id=\"loading-comments\" class=\"type\"><span>Loading...</span></span>"
-  		: ""
-  }
+        ? "<span id=\"loading-comments\" class=\"type\"><span>Loading...</span></span>"
+        : ""
+      }
             </div>
           </section>
       </main>`;
 
-  	useModalHeaderDoubleTapResize(modal);
+    useModalHeaderDoubleTapResize(modal);
 
-  	setModalDisplayDefaultSize(modal);
+    setModalDisplayDefaultSize(modal);
 
-  	modal
-  		.querySelector(`#open-link-${story.id}`)
-  		.addEventListener("click", () => {
-  			if (
-  				modal.querySelector(`#story-iframe-${story.id}`).style.display ===
+    modal
+      .querySelector(`#open-link-${story.id}`)
+      .addEventListener("click", () => {
+        if (
+          modal.querySelector(`#story-iframe-${story.id}`).style.display ===
           "none"
-  			) {
-  				window.open(`${YCOMBINATOR_URL}/item?id=${story.id}`, "_blank");
-  			} else {
-  				window.open(story.url, "_blank");
-  			}
-  		});
+        ) {
+          window.open(`${YCOMBINATOR_URL}/item?id=${story.id}`, "_blank");
+        } else {
+          window.open(story.url, "_blank");
+        }
+      });
 
-  	if (story.url) {
-  		modal
-  			.querySelector("#toggle-url-or-post-button")
-  			.addEventListener("click", () => {
-  				const iframe = modal.querySelector(`#story-iframe-${story.id}`);
-  				const post = modal.querySelector(`#modal-content-post-${story.id}`);
-  				if (iframe.style.display === "none") {
-  					iframe.style.display = "block";
-  					post.style.display = "none";
-  					modal.querySelector("#toggle-url-or-post-button").textContent =
+    if (story.url) {
+      modal
+        .querySelector("#toggle-url-or-post-button")
+        .addEventListener("click", () => {
+          const iframe = modal.querySelector(`#story-iframe-${story.id}`);
+          const post = modal.querySelector(`#modal-content-post-${story.id}`);
+          if (iframe.style.display === "none") {
+            iframe.style.display = "block";
+            post.style.display = "none";
+            modal.querySelector("#toggle-url-or-post-button").textContent =
               "[💬]";
-  				} else {
-  					iframe.style.display = "none";
-  					post.style.display = "block";
-  					modal.querySelector("#toggle-url-or-post-button").textContent =
+          } else {
+            iframe.style.display = "none";
+            post.style.display = "block";
+            modal.querySelector("#toggle-url-or-post-button").textContent =
               "[🖥️]";
-  				}
-  			});
-  	}
+          }
+        });
+    }
 
-  	modal
-  		.querySelector(`#close-button-${story.id}`)
-  		.addEventListener("click", () => {
-  			modal.remove();
-  			removeStoryModalFromURL(story.id);
-  		});
+    modal
+      .querySelector(`#close-button-${story.id}`)
+      .addEventListener("click", () => {
+        modal.remove();
+        removeStoryModalFromURL(story.id);
+      });
 
-  	if (!isMobileDevice()) {
-  		modal
-  			.querySelector("#modal-window-title-maximize")
-  			.addEventListener("click", () => {
-  				if (isModalMaximized(modal)) {
-  					setModalDisplayDefaultSize(modal);
-  				} else {
-  					maximizeModal(modal);
-  				}
-  			});
-  	}
+    if (!isMobileDevice()) {
+      modal
+        .querySelector("#modal-window-title-maximize")
+        .addEventListener("click", () => {
+          if (isModalMaximized(modal)) {
+            setModalDisplayDefaultSize(modal);
+          } else {
+            maximizeModal(modal);
+          }
+        });
+    }
 
-  	modal
-  		.querySelector(`#share-story-${story.id}`)
-  		.addEventListener("click", () => launchShareModal());
+    modal
+      .querySelector(`#share-story-${story.id}`)
+      .addEventListener("click", () => launchShareModal());
 
-  	const updateFavoriteButtonState = () => {
-  		if (isStoryFavorited(story.id)) {
-  			modal.querySelector(
-  				`#favorite-story-button-${story.id}`
-  			).textContent = "[♥]";
-  		} else {
-  			modal.querySelector(
-  				`#favorite-story-button-${story.id}`
-  			).textContent = "[♡]";
-  		}
-  	};
+    const updateFavoriteButtonState = () => {
+      if (isStoryFavorited(story.id)) {
+        modal.querySelector(
+          `#favorite-story-button-${story.id}`
+        ).textContent = "[♥]";
+      } else {
+        modal.querySelector(
+          `#favorite-story-button-${story.id}`
+        ).textContent = "[♡]";
+      }
+    };
 
-  	modal
-  		.querySelector(`#favorite-story-button-${story.id}`)
-  		.addEventListener("click", () => {
-  			if (isStoryFavorited(story.id)) {
-  				unfavoriteStory(story.id);
-  			} else {
-  				favoriteStory(story.id);
-  			}
-  			updateFavoriteButtonState();
-  		});
+    modal
+      .querySelector(`#favorite-story-button-${story.id}`)
+      .addEventListener("click", () => {
+        if (isStoryFavorited(story.id)) {
+          unfavoriteStory(story.id);
+        } else {
+          favoriteStory(story.id);
+        }
+        updateFavoriteButtonState();
+      });
 
-  	modal.querySelector(".user-id").addEventListener("click", () => {
-  		launchUserModal(story.by);
-  	});
+    modal.querySelector(".user-id").addEventListener("click", () => {
+      launchUserModal(story.by);
+    });
 
-  	if (story.parent) {
-  		modal.querySelector("#parent-comment").addEventListener("click", () => {
-  			API.item(story.parent).then((parentItem) =>
-  				launchStoryModal(parentItem)
-  			);
-  		});
-  	}
+    if (story.parent) {
+      modal.querySelector("#parent-comment").addEventListener("click", () => {
+        API.item(story.parent).then((parentItem) =>
+          launchStoryModal(parentItem)
+        );
+      });
+    }
 
-  	const loadingIndicator = modal.querySelector("#loading-comments");
+    const loadingIndicator = modal.querySelector("#loading-comments");
 
-  	const hideLoadingMessage = () => {
-  		if (loadingIndicator) loadingIndicator.style.display = "none";
-  	};
+    const hideLoadingMessage = () => {
+      if (loadingIndicator) loadingIndicator.style.display = "none";
+    };
 
-  	const loadCommentsAsync = async (itemId, parent) => {
-  		const currentStory = await API.item(itemId);
+    const loadCommentsAsync = async (itemId, parent) => {
+      const currentStory = await API.item(itemId);
 
-  		if (!currentStory.kids) return; // Base case for end of coment tree
+      if (!currentStory.kids) return; // Base case for end of coment tree
 
-  		const comments = await Promise.all(
-  			currentStory.kids.map((commentId) => API.item(commentId))
-  		);
+      const comments = await Promise.all(
+        currentStory.kids.map((commentId) => API.item(commentId))
+      );
 
-  		comments.forEach((comment) => {
-  			if (!comment || comment.deleted) return; // Skip if comment is null (deleted)
-  			const commentElement = document.createElement("div");
-  			commentElement.classList.add("comment");
-  			commentElement.innerHTML = `
+      comments.forEach((comment) => {
+        if (!comment || comment.deleted) return; // Skip if comment is null (deleted)
+        const commentElement = document.createElement("div");
+        commentElement.classList.add("comment");
+        commentElement.innerHTML = `
             <a class="comment-by"><strong>${comment.by}</strong></a>
             <p class="comment-text">${sanitize(comment.text)}</p>
             <div class="comments-container"></div>
           `;
-  			loadCommentsAsync(
-  				comment.id,
-  				commentElement.querySelector(".comments-container")
-  			);
+        loadCommentsAsync(
+          comment.id,
+          commentElement.querySelector(".comments-container")
+        );
 
-  			commentElement
-  				.querySelector(".comment-by")
-  				.addEventListener("click", () => {
-  					launchUserModal(comment.by);
-  				});
+        commentElement
+          .querySelector(".comment-by")
+          .addEventListener("click", () => {
+            launchUserModal(comment.by);
+          });
 
-  			hideLoadingMessage();
+        hideLoadingMessage();
 
-  			parent.appendChild(commentElement);
-  		});
-  	};
+        parent.appendChild(commentElement);
+      });
+    };
 
-  	loadCommentsAsync(story.id, modal.querySelector(".comments"));
+    loadCommentsAsync(story.id, modal.querySelector(".comments"));
 
-  	addStoryModalToURL(story.id);
+    addStoryModalToURL(story.id);
 
-  	return modal;
+    return modal;
   }
 
   /**
@@ -3614,32 +3613,32 @@
    * @returns {HTMLElement}
    */
   function LoadingStoryElement() {
-  	const loadingContainer = document.createElement("div");
-  	loadingContainer.classList.add("story-container");
+    const loadingContainer = document.createElement("div");
+    loadingContainer.classList.add("story-container");
 
-  	const animationRender = () =>
-  		(loadingContainer.innerHTML = `<span>${generateLoadingString(
-  			getRandomNumberBetween(
-  				LOADING_STRING_MIN_LENGTH,
-  				isMobileDevice()
-  					? LOADING_STRING_MAX_LENGTH_MOBILE
-  					: LOADING_STRING_MAX_LENGTH_DESKTOP
-  			)
-  		)}</span>`);
+    const animationRender = () =>
+    (loadingContainer.innerHTML = `<span>${generateLoadingString(
+      getRandomNumberBetween(
+        LOADING_STRING_MIN_LENGTH,
+        isMobileDevice()
+          ? LOADING_STRING_MAX_LENGTH_MOBILE
+          : LOADING_STRING_MAX_LENGTH_DESKTOP
+      )
+    )}</span>`);
 
-  	const animationSpeed = getRandomNumberBetween(
-  		LOADING_STORY_ANIMATION_REFRESH_INTERVAL_MINIMUM,
-  		LOADING_STORY_ANIMATION_REFRESH_INTERVAL_MAXIMUM
-  	);
+    const animationSpeed = getRandomNumberBetween(
+      LOADING_STORY_ANIMATION_REFRESH_INTERVAL_MINIMUM,
+      LOADING_STORY_ANIMATION_REFRESH_INTERVAL_MAXIMUM
+    );
 
-  	const animationUpdateInterval = setInterval(
-  		animationRender,
-  		animationSpeed
-  	);
+    const animationUpdateInterval = setInterval(
+      animationRender,
+      animationSpeed
+    );
 
-  	animationRender();
+    animationRender();
 
-  	return loadingContainer;
+    return loadingContainer;
   }
 </script>
 
@@ -3650,82 +3649,82 @@
   let loadingStrings = ["loading..."];
   // Assign precomputed loading strings to `loadingStrings` when ready
   precomputeLoadingStrings().then((strings) => {
-  	loadingStrings = strings;
+    loadingStrings = strings;
   });
 
   /**
    * Render `StoryListElement`s for top stories
    */
   const topStoryIds = reactive([], (newState) => {
-  	const topStoriesElement = document.querySelector("#top-outlet");
-  	topStoriesElement.innerHTML = "";
+    const topStoriesElement = document.querySelector("#top-outlet");
+    topStoriesElement.innerHTML = "";
 
-  	const fragment = document.createDocumentFragment();
-  	newState.map((storyId) => {
-  		fragment.appendChild(new StoryListElement(storyId));
-  	});
-  	topStoriesElement.appendChild(fragment);
-  	startStoryIntersectionObservers();
+    const fragment = document.createDocumentFragment();
+    newState.map((storyId) => {
+      fragment.appendChild(new StoryListElement(storyId));
+    });
+    topStoriesElement.appendChild(fragment);
+    startStoryIntersectionObservers();
   });
 
   /**
    * Render `StoryListElement`s for new stories
    */
   const newStoryIds = reactive([], (newState) => {
-  	const newStoriesElement = document.querySelector("#new-outlet");
-  	newStoriesElement.innerHTML = "";
+    const newStoriesElement = document.querySelector("#new-outlet");
+    newStoriesElement.innerHTML = "";
 
-  	const fragment = document.createDocumentFragment();
-  	newState.map((storyId) => {
-  		fragment.appendChild(new StoryListElement(storyId));
-  	});
-  	newStoriesElement.appendChild(fragment);
-  	startStoryIntersectionObservers();
+    const fragment = document.createDocumentFragment();
+    newState.map((storyId) => {
+      fragment.appendChild(new StoryListElement(storyId));
+    });
+    newStoriesElement.appendChild(fragment);
+    startStoryIntersectionObservers();
   });
 
   /**
    * Render `StoryListElement`s for best stories
    */
   const bestStoryIds = reactive([], (newState) => {
-  	const bestStoriesElement = document.querySelector("#best-outlet");
-  	bestStoriesElement.innerHTML = "";
+    const bestStoriesElement = document.querySelector("#best-outlet");
+    bestStoriesElement.innerHTML = "";
 
-  	const fragment = document.createDocumentFragment();
-  	newState.map((storyId) => {
-  		fragment.appendChild(new StoryListElement(storyId));
-  	});
-  	bestStoriesElement.appendChild(fragment);
-  	startStoryIntersectionObservers();
+    const fragment = document.createDocumentFragment();
+    newState.map((storyId) => {
+      fragment.appendChild(new StoryListElement(storyId));
+    });
+    bestStoriesElement.appendChild(fragment);
+    startStoryIntersectionObservers();
   });
 
   /**
    * Render `StoryListElement`s for ask stories
    */
   const askStoryIds = reactive([], (newState) => {
-  	const askStoriesElement = document.querySelector("#ask-outlet");
-  	askStoriesElement.innerHTML = "";
+    const askStoriesElement = document.querySelector("#ask-outlet");
+    askStoriesElement.innerHTML = "";
 
-  	const fragment = document.createDocumentFragment();
-  	newState.map((storyId) => {
-  		fragment.appendChild(new StoryListElement(storyId));
-  	});
-  	askStoriesElement.appendChild(fragment);
-  	startStoryIntersectionObservers();
+    const fragment = document.createDocumentFragment();
+    newState.map((storyId) => {
+      fragment.appendChild(new StoryListElement(storyId));
+    });
+    askStoriesElement.appendChild(fragment);
+    startStoryIntersectionObservers();
   });
 
   /**
    * Render `StoryListElement`s for show stories
    */
   const showStoryIds = reactive([], (newState) => {
-  	const showStoriesElement = document.querySelector("#show-outlet");
-  	showStoriesElement.innerHTML = "";
+    const showStoriesElement = document.querySelector("#show-outlet");
+    showStoriesElement.innerHTML = "";
 
-  	const fragment = document.createDocumentFragment();
-  	newState.map((storyId) => {
-  		fragment.appendChild(new StoryListElement(storyId));
-  	});
-  	showStoriesElement.appendChild(fragment);
-  	startStoryIntersectionObservers();
+    const fragment = document.createDocumentFragment();
+    newState.map((storyId) => {
+      fragment.appendChild(new StoryListElement(storyId));
+    });
+    showStoriesElement.appendChild(fragment);
+    startStoryIntersectionObservers();
   });
 
   /**
@@ -3733,62 +3732,62 @@
    * memory whenever it changes.
    */
   const jobStoryIds = reactive([], (newState) => {
-  	const jobStoriesElement = document.querySelector("#job-outlet");
-  	jobStoriesElement.innerHTML = "";
+    const jobStoriesElement = document.querySelector("#job-outlet");
+    jobStoriesElement.innerHTML = "";
 
-  	const fragment = document.createDocumentFragment();
-  	newState.map((storyId) => {
-  		fragment.appendChild(new StoryListElement(storyId));
-  	});
-  	jobStoriesElement.appendChild(fragment);
-  	startStoryIntersectionObservers();
+    const fragment = document.createDocumentFragment();
+    newState.map((storyId) => {
+      fragment.appendChild(new StoryListElement(storyId));
+    });
+    jobStoriesElement.appendChild(fragment);
+    startStoryIntersectionObservers();
   });
 
   const onNavigationChange = (newState) => {
-  	updateDOMForNavigationOption(newState);
-  	applyCurrentNavigationStateToURL();
-  	scrollToTop();
+    updateDOMForNavigationOption(newState);
+    applyCurrentNavigationStateToURL();
+    scrollToTop();
 
-  	switch (newState) {
-  	case NAVIGATION_OPTIONS.TOP:
-  		API.topStories().then((storyIds) => {
-  			topStoryIds.update(storyIds);
-  		});
-  		break;
-  	case NAVIGATION_OPTIONS.NEW:
-  		API.newStories().then((storyIds) => {
-  			newStoryIds.update(storyIds);
-  		});
-  		break;
-  	case NAVIGATION_OPTIONS.BEST:
-  		API.bestStories().then((storyIds) => {
-  			bestStoryIds.update(storyIds);
-  		});
-  		break;
-  	case NAVIGATION_OPTIONS.ASK:
-  		API.askStories().then((storyIds) => {
-  			askStoryIds.update(storyIds);
-  		});
-  		break;
-  	case NAVIGATION_OPTIONS.SHOW:
-  		API.showStories().then((storyIds) => {
-  			showStoryIds.update(storyIds);
-  		});
-  		break;
-  	case NAVIGATION_OPTIONS.JOB:
-  		API.jobStories().then((storyIds) => {
-  			jobStoryIds.update(storyIds);
-  		});
-  		break;
-  	case NAVIGATION_OPTIONS.FAVORITES:
-  		renderFavorites();
-  		startStoryIntersectionObservers();
-  		break;
-  	case NAVIGATION_OPTIONS.SETTINGS:
-  		return;
-  	default:
-  		onNavigationChange(NAVIGATION_OPTIONS.TOP);
-  	}
+    switch (newState) {
+      case NAVIGATION_OPTIONS.TOP:
+        API.topStories().then((storyIds) => {
+          topStoryIds.update(storyIds);
+        });
+        break;
+      case NAVIGATION_OPTIONS.NEW:
+        API.newStories().then((storyIds) => {
+          newStoryIds.update(storyIds);
+        });
+        break;
+      case NAVIGATION_OPTIONS.BEST:
+        API.bestStories().then((storyIds) => {
+          bestStoryIds.update(storyIds);
+        });
+        break;
+      case NAVIGATION_OPTIONS.ASK:
+        API.askStories().then((storyIds) => {
+          askStoryIds.update(storyIds);
+        });
+        break;
+      case NAVIGATION_OPTIONS.SHOW:
+        API.showStories().then((storyIds) => {
+          showStoryIds.update(storyIds);
+        });
+        break;
+      case NAVIGATION_OPTIONS.JOB:
+        API.jobStories().then((storyIds) => {
+          jobStoryIds.update(storyIds);
+        });
+        break;
+      case NAVIGATION_OPTIONS.FAVORITES:
+        renderFavorites();
+        startStoryIntersectionObservers();
+        break;
+      case NAVIGATION_OPTIONS.SETTINGS:
+        return;
+      default:
+        onNavigationChange(NAVIGATION_OPTIONS.TOP);
+    }
   };
 
   /**
@@ -3800,8 +3799,8 @@
    * @param {function} sideEffect
    */
   const navigationState = reactive(
-  	NAVIGATION_OPTIONS.TOP,
-  	onNavigationChange
+    NAVIGATION_OPTIONS.TOP,
+    onNavigationChange
   );
 
   /**
@@ -3810,9 +3809,9 @@
    * @returns {void}
    */
   function launchStoryModal(story) {
-  	const node = document.body.appendChild(new StoryModal(story));
-  	// TODO: find a way to make modal dragable in constructor
-  	makeModalDragable(node);
+    const node = document.body.appendChild(new StoryModal(story));
+    // TODO: find a way to make modal dragable in constructor
+    makeModalDragable(node);
   }
 
   /**
@@ -3821,23 +3820,23 @@
    * @returns {void}
    */
   function startStoryIntersectionObservers() {
-  	const observer = new IntersectionObserver(
-  		(entries) => {
-  			entries.forEach((entry) => {
-  				if (entry.isIntersecting) {
-  					if (storyElementLoadingCallbacks[entry.target.id])
-  						storyElementLoadingCallbacks[entry.target.id]();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            if (storyElementLoadingCallbacks[entry.target.id])
+              storyElementLoadingCallbacks[entry.target.id]();
 
-  					observer.unobserve(entry.target);
-  				}
-  			});
-  		},
-  		{ rootMargin: "0px 0px 100px 0px" }
-  	);
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { rootMargin: "0px 0px 100px 0px" }
+    );
 
-  	document.querySelectorAll(".story-container").forEach((story) => {
-  		observer.observe(story);
-  	});
+    document.querySelectorAll(".story-container").forEach((story) => {
+      observer.observe(story);
+    });
   }
 
   /**
@@ -3845,20 +3844,20 @@
    * @returns {void}
    */
   async function main() {
-  	initializeLoadingAnimation();
-  	attachNavigationButtonClickListeners();
-  	loadSettingsFromLocalStorage();
-  	initializeSettings();
-  	renderFavorites();
-  	attachFavoritesListeners();
-  	launchModalsFromNavigationParams();
-  	initLinkClickInterceptBehavior();
-  	applyInitialNavigationState();
+    initializeLoadingAnimation();
+    attachNavigationButtonClickListeners();
+    loadSettingsFromLocalStorage();
+    initializeSettings();
+    renderFavorites();
+    attachFavoritesListeners();
+    launchModalsFromNavigationParams();
+    initLinkClickInterceptBehavior();
+    applyInitialNavigationState();
   }
 
   // Call main when other data loaded
   document.onreadystatechange = () => {
-  	if (document.readyState === "complete") main();
+    if (document.readyState === "complete") main();
   };
 </script>
 
