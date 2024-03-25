@@ -1252,6 +1252,22 @@
 
 <!-- Utils -->
 <script type="text/javascript">
+	const _$refs = {}
+
+	/**
+	 * Returns a reference to a DOM element with caching if it has been accesed
+	 * previously. This should only be used for high level elements not expected 
+	 * to change or re-render.
+	 * @param {string} query
+	 * @returns {HTMLElement}
+	 */
+	function $ref(query) {
+		if (query in _$refs) return _$refs[query];
+		const ref = document.querySelector(query);
+		_$refs[query] = ref;
+		return ref;
+	}
+
 	/**
 	 * Loop utility, does `callback` `times` times
 	 * @param {number} times
@@ -2473,15 +2489,13 @@
 	function updateDOMForNavigationOption(option) {
 		Object.entries(NAVIGATION_OPTIONS).forEach(([_, value]) => {
 			if (value === option) {
-				document
-					.querySelector(`#nav-button-${value}`)
+				$ref(`#nav-button-${value}`)
 					.classList.add("text-link-button-selected");
 			} else {
-				document
-					.querySelector(`#nav-button-${value}`)
+				$ref(`#nav-button-${value}`)
 					.classList.remove("text-link-button-selected");
 			}
-			document.querySelector(`#${value}-outlet`).style.display =
+			$ref(`#${value}-outlet`).style.display =
 				value === option ? "block" : "none";
 		});
 	}
@@ -2618,8 +2632,7 @@
 	 */
 	function attachNavigationButtonClickListeners() {
 		Object.entries(NAVIGATION_OPTIONS).forEach(([_, value]) => {
-			document
-				.querySelector(`#nav-button-${value}`)
+			$ref(`#nav-button-${value}`)
 				.addEventListener("click", () => {
 					navigationState.update(value);
 				});
@@ -2747,7 +2760,7 @@
 	 * @returns {void}
 	 */
 	function scrollToTop() {
-		document.querySelector("body").scrollIntoView({ behavior: "smooth" });
+		$ref("body").scrollIntoView({ behavior: "smooth" });
 	}
 
 	/**
@@ -2756,7 +2769,7 @@
 	 */
 	function showLoadingAnimation() {
 		scrollToTop();
-		document.querySelector("#loading-outlet").style.display = "block";
+		$ref("#loading-outlet").style.display = "block";
 	}
 
 	/**
@@ -2765,7 +2778,7 @@
 	 */
 	function hideLoadingAnimation() {
 		scrollToTop();
-		document.querySelector("#loading-outlet").style.display = "none";
+		$ref("#loading-outlet").style.display = "none";
 	}
 
 	/**
@@ -2824,7 +2837,7 @@
 		loop(LOADING_ANIMATION_NUMBER_OF_ROWS, (i) =>
 			fragment.append(new LoadingStoryElement())
 		);
-		document.querySelector("#loading-outlet").appendChild(fragment);
+		$ref("#loading-outlet").appendChild(fragment);
 	}
 </script>
 
@@ -3561,7 +3574,7 @@
 			applyCurrentNavigationStateToURL();
 			scrollToTop();
 
-			const outlet = document.querySelector(`#${newState}-outlet`);
+			const outlet = $ref(`#${newState}-outlet`);
 			const fragment = document.createDocumentFragment();
 
 			const renderStoriesToOutlet = (storyIds) => {
