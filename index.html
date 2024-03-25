@@ -3148,7 +3148,7 @@
 		// Assign random string for loading effect
 		storyContainer.innerHTML = `<span>${getRandomLoadingString()}}</span>`;
 
-		const renderStory = (story) => {
+		const render = (story) => {
 			if (story.deleted) {
 				storyContainer.innerHTML = "<span>[DELETED]</span>";
 				return;
@@ -3168,7 +3168,7 @@
 
 		const loadStory = () => {
 			API.item(storyId)
-				.then(async (story) => renderStory(story))
+				.then(async (story) => render(story))
 				.catch((error) => {
 					console.error(error);
 					storyContainer.firstChild.textContent = "Eᴙᴙ0ᴙ...";
@@ -3177,7 +3177,7 @@
 
 		if (loadContentImmediately && !storyPreloaded) loadStory();
 
-		if (storyPreloaded) renderStory(storyPreloaded);
+		if (storyPreloaded) render(storyPreloaded);
 
 		storyElementLoadingCallbacks[storyId] = loadStory;
 
@@ -3455,7 +3455,7 @@
 		 * @param {HTMLElement} parent
 		 * @returns {void}
 		 */
-		const loadCommentsAsync = async (itemId, parent) => {
+		const renderCommentsAsync = async (itemId, parent) => {
 			const currentStory = await API.item(itemId);
 
 			if (!currentStory.kids) return; // Base case for end of coment tree
@@ -3475,7 +3475,7 @@
             <p class="comment-text">${sanitize(comment.text)}</p>
             <div class="comments-container"></div>
           `;
-				loadCommentsAsync(
+				renderCommentsAsync(
 					comment.id,
 					commentElement.querySelector(".comments-container")
 				);
@@ -3493,7 +3493,8 @@
 			});
 		};
 
-		loadCommentsAsync(story.id, modal.querySelector(".comments"));
+		// Trigger load of comments tree
+		renderCommentsAsync(story.id, modal.querySelector(".comments"));
 
 		document.body.appendChild(modal);
 		addStoryModalToURL(story.id);
@@ -3548,6 +3549,12 @@
 	});
 
 
+	/**
+	 * Renders the page according to current navigation state.
+	 * Most of the behavior on the page originates from this function.
+	 * @param {string} newState
+	 * @returns {void}
+	 */
 	const onNavigationChange = (newState) => {
 		try {
 			updateDOMForNavigationOption(newState);
