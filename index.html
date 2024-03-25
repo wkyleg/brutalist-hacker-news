@@ -1147,7 +1147,6 @@
 
 <!-- API -->
 <script type="text/javascript">
-	// TODO: remove coupling with DOM state
 	async function getRequestWithLoadingAnimation(url) {
 		showLoadingAnimation();
 		let response;
@@ -1252,6 +1251,11 @@
 		}
 	};
 
+	/*
+	 * Standard Date format
+	 * @param {number} timePosted as Unix Time in seconds
+	 * @returns {string}
+	 */
 	function formatDate(timePosted) {
 		const date = new Date(timePosted * 1000);
 		const year = date.getFullYear();
@@ -1339,6 +1343,7 @@
 		return doc.body.innerHTML;
 	}
 
+
 	function shareOnTwitter(url) {
 		window.open(
 			`${TWITTER_SHARE_URL}${url || window.location.href}`,
@@ -1417,13 +1422,61 @@
 		}
 	}
 
-	function downloadJSONAsFile(json) {
+	const SHARE_OPTIONS = [
+		{
+			name: "Twitter/X",
+			callback: shareOnTwitter,
+		},
+		{
+			name: "Facebook",
+			callback: shareOnFacebook,
+		},
+		{
+			name: "LinkedIn",
+			callback: shareOnLinkedIn,
+		},
+		{
+			name: "WhatsApp",
+			callback: shareOnWhatsApp,
+		},
+		{
+			name: "Reddit",
+			callback: shareOnReddit,
+		},
+		{
+			name: "Telegram",
+			callback: shareOnTelegram,
+		},
+		{
+			name: "Email",
+			callback: shareViaEmail,
+		},
+		{
+			name: "Pintrest",
+			callback: shareOnPintrest,
+		},
+		{
+			name: "Tumblr",
+			callback: shareOnTumblr,
+		},
+		{
+			name: "Built-in Share",
+			callback: builtInShare,
+		},
+	]
+
+	/**
+	 * Downloads a JSON object as a file
+	 * @param {string} url
+	 * @returns {void}
+	 */
+	function downloadJSONAsFile(json, filename = "data.json") {
 		const data = JSON.stringify(json, null, 2);
 		const blob = new Blob([data], { type: "application/json" });
 		const url = URL.createObjectURL(blob);
 		const a = document.createElement("a");
 		a.href = url;
-		a.download = "data.json";
+		a.download = filename;
 		a.click();
 		URL.revokeObjectURL(url);
 	}
@@ -1461,14 +1514,33 @@
 
 <!-- Favorites -->
 <script>
+	/*
+	 * Favorites are stored in localStorage as an array of story IDs
+	 * Each story ID is a number
+	 * @returns {Array<number>}
+	 */
 	const getFavorites = () =>
 		JSON.parse(localStorage.getItem("favorites")) || [];
 
+	/*
+	 * Set the favorites in localStorage
+	 * @param {Array<number>} favorites
+	 * @returns {void}
+	 */
 	const setFavorites = (favorites) =>
 		localStorage.setItem("favorites", JSON.stringify(favorites));
 
+	/*
+	 * Check if a story is favorited
+	 * @param {number} storyId
+	 * @returns {boolean}
+	 */
 	const isStoryFavorited = (storyId) => getFavorites().includes(storyId);
 
+	/*
+	 * Render the favorites from local storage on the DOM
+	 * @returns {HTMLElement}
+	 */
 	function renderFavorites() {
 		const favoriteStoriesElement =
 			document.querySelector("#favorites-outlet");
@@ -1481,6 +1553,11 @@
 		return favoriteStoriesElement;
 	}
 
+	/*
+	 * Favorite a story by ID
+	 * @param {number} storyId
+	 * @returns {void}
+	 */
 	function favoriteStory(storyId) {
 		const favorites = getFavorites();
 		if (favorites.includes(storyId)) return;
@@ -1489,18 +1566,35 @@
 		renderFavorites();
 	}
 
+	/*
+	 * Unfavorite a story by ID
+	 * @param {number} storyId
+	 * @returns {void}
+	 */
 	function unfavoriteStory(storyId) {
 		setFavorites(getFavorites().filter((id) => id !== storyId));
 		renderFavorites();
 	}
 
+	/*
+	 * Clear all favorites from local storage
+	 * @returns {void}
+	 */
 	function clearAllFavorites() {
 		setFavorites([]);
 		renderFavorites();
 	}
 
-	const downloadFavorites = () => downloadJSONAsFile(getFavorites());
+	/*
+	 * Download current favorites as a JSON file
+	 * @returns {void}
+	 */
+	const downloadFavorites = () => downloadJSONAsFile(getFavorites(), "favorites.json");
 
+	/*
+	 * Attach event listeners for favorites buttons on settings page
+	 * @returns {void}
+	 */
 	const attachFavoritesListeners = () => {
 		document
 			.querySelector("#clear-all-favorites-button")
@@ -1524,19 +1618,15 @@
 		COLOR_TEXT_MAIN: "--color-text-main",
 	};
 
-	const SETTING__DEFAULT_VALUES = {
-		[SETTINGS.COLOR_PRIMARY]: "#e30613",
-		[SETTINGS.COLOR_SECONDARY]: "#ffed00",
-		[SETTINGS.COLOR_ACCENT_1]: "#f6d365",
-		[SETTINGS.COLOR_ACCENT_2]: "#fda085",
-		[SETTINGS.COLOR_DARK]: "#3c3c3c",
-		[SETTINGS.COLOR_LIGHT]: "#FFFFFF",
-		[SETTINGS.COLOR_TEXT_MAIN]: "#2f4f4f",
-	};
-
 	const themes = {
 		default: {
-			...SETTING__DEFAULT_VALUES,
+			"--color-primary": "#e30613",
+			"--color-secondary": "#ffed00",
+			"--color-accent-1": "#f6d365",
+			"--color-accent-2": "#fda085",
+			"--color-dark": "#3c3c3c",
+			"--color-light": "#FFFFFF",
+			"--color-text-main": "#2f4f4f",
 		},
 		hacker: {
 			"--color-primary": "#00ff00",
@@ -2181,6 +2271,9 @@
 		},
 	};
 
+	/*
+	 * Apply theme to CSS variables in document
+	 */
 	const applyTheme = (theme) => {
 		Object.entries(theme).map(([key, value]) => {
 			setCSSVariable(key, value);
@@ -2189,6 +2282,11 @@
 		});
 	};
 
+	/**
+	 * Convert RGBA color string to HEX color string
+	 * @param {string} rgba
+	 * @returns {string}
+	 */
 	const convertToHexString = (rgba) => {
 		const [r, g, b, a] = rgba
 			.substring(5, rgba.length - 1)
@@ -2199,17 +2297,32 @@
 		).toString(16)}`;
 	};
 
+	/**
+	 * Convert color string in HEX <OR> RGBA format to HEX color string
+	 * @param {string} string
+	 * @returns {string}
+	 */
 	const asColorSelectorInputValue = (string) => {
 		if (string.startsWith("#")) return string;
 		return convertToHexString(string);
 	};
 
+	/**
+	 * Return current value of CSS variable
+	 */
 	const getCSSVariable = (variable) =>
 		getComputedStyle(document.documentElement).getPropertyValue(variable);
 
+	/**
+	 * Set CSS variable `variable` to `value`
+	 */
 	const setCSSVariable = (variable, value) =>
 		document.documentElement.style.setProperty(variable, value);
 
+	/**
+	 * Load current CSS settings from local storage and apply them to the document
+	 * @returns {void}
+	 */
 	const loadSettingsFromLocalStorage = () => {
 		Object.entries(SETTINGS).forEach(([_, value]) => {
 			const storedValue = localStorage.getItem(value);
@@ -2219,40 +2332,72 @@
 		});
 	};
 
+	/**
+	 * Save setting to local storage
+	 * @param {string} setting
+	 * @param {string} value
+	 * @returns {void}
+	 */
 	const saveSettingToLocalStorage = (setting, value) => {
 		localStorage.setItem(setting, value);
 	};
 
+	/**
+	 * Apply theme setting to document and save preference in local storage
+	 */
 	const changeSetting = (setting, value) => {
 		setCSSVariable(setting, value);
 		saveSettingToLocalStorage(setting, value);
 	};
 
+	/**
+	 * Update setting input with current value
+	 * @param {string} setting
+	 * @returns {void}
+	 */
 	const updateSettingInputWithCurrentValue = (setting) => {
 		document.querySelector(`#setting-input${setting}`).value =
 			asColorSelectorInputValue(getCSSVariable(setting));
 	};
 
+	/**
+	 * Reset setting to default value
+	 * @param {string} setting
+	 * @returns {void}
+	 */
 	const resetSetting = (setting) => {
-		changeSetting(setting, SETTING__DEFAULT_VALUES[setting]);
+		changeSetting(setting, themes.default[setting]);
 		updateSettingInputWithCurrentValue(setting);
 	};
 
+	/**
+	 * Download current color theme as JSON file
+	 * @returns {void}
+	 */
 	const downloadCurrentColorTheme = () => {
 		const theme = {};
 		Object.entries(SETTINGS).forEach(([_, value]) => {
 			theme[value] = getCSSVariable(value);
 		});
-		downloadJSONAsFile(theme);
+		const themeName = prompt("Enter name for theme");
+		downloadJSONAsFile(theme, themeName);
 	};
 
+
+	/**
+	 * Initializes settings
+	 * Reads users settings preferences from local storage and applies them to the document
+	 * Also attached click event handlers for settings page such as theme buttons
+	 * and share button
+	 * @returns {void}
+	 */
 	const initializeSettings = () => {
 		Object.entries(SETTINGS).forEach(([_, value]) => {
 			try {
 				const storedValue = localStorage.getItem(value);
 				if (!storedValue) {
-					setCSSVariable(value, SETTING__DEFAULT_VALUES[value]);
-					saveSettingToLocalStorage(value, SETTING__DEFAULT_VALUES[value]);
+					setCSSVariable(value, themes.default[value]);
+					saveSettingToLocalStorage(value, themes.default[value]);
 				}
 
 				updateSettingInputWithCurrentValue(value);
@@ -2328,6 +2473,9 @@
 		});
 	}
 
+	/**
+	 * Launch modals corresponding to search params in URL
+	 */
 	function launchModalsFromNavigationParams() {
 		const currentURL = new URL(window.location.href);
 
@@ -2349,6 +2497,11 @@
 		}
 	}
 
+	/**
+	 * Adds story modal to URL search params
+	 * @param {number} storyId
+	 * @returns {void}
+	 */
 	function addStoryModalToURL(storyId) {
 		const currentURL = new URL(window.location.href);
 		const currentStoryModalIdList =
@@ -2367,6 +2520,11 @@
 		window.history.pushState({}, "", currentURL);
 	}
 
+	/**
+	 * Removes story modal from URL search params
+	 * @param {number} storyId
+	 * @returns {void}
+	 */
 	function removeStoryModalFromURL(storyId) {
 		const currentURL = new URL(window.location.href);
 
@@ -2388,6 +2546,11 @@
 		window.history.pushState({}, "", currentURL);
 	}
 
+	/**
+	 * Adds profile modal to URL search params
+	 * @param {number} profileId
+	 * @returns {void}
+	 */
 	function addProfileModalToURL(profileId) {
 		const currentURL = new URL(window.location.href);
 		const currentProfileModalIdList =
@@ -2408,6 +2571,11 @@
 		window.history.pushState({}, "", currentURL);
 	}
 
+	/**
+	 * Removes profile modal from URL search params
+	 * @param {number} profileId
+	 * @returns {void}
+	 */
 	function removeProfileModalFromURL(profileId) {
 		const currentURL = new URL(window.location.href);
 
@@ -2445,6 +2613,10 @@
 		});
 	}
 
+	/**
+	 * Trigger initial page render corresponding to navigation state
+	 * @returns {void}
+	 */
 	function applyInitialNavigationState() {
 		const currentURL = new URL(window.location.href);
 		const currentPath = currentURL.pathname.split("/").pop();
@@ -2455,6 +2627,9 @@
 		}
 	}
 
+	/**
+	 * Apply current navigation state to window history
+	 */
 	function applyCurrentNavigationStateToURL() {
 		const currentURL = new URL(window.location.href);
 		const currentPath = currentURL.pathname.split("/").pop();
@@ -2488,7 +2663,9 @@
 			// Make sure this ignores events from nav buttons
 			if (event.target.tagName === "NAV") {
 				// Propagate click event to button and handle normally
-				// TODO: handle this bug better
+				// TODO: handle this bug better, the touch event overrides button
+				// events in modals
+				// NOTE: the css z-index behavior may have fixed this
 				event.target.click();
 				return;
 			}
@@ -2585,7 +2762,7 @@
 	 * @returns {string}
 	 */
 	function generateLoadingString(length) {
-		// TODO: rewrite with reduce
+		// Use for loop over map for performance
 		let result = "";
 		for (let i = 0; i < length; i++) {
 			result += ANIMATION_CHARACTERS_STRING.charAt(
@@ -2598,9 +2775,9 @@
 	/**
 	 * Precomputes loading strings for the loading animation
 	 * @returns {Promise<string[]>}
-	 * TODO:reqrite with loop
 	 */
 	async function precomputeLoadingStrings() {
+		// Use for loop over map for performance
 		const loadingStrings = [];
 		for (let i = 0; i < TOTAL_ANIMATION_STRINGS; i++) {
 			loadingStrings.push(
@@ -2646,6 +2823,16 @@
 	 */
 	const storyElementLoadingCallbacks = {};
 
+	/**
+	 * Handle sizing of modal according to screen width
+	 * @param {HTMLElement} modal
+	 * @param {string} mobileHeight
+	 * @param {string} mobileWidth
+	 * @param {string} desktopHeight
+	 * @param {string} desktopWidth
+	 * @returns {void}
+	 * TODO: refactor because these params aren't needed
+	 */
 	function setModalDisplayDefaultSize(
 		modal,
 		mobileHeight = "99%",
@@ -2681,6 +2868,12 @@
 		}
 	}
 
+	/**
+	 * Maximize modal to take up the entire screen
+	 * @param {HTMLElement} modal
+	 * @returns {void}
+	 * TODO: Remove mobile code check, it's not needed and less accurate
+	 */
 	function maximizeModal(modal) {
 		if (isMobileDevice()) {
 			modal.style.width = "99%";
@@ -2704,12 +2897,18 @@
 	 */
 	function isModalMaximized(modal) {
 		const rect = modal.getBoundingClientRect();
+		// TODO: save threshhold as constant
 		return (
 			rect.width > window.innerWidth * 0.9 ||
 			rect.height > window.innerHeight * 0.9
 		);
 	}
 
+	/**
+	 * Double tap on modal header to resize
+	 * @param {HTMLElement} modal
+	 * @returns {void}
+	 */
 	function useModalHeaderDoubleTapResize(modal) {
 		modal
 			.querySelector(".modal-window-title")
@@ -2724,6 +2923,10 @@
 
 	// TODO: reqrite modal share and maximize listeners to be reusable
 
+	/**
+	 * Modal for social sharing
+	 * @returns {HTMLElement}
+	 */
 	function ShareModal() {
 		const modal = document.createElement("div");
 		modal.classList.add(
@@ -2837,6 +3040,11 @@
 		// TODO: find a way to make modal dragable in constructor
 	}
 
+	/**
+	 * Element for comments on items/stories
+	 * @param {object} story
+	 * @returns {HTMLElement}
+	 */
 	function CommentListElement(item) {
 		const commentContainer = document.createElement("div");
 		commentContainer.id = item.id;
@@ -2862,6 +3070,12 @@
 
 	const userProfileItemCallbacks = {};
 
+	/*
+	 * Element for items submitted by a user.
+	 * Will render comment items for submitted comments, and story items for submitted stories.
+	 * @param {number} itemId
+	 * @returns {HTMLElement}
+	 */
 	function UserSubmittedItemElement(itemId) {
 		const storyContainer = document.createElement("div");
 		storyContainer.id = itemId;
@@ -2900,7 +3114,7 @@
 	}
 
 	/**
-	 * Story list element for a hacker news story
+	 * Story list element for a Hacker News story/item
 	 * @param {number} storyId
 	 * @param {boolean} loadContentImmediately
 	 * @returns {HTMLElement}
@@ -2910,7 +3124,6 @@
 		loadContentImmediately = false,
 		storyPreloaded = undefined
 	) {
-		// Create html element for story
 		const storyContainer = document.createElement("div");
 		storyContainer.id = storyId;
 		storyContainer.classList.add("item-title-preview");
@@ -2954,6 +3167,11 @@
 		return storyContainer;
 	}
 
+	/**
+	 * Modal for a Hacker News user and items/stories/comments they have submitted
+	 * @param {object} story
+	 * @returns {HTMLElement}
+	 */
 	function UserModal(userId) {
 		const modal = document.createElement("div");
 		modal.classList.add("modal", "title-actions-modal", "use-gpu-rendering");
@@ -3023,6 +3241,8 @@
 				userSubmitted.appendChild(new UserSubmittedItemElement(storyId));
 			});
 
+			// Load items as they come into view. Users can have submitted 
+			// thosands of items so this needs to be throttled
 			const submittedStoriesObserver = new IntersectionObserver(
 				(entries) => {
 					entries.forEach((entry) => {
@@ -3053,6 +3273,12 @@
 		addProfileModalToURL(userId);
 	}
 
+	/**
+	 * Modal that shows iframe of a link that a user clicked on in other modal
+	 * regarding the link.
+	 * @param {string} url
+	 * @returns {HTMLElement}
+	 */
 	function LinkModal(url) {
 		const modal = document.createElement("div");
 		modal.classList.add(
@@ -3288,15 +3514,25 @@
 			if (loadingIndicator) loadingIndicator.style.display = "none";
 		};
 
+		/*
+		 * Recursive function to load comments asynchronously
+		 * Will load comments for `itemId` and assign to parent element, child
+		 * items will render when ready
+		 * @param {number} itemId
+		 * @param {HTMLElement} parent
+		 * @returns {void}
+		 */
 		const loadCommentsAsync = async (itemId, parent) => {
 			const currentStory = await API.item(itemId);
 
 			if (!currentStory.kids) return; // Base case for end of coment tree
 
+			// Load all child comments in parallel
 			const comments = await Promise.all(
 				currentStory.kids.map((commentId) => API.item(commentId))
 			);
 
+			// Render each comment and load its children recursively without blocking
 			comments.forEach((comment) => {
 				if (!comment || comment.deleted) return; // Skip if comment is null (deleted)
 				const commentElement = document.createElement("div");
@@ -3311,6 +3547,7 @@
 					commentElement.querySelector(".comments-container")
 				);
 
+				// Listener for user modal
 				commentElement
 					.querySelector(".comment-by")
 					.addEventListener("click", () => {
@@ -3332,13 +3569,14 @@
 
 	/**
 	 * Loading version of normal story element that produces text glitch effect
+	 * These are used while top level pages are loading.
 	 * @returns {HTMLElement}
 	 */
 	function LoadingStoryElement() {
 		const loadingContainer = document.createElement("div");
 		loadingContainer.classList.add("item-title-preview");
 
-		const animationRender = () =>
+		const render = () =>
 		(loadingContainer.innerHTML = `<span>${generateLoadingString(
 			getRandomNumberBetween(
 				LOADING_STRING_MIN_LENGTH,
@@ -3353,12 +3591,13 @@
 			LOADING_STORY_ANIMATION_REFRESH_INTERVAL_MAXIMUM
 		);
 
+		// Trigger glitch animation at random interval for element
 		const animationUpdateInterval = setInterval(
-			animationRender,
+			render,
 			animationSpeed
 		);
 
-		animationRender();
+		render();
 
 		return loadingContainer;
 	}
