@@ -517,7 +517,6 @@
 	}
 
 	@keyframes typing {
-
 		100%,
 		90% {
 			width: 100%
@@ -525,7 +524,6 @@
 	}
 
 	@keyframes caret {
-
 		0%,
 		100% {
 			box-shadow: .66rem 0 0 transparent
@@ -1125,6 +1123,14 @@
 	const LOADING_STORY_ANIMATION_REFRESH_INTERVAL_MAXIMUM = 2_000;
 	const LOADING_ANIMATION_NUMBER_OF_ROWS = 50;
 	const MODAL_POSITION_RANDOM_OFFSET = 10;
+	const MODAL_FULL_SIZE_WITH_BORDER_COMPUTATION = "calc(100vw - var(--modal-border-width) - var(--modal-border-width))";
+	const SHARE_MODAL_HEIGHT = "42%";
+	const SHARE_MODAL_WIDTH = "16.6%";
+	const DESKTOP_MODAL_DEFAULT_SIZE = "50%";
+	const DESKTOP_MODAL_DEFAULT_POSITION = 25;
+	const MODAL_MAXIMIZATION_THRESHOLD = 0.9;
+	const MODAL_ICON_IS_FAVORITED = '♥';
+	const MODAL_ICON_NOT_FAVORITED = '♡';
 	const ANIMATION_CHARACTERS_STRING =
 		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+=-[]{}|;:,.<>?♥♦♣♠•◘○◆☻☺♂♀♪♫☼►◄↕‼¶§▬↨↑↓→←∟↔▲▼ァアィイゥウェエォオカガキギクゲゴサザシジスゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャユョヨラリルレロヮワヰヱヲン々〆〤￥「」『』【】〒〓─━│┃┄┅┆┇┈┉┊┋┌┍┎┏┐┑┒┓└┕┖┗┘┙┚┛├┝┞┟┠┡┢┣┤┥┦┧┨┩┪┫┬┭┮┯┰┱┲┳┴┵┶┷┸┹┺┻┼┽┾┿╀╁╂╃╄╅╆╇╈╉╊╋╌╍╎╏═║╒╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡╢╣╤╥╦╧╨╩╪╫╬§¶☊☋☌☍ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθικλμνξοπρςστυφχψω←↑→↓↔↕↖↗↘↙↚↛↜↝↞↟↠↡↢↣↤↥↦↧↨↩↪↫↬↭↮↯↰↱↲↳↴↵↶↷↸↹↺↻↼↽↾↿⇀⇁⇂⇃⇄⇅⇆⇇⇈⇉⇊⇋⇌⇍⇎⇏⇐⇑⇒⇓⇔⇕⇖⇗⇘⇙⇚⇛⇜⇝⇞⇟⇠⇡⇢⇣⇤⇥⇦⇧⇨⇩⇪⌨";
 	const LINK_SHARE_DESCRIPTION =
@@ -1510,7 +1516,7 @@
 					// Check for data-allow-external="true"
 					if (target.getAttribute("data-allow-external") === "true")
 						return window.open(target.href, "_blank");
-					launchLinkModal(target.href);
+					new LinkModal(target.href);
 				}
 			}
 		});
@@ -2435,9 +2441,9 @@
 				.addEventListener("click", () => applyTheme(value));
 		});
 
-		document.getElementById("share-website").addEventListener("click", () => {
-			window.launchShareModal();
-		});
+		document.getElementById("share-website").addEventListener("click", () =>
+			new ShareModal()
+		);
 	};
 </script>
 
@@ -2488,7 +2494,7 @@
 		if (storyModalIdList) {
 			const storyIds = storyModalIdList.split(",");
 			storyIds.forEach((storyId) => {
-				API.item(storyId).then((story) => launchStoryModal(story));
+				API.item(storyId).then((story) => new StoryModal(story));
 			});
 		}
 
@@ -2497,7 +2503,7 @@
 		if (profileModalIdList) {
 			const profileIds = profileModalIdList.split(",");
 			profileIds.forEach((profileId) => {
-				launchUserModal(profileId);
+				new UserModal(profileId);
 			});
 		}
 	}
@@ -2650,7 +2656,7 @@
 	 * @param {HTMLElement} element
 	 * @returns {void}
 	 */
-	function makeModalDragable(element) {
+	function useModalDragBehavior(element) {
 		let mousePosition1 = 0,
 			mousePosition2 = 0,
 			mousePosition3 = 0,
@@ -2831,40 +2837,36 @@
 	/**
 	 * Handle sizing of modal according to screen width
 	 * @param {HTMLElement} modal
-	 * @param {string} mobileHeight
-	 * @param {string} mobileWidth
-	 * @param {string} desktopHeight
-	 * @param {string} desktopWidth
+	 * @param {string} height
+	 * @param {string} width
 	 * @returns {void}
 	 * TODO: refactor because these params aren't needed
 	 */
 	function setModalDisplayDefaultSize(
 		modal,
-		mobileHeight = "99%",
-		mobileWidth = "98%",
-		desktopHeight = "50%",
-		desktopWidth = "50%"
+		height = undefined,
+		width = undefined
 	) {
-		// TODO: refactor this
 		if (isMobileDevice()) {
-			modal.style.width =
-				"calc(100vw - var(--modal-border-width) - var(--modal-border-width))";
 			modal.style.height =
-				"calc(100vh - var(--modal-border-width) - var(--modal-border-width))";
+				height || MODAL_FULL_SIZE_WITH_BORDER_COMPUTATION;
+			modal.style.width =
+				width || MODAL_FULL_SIZE_WITH_BORDER_COMPUTATION;
 			modal.style.top = "0";
 			modal.style.left = "0";
 		} else {
-			modal.style.width = desktopWidth;
-			modal.style.height = desktopHeight;
+			modal.style.height = height || DESKTOP_MODAL_DEFAULT_SIZE;
+			modal.style.width = width || DESKTOP_MODAL_DEFAULT_SIZE;
+
 			modal.style.left =
-				25 +
+				DESKTOP_MODAL_DEFAULT_POSITION +
 				getRandomNumberBetween(
 					-MODAL_POSITION_RANDOM_OFFSET,
 					MODAL_POSITION_RANDOM_OFFSET
 				) +
 				"%";
 			modal.style.top =
-				25 +
+				DESKTOP_MODAL_DEFAULT_POSITION +
 				getRandomNumberBetween(
 					-MODAL_POSITION_RANDOM_OFFSET,
 					MODAL_POSITION_RANDOM_OFFSET
@@ -2877,22 +2879,14 @@
 	 * Maximize modal to take up the entire screen
 	 * @param {HTMLElement} modal
 	 * @returns {void}
-	 * TODO: Remove mobile code check, it's not needed and less accurate
 	 */
 	function maximizeModal(modal) {
-		if (isMobileDevice()) {
-			modal.style.width = "99%";
-			modal.style.height = "99%";
-			modal.style.top = "0";
-			modal.style.left = "0";
-		} else {
-			modal.style.width =
-				"calc(100vw - var(--modal-border-width) - var(--modal-border-width))";
-			modal.style.height =
-				"calc(100vh - var(--modal-border-width) - var(--modal-border-width))";
-			modal.style.top = "0";
-			modal.style.left = "0";
-		}
+		modal.style.width =
+			MODAL_FULL_SIZE_WITH_BORDER_COMPUTATION;
+		modal.style.height =
+			MODAL_FULL_SIZE_WITH_BORDER_COMPUTATION;
+		modal.style.top = "0";
+		modal.style.left = "0";
 	}
 
 	/**
@@ -2902,12 +2896,47 @@
 	 */
 	function isModalMaximized(modal) {
 		const rect = modal.getBoundingClientRect();
-		// TODO: save threshhold as constant
 		return (
-			rect.width > window.innerWidth * 0.9 ||
-			rect.height > window.innerHeight * 0.9
+			rect.width > window.innerWidth * MODAL_MAXIMIZATION_THRESHOLD ||
+			rect.height > window.innerHeight * MODAL_MAXIMIZATION_THRESHOLD
 		);
 	}
+
+	/**
+	 * Markup for modal close button
+	 * @returns {string}
+	 */
+	const getModalCloseButtonString = () =>
+		`<nav id="close-button" class="text-link-button" title="Close Modal">[X]</nav>`;
+
+	/**
+	 * Markup for modal maximize button
+	 * @returns {string}
+	 */
+	const getModalMaximizeButtonString = () =>
+		`<nav id="maximize-button" class="text-link-button" title="Toggle Full Screen">[+]</nav>`;
+
+	/**
+	 * Markup for modal open link button
+	 * @returns {string}
+	 */
+	const getModalOpenLinkString = () =>
+		`<nav id="open-link-button" class="text-link-button" title='Open In New Tab'>[⬆️]</nav>`
+
+	/**
+	 * Markup for modal share button
+	 * @returns {string}
+	 */
+	const getModalShareButtonString = () =>
+		`<nav id="share-button" class="text-link-button" title='Share'>[📤]</nav>`;
+
+	/**
+	 * Markup for modal favorite button
+	 * @param {boolean} isFavorited
+	 * @returns {string}
+	 */
+	const getModalFavoriteButtonString = (isFavorited) =>
+		`<nav id="favorite-button" class="text-link-button" title='Save/Unsave Story'>[${isFavorited ? MODAL_ICON_IS_FAVORITED : MODAL_ICON_NOT_FAVORITED}]</nav>`;
 
 	/**
 	 * Double tap on modal header to resize
@@ -2926,7 +2955,56 @@
 			});
 	}
 
-	// TODO: reqrite modal share and maximize listeners to be reusable
+	/**
+	 * Toggle between full and default size on click
+	 * @param {HTMLElement} modal
+	 * @param {function} callback
+	 * @returns {void}
+	 */
+	function useModalHeaderMaximizeButtonBehavior(modal, callback = undefined) {
+		if (!isMobileDevice()) {
+			modal
+				.querySelector("#maximize-button")
+				.addEventListener("click", () => {
+					if (isModalMaximized(modal)) {
+						setModalDisplayDefaultSize(modal);
+					} else {
+						maximizeModal(modal);
+					}
+					if (callback) callback();
+				});
+		}
+	}
+
+	/**
+	 * Close modal and remove from DOM on click
+	 * @param {HTMLElement} modal
+	 * @param {function} callback
+	 * @returns {void}
+	 */
+	function useModalHeaderCloseButtonBehavior(modal, callback = undefined) {
+		modal
+			.querySelector("#close-button")
+			.addEventListener("click", () => {
+				modal.remove();
+				if (callback) callback();
+			});
+
+	}
+
+	/**
+	 * Open Share modal on click
+	 * @param {HTMLElement} modal
+	 * @returns {void}
+	 */
+	function useModalHeaderShareButtonBehavior(modal, callback = undefined) {
+		modal
+			.querySelector("#share-button")
+			.addEventListener("click", () => {
+				new ShareModal();
+				if (callback) callback();
+			});
+	}
 
 	/**
 	 * Modal for social sharing
@@ -2944,13 +3022,8 @@
 		modal.innerHTML = `
       <header class="modal-window-title" role="dialog" aria-modal="true">
         <div class="modal-action-buttons">
-          <nav id="close-button-share" class="text-link-button" title="Close Modal">
-            [X]
-          </nav>
-          ${!isMobileDevice()
-				? "<nav id='modal-window-title-maximize' class='text-link-button' title='Toggle Full Screen'>[+]</nav>"
-				: ""
-			}
+          ${getModalCloseButtonString()}
+          ${!isMobileDevice() ? getModalMaximizeButtonString() : ""}
         </div>
         <div class="title-actions-modal-title">Share</div>
         <div class="spacer"></div>
@@ -2962,30 +3035,10 @@
       `;
 
 		useModalHeaderDoubleTapResize(modal);
-
-		// Use smaller sizing for this modal
-		// TODO: key these values for share modal as constants
-		setModalDisplayDefaultSize(modal, "99%", "99%", "42%", "16.6%");
-
-		// TODO: rewrite repeatable versino of this function
-		modal
-			.querySelector("#close-button-share")
-			.addEventListener("click", () => {
-				modal.remove();
-			});
-
-		// TODO: rewrite repeatable versino of this function
-		if (!isMobileDevice()) {
-			modal
-				.querySelector("#modal-window-title-maximize")
-				.addEventListener("click", () => {
-					if (isModalMaximized(modal)) {
-						setModalDisplayDefaultSize(modal);
-					} else {
-						maximizeModal(modal);
-					}
-				});
-		}
+		setModalDisplayDefaultSize(modal, SHARE_MODAL_HEIGHT, SHARE_MODAL_WIDTH)
+		useModalHeaderCloseButtonBehavior(modal);
+		useModalHeaderMaximizeButtonBehavior(modal)
+		useModalDragBehavior(modal);
 
 		SHARE_OPTIONS.map((shareOption) => {
 			const shareButton = document.createElement("nav");
@@ -2996,13 +3049,11 @@
 			modal.querySelector(".modal-content-post-share").appendChild(shareButton);
 		});
 
+		document.body.appendChild(modal);
+
 		return modal;
 	}
 
-	function launchShareModal() {
-		makeModalDragable(document.body.appendChild(new ShareModal()));
-		// TODO: find a way to make modal dragable in constructor
-	}
 
 	/**
 	 * Element for comments on items/stories
@@ -3022,11 +3073,11 @@
 		if (item.parent) {
 			commentContainer
 				.querySelector("#parent-comment")
-				.addEventListener("click", () => {
+				.addEventListener("click", () =>
 					API.item(item.parent).then((parentItem) =>
-						launchStoryModal(parentItem)
-					);
-				});
+						new StoryModal(parentItem)
+					)
+				);
 		}
 
 		return commentContainer;
@@ -3110,7 +3161,7 @@
 				story.title = "[NO TITLE]";
 			}
 			storyContainer.innerHTML = `<span>${sanitize(story.title)}</span>`;
-			storyContainer.addEventListener("click", () => launchStoryModal(story));
+			storyContainer.addEventListener("click", () => new StoryModal(story));
 		};
 
 		const loadStory = () => {
@@ -3142,15 +3193,10 @@
 
 		modal.innerHTML = `<header class="modal-window-title" role="dialog" aria-modal="true">
         <div class="modal-action-buttons">
-          <nav id="close-button-${userId}" class="text-link-button" title="Close Modal">
-            [X]
-          </nav>
-          ${!isMobileDevice()
-				? "<nav id='modal-window-title-maximize' class='text-link-button' title='Toggle Full Screen'>[+]</nav>"
-				: ""
-			}
+          ${getModalCloseButtonString()}
+          ${!isMobileDevice() ? getModalMaximizeButtonString() : ""}
         </div>
-        <div class="title-actions-modal-title">${userId}</div>
+        <title class="title-actions-modal-title">${userId}</title>
         <div class="spacer"></div>
       </header>
 
@@ -3162,28 +3208,11 @@
         </section>
       </main>`;
 
+		useModalHeaderCloseButtonBehavior(modal, () => removeProfileModalFromURL(userId));
 		useModalHeaderDoubleTapResize(modal);
-
+		useModalHeaderMaximizeButtonBehavior(modal);
+		useModalDragBehavior(modal);
 		setModalDisplayDefaultSize(modal);
-
-		modal
-			.querySelector(`#close-button-${userId}`)
-			.addEventListener("click", () => {
-				modal.remove();
-				removeProfileModalFromURL(userId);
-			});
-
-		if (!isMobileDevice()) {
-			modal
-				.querySelector("#modal-window-title-maximize")
-				.addEventListener("click", () => {
-					if (isModalMaximized(modal)) {
-						setModalDisplayDefaultSize(modal);
-					} else {
-						maximizeModal(modal);
-					}
-				});
-		}
 
 		API.user(userId).then((user) => {
 			const userDetails = modal.querySelector(".user-details");
@@ -3229,13 +3258,12 @@
 				});
 		});
 
+		addProfileModalToURL(userId);
+		document.body.appendChild(modal);
+
 		return modal;
 	}
 
-	function launchUserModal(userId) {
-		makeModalDragable(document.body.appendChild(new UserModal(userId)));
-		addProfileModalToURL(userId);
-	}
 
 	/**
 	 * Modal that shows iframe of a link that a user clicked on in other modal
@@ -3253,60 +3281,30 @@
 		);
 
 		modal.innerHTML = `<header class="modal-window-title" role="dialog" aria-modal="true">
-        <nav id="close-button-link" class="text-link-button" title="Close Modal">
-          [X]
-        </nav>
-        ${!isMobileDevice()
-				? "<nav id='modal-window-title-maximize' class='text-link-button' title='Toggle Full Screen'>[+]</nav>"
-				: ""
-			}
-        <nav id="open-link" class="text-link-button" title='Open In New Tab'>
-          [⬆️]
-        </nav>
-        <nav id="share-link" class="text-link-button" title="Share Link">
-          [📤]
-        </nav>
+		${getModalCloseButtonString()}
+        ${!isMobileDevice() ? getModalMaximizeButtonString() : ""}
+		${getModalOpenLinkString()}
+        ${getModalShareButtonString()}
       </header>
 
       <main class="modal-content">
         <iframe id="link-iframe" src="${url}"></iframe>
       </main>`;
 
-		useModalHeaderDoubleTapResize(modal);
-		makeModalDragable(modal);
 		setModalDisplayDefaultSize(modal);
+		useModalHeaderDoubleTapResize(modal);
+		useModalDragBehavior(modal);
+		useModalHeaderCloseButtonBehavior(modal);
+		useModalHeaderMaximizeButtonBehavior(modal);
+		useModalHeaderShareButtonBehavior(modal);
 
-		modal
-			.querySelector("#close-button-link")
-			.addEventListener("click", () => {
-				modal.remove();
-			});
+		modal.querySelector("#open-link-button").addEventListener("click", () =>
+			window.open(url, "_blank")
+		);
 
-		if (!isMobileDevice()) {
-			modal
-				.querySelector("#modal-window-title-maximize")
-				.addEventListener("click", () => {
-					if (isModalMaximized(modal)) {
-						setModalDisplayDefaultSize(modal);
-					} else {
-						maximizeModal(modal);
-					}
-				});
-		}
-
-		modal.querySelector("#open-link").addEventListener("click", () => {
-			window.open(url, "_blank");
-		});
-
-		modal
-			.querySelector("#share-link")
-			.addEventListener("click", () => launchShareModal());
+		document.body.appendChild(modal);
 
 		return modal;
-	}
-
-	function launchLinkModal(url) {
-		makeModalDragable(document.body.appendChild(new LinkModal(url)));
 	}
 
 	/**
@@ -3322,25 +3320,12 @@
 		const datePosted = formatDate(story.time);
 
 		modal.innerHTML = `<header class="modal-window-title" role="dialog" aria-modal="true">
-        <nav id="close-button-${story.id
-			}" class="text-link-button" title="Close Modal">
-          [X]
+        ${getModalCloseButtonString()}
         </nav>
+        ${!isMobileDevice() ? getModalMaximizeButtonString() : ""}
+		${getModalOpenLinkString()}
 
-        ${!isMobileDevice()
-				? "<nav id='modal-window-title-maximize' class='text-link-button' title='Toggle Full Screen'>[+]</nav>"
-				: ""
-			}
-
-        <nav id="open-link-${story.id
-			}" class="text-link-button" title='Open In New Tab'>
-          [⬆️]
-        </nav>
-
-        <nav id="share-story-${story.id
-			}" class="text-link-button" title="Share Story">
-          [📤]
-        </nav>
+        ${getModalShareButtonString()}
 
         ${story.url
 				? "<nav id=\"toggle-url-or-post-button\" class=\"text-link-button\" title=\"Toggle Webpage Preview or Hacker News Post\"> [🖥️] </nav>"
@@ -3348,8 +3333,8 @@
 			}
 
         ${isStoryFavorited(story.id)
-				? `<nav id="favorite-story-button-${story.id}" class="text-link-button" title="Save/Unsave story">[♥]</button>`
-				: `<nav id="favorite-story-button-${story.id}" class="text-link-button" title="Save/Unsave story">[♡]</button>`
+				? getModalFavoriteButtonString(true)
+				: getModalFavoriteButtonString(false)
 			}
       </header>
 
@@ -3377,12 +3362,16 @@
           </section>
       </main>`;
 
-		useModalHeaderDoubleTapResize(modal);
-
 		setModalDisplayDefaultSize(modal);
+		useModalHeaderDoubleTapResize(modal);
+		useModalDragBehavior(modal);
+
+		useModalHeaderCloseButtonBehavior(modal, () => removeStoryModalFromURL(story.id));
+		useModalHeaderMaximizeButtonBehavior(modal);
+		useModalHeaderShareButtonBehavior(modal);
 
 		modal
-			.querySelector(`#open-link-${story.id}`)
+			.querySelector("#open-link-button")
 			.addEventListener("click", () => {
 				if (
 					modal.querySelector(`#story-iframe-${story.id}`).style.display ===
@@ -3414,43 +3403,21 @@
 				});
 		}
 
-		modal
-			.querySelector(`#close-button-${story.id}`)
-			.addEventListener("click", () => {
-				modal.remove();
-				removeStoryModalFromURL(story.id);
-			});
-
-		if (!isMobileDevice()) {
-			modal
-				.querySelector("#modal-window-title-maximize")
-				.addEventListener("click", () => {
-					if (isModalMaximized(modal)) {
-						setModalDisplayDefaultSize(modal);
-					} else {
-						maximizeModal(modal);
-					}
-				});
-		}
-
-		modal
-			.querySelector(`#share-story-${story.id}`)
-			.addEventListener("click", () => launchShareModal());
 
 		const updateFavoriteButtonState = () => {
 			if (isStoryFavorited(story.id)) {
 				modal.querySelector(
-					`#favorite-story-button-${story.id}`
-				).textContent = "[♥]";
+					"#favorite-button"
+				).textContent = `[${MODAL_ICON_IS_FAVORITED}]`;
 			} else {
 				modal.querySelector(
-					`#favorite-story-button-${story.id}`
-				).textContent = "[♡]";
+					"#favorite-button"
+				).textContent = `[${MODAL_ICON_NOT_FAVORITED}]`;
 			}
 		};
 
 		modal
-			.querySelector(`#favorite-story-button-${story.id}`)
+			.querySelector("#favorite-button")
 			.addEventListener("click", () => {
 				if (isStoryFavorited(story.id)) {
 					unfavoriteStory(story.id);
@@ -3460,14 +3427,14 @@
 				updateFavoriteButtonState();
 			});
 
-		modal.querySelector(".user-id").addEventListener("click", () => {
-			launchUserModal(story.by);
-		});
+		modal.querySelector(".user-id").addEventListener("click", () =>
+			new UserModal(story.by)
+		);
 
 		if (story.parent) {
 			modal.querySelector("#parent-comment").addEventListener("click", () => {
 				API.item(story.parent).then((parentItem) =>
-					launchStoryModal(parentItem)
+					new StoryModal(parentItem)
 				);
 			});
 		}
@@ -3515,7 +3482,7 @@
 				commentElement
 					.querySelector(".comment-by")
 					.addEventListener("click", () => {
-						launchUserModal(comment.by);
+						new UserModal(comment.by);
 					});
 
 				hideLoadingMessage();
@@ -3526,6 +3493,7 @@
 
 		loadCommentsAsync(story.id, modal.querySelector(".comments"));
 
+		document.body.appendChild(modal);
 		addStoryModalToURL(story.id);
 
 		return modal;
@@ -3727,17 +3695,6 @@
 		NAVIGATION_OPTIONS.TOP,
 		onNavigationChange
 	);
-
-	/**
-	 * Launches a modal for a story
-	 * @param {object} story
-	 * @returns {void}
-	 */
-	function launchStoryModal(story) {
-		const node = document.body.appendChild(new StoryModal(story));
-		// TODO: find a way to make modal dragable in constructor
-		makeModalDragable(node);
-	}
 
 	/**
 	 * Starts intersection observers for story elements in view. These stories
