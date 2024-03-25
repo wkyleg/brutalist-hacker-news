@@ -6,7 +6,8 @@
   "scripts": {
     "lint:js": "eslint .",
     "lint:js:fix": "eslint . --fix",
-    "lint:css": "stylelint 'index.html'"
+    "lint:css": "stylelint 'index.html'",
+    "lint:css:fix": "stylelint 'index.html' --fix"
   },
   "author": "",
   "license": "ISC",
