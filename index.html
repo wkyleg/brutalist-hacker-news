@@ -3614,6 +3614,7 @@
 					startStoryIntersectionObservers();
 					break;
 				case NAVIGATION_OPTIONS.SETTINGS:
+					$ref("#settings-outlet").scrollIntoView({ behavior: "instant" });
 					break;
 				default:
 					onNavigationChange(NAVIGATION_OPTIONS.TOP);
