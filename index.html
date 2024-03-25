@@ -517,6 +517,7 @@
 	}
 
 	@keyframes typing {
+
 		100%,
 		90% {
 			width: 100%
@@ -524,6 +525,7 @@
 	}
 
 	@keyframes caret {
+
 		0%,
 		100% {
 			box-shadow: .66rem 0 0 transparent
@@ -3545,141 +3547,56 @@
 		loadingStrings = strings;
 	});
 
-	/**
-	 * Render `StoryListElement`s for top stories
-	 */
-	const topStoryIds = reactive([], (newState) => {
-		const topStoriesElement = document.querySelector("#top-outlet");
-		topStoriesElement.innerHTML = "";
-
-		const fragment = document.createDocumentFragment();
-		newState.map((storyId) => {
-			fragment.appendChild(new StoryListElement(storyId));
-		});
-		topStoriesElement.appendChild(fragment);
-		startStoryIntersectionObservers();
-	});
-
-	/**
-	 * Render `StoryListElement`s for new stories
-	 */
-	const newStoryIds = reactive([], (newState) => {
-		const newStoriesElement = document.querySelector("#new-outlet");
-		newStoriesElement.innerHTML = "";
-
-		const fragment = document.createDocumentFragment();
-		newState.map((storyId) => {
-			fragment.appendChild(new StoryListElement(storyId));
-		});
-		newStoriesElement.appendChild(fragment);
-		startStoryIntersectionObservers();
-	});
-
-	/**
-	 * Render `StoryListElement`s for best stories
-	 */
-	const bestStoryIds = reactive([], (newState) => {
-		const bestStoriesElement = document.querySelector("#best-outlet");
-		bestStoriesElement.innerHTML = "";
-
-		const fragment = document.createDocumentFragment();
-		newState.map((storyId) => {
-			fragment.appendChild(new StoryListElement(storyId));
-		});
-		bestStoriesElement.appendChild(fragment);
-		startStoryIntersectionObservers();
-	});
-
-	/**
-	 * Render `StoryListElement`s for ask stories
-	 */
-	const askStoryIds = reactive([], (newState) => {
-		const askStoriesElement = document.querySelector("#ask-outlet");
-		askStoriesElement.innerHTML = "";
-
-		const fragment = document.createDocumentFragment();
-		newState.map((storyId) => {
-			fragment.appendChild(new StoryListElement(storyId));
-		});
-		askStoriesElement.appendChild(fragment);
-		startStoryIntersectionObservers();
-	});
-
-	/**
-	 * Render `StoryListElement`s for show stories
-	 */
-	const showStoryIds = reactive([], (newState) => {
-		const showStoriesElement = document.querySelector("#show-outlet");
-		showStoriesElement.innerHTML = "";
-
-		const fragment = document.createDocumentFragment();
-		newState.map((storyId) => {
-			fragment.appendChild(new StoryListElement(storyId));
-		});
-		showStoriesElement.appendChild(fragment);
-		startStoryIntersectionObservers();
-	});
-
-	/**
-	 * Ids corresponding to job stories. Will recompute `jobStoryElements` in
-	 * memory whenever it changes.
-	 */
-	const jobStoryIds = reactive([], (newState) => {
-		const jobStoriesElement = document.querySelector("#job-outlet");
-		jobStoriesElement.innerHTML = "";
-
-		const fragment = document.createDocumentFragment();
-		newState.map((storyId) => {
-			fragment.appendChild(new StoryListElement(storyId));
-		});
-		jobStoriesElement.appendChild(fragment);
-		startStoryIntersectionObservers();
-	});
 
 	const onNavigationChange = (newState) => {
-		updateDOMForNavigationOption(newState);
-		applyCurrentNavigationStateToURL();
-		scrollToTop();
+		try {
+			updateDOMForNavigationOption(newState);
+			applyCurrentNavigationStateToURL();
+			scrollToTop();
 
-		switch (newState) {
-			case NAVIGATION_OPTIONS.TOP:
-				API.topStories().then((storyIds) => {
-					topStoryIds.update(storyIds);
-				});
-				break;
-			case NAVIGATION_OPTIONS.NEW:
-				API.newStories().then((storyIds) => {
-					newStoryIds.update(storyIds);
-				});
-				break;
-			case NAVIGATION_OPTIONS.BEST:
-				API.bestStories().then((storyIds) => {
-					bestStoryIds.update(storyIds);
-				});
-				break;
-			case NAVIGATION_OPTIONS.ASK:
-				API.askStories().then((storyIds) => {
-					askStoryIds.update(storyIds);
-				});
-				break;
-			case NAVIGATION_OPTIONS.SHOW:
-				API.showStories().then((storyIds) => {
-					showStoryIds.update(storyIds);
-				});
-				break;
-			case NAVIGATION_OPTIONS.JOB:
-				API.jobStories().then((storyIds) => {
-					jobStoryIds.update(storyIds);
-				});
-				break;
-			case NAVIGATION_OPTIONS.FAVORITES:
-				renderFavorites();
+			const outlet = document.querySelector(`#${newState}-outlet`);
+			const fragment = document.createDocumentFragment();
+
+			const renderStoriesToOutlet = (storyIds) => {
+				storyIds.map(story =>
+					fragment.appendChild(new StoryListElement(story))
+				);
+				outlet.innerHTML = "";
+				outlet.appendChild(fragment);
 				startStoryIntersectionObservers();
-				break;
-			case NAVIGATION_OPTIONS.SETTINGS:
-				return;
-			default:
-				onNavigationChange(NAVIGATION_OPTIONS.TOP);
+			};
+
+			switch (newState) {
+				case NAVIGATION_OPTIONS.TOP:
+					API.topStories().then(renderStoriesToOutlet);
+					break;
+				case NAVIGATION_OPTIONS.NEW:
+					API.newStories().then(renderStoriesToOutlet);
+					break;
+				case NAVIGATION_OPTIONS.BEST:
+					API.bestStories().then(renderStoriesToOutlet);
+					break;
+				case NAVIGATION_OPTIONS.ASK:
+					API.askStories().then(renderStoriesToOutlet);
+					break;
+				case NAVIGATION_OPTIONS.SHOW:
+					API.showStories().then(renderStoriesToOutlet);
+					break;
+				case NAVIGATION_OPTIONS.JOB:
+					API.jobStories().then(renderStoriesToOutlet);
+					break;
+				case NAVIGATION_OPTIONS.FAVORITES:
+					renderFavorites();
+					startStoryIntersectionObservers();
+					break;
+				case NAVIGATION_OPTIONS.SETTINGS:
+					break;
+				default:
+					onNavigationChange(NAVIGATION_OPTIONS.TOP);
+			}
+		} catch (error) {
+			console.error(error);
+			onNavigationChange(NAVIGATION_OPTIONS.TOP);
 		}
 	};
 
