@@ -158,7 +158,7 @@
 					</button>
 				</div>
 			</div>
-			<p>... or use pre built theme ...</p>
+			<p>... or apply pre-built theme ...</p>
 			<div class="theme-buttons-row">
 				<button id="button-theme-default">DEFAULT</button>
 				<button id="button-theme-hacker">H@CK3ᴙ</button>
@@ -3364,8 +3364,8 @@
 			}" class="modal-content-post">
             ${story.title ? `<h3>${sanitize(story.title)}</h3>` : ""}
             <p class="story-summary-statistics">
-              By <a class="user-id">${story.by}</a> | ${datePosted} | ⧫ ${story.score
-			} | ${story.descendants || 0} comments ${story.parent ? "| <a id=\"parent-comment\">In Thread</a>" : ""
+            <a class="user-id">${story.by}</a> | ${datePosted} | ⧫ ${story.score
+			} | 💬 ${story.descendants || 0} ${story.parent ? "| <a id=\"parent-comment\">In Thread</a>" : ""
 			}
             </p>
             ${story.text
