@@ -1131,7 +1131,8 @@
 	const LOADING_STORY_ANIMATION_REFRESH_INTERVAL_MAXIMUM = 2_000;
 	const LOADING_ANIMATION_NUMBER_OF_ROWS = 50;
 	const MODAL_POSITION_RANDOM_OFFSET = 10;
-	const MODAL_FULL_SIZE_WITH_BORDER_COMPUTATION = "calc(100vw - var(--modal-border-width) - var(--modal-border-width))";
+	const MODAL_FULL_SIZE_WITH_BORDER_COMPUTATION_HEIGHT = "calc(100vh - var(--modal-border-width) - var(--modal-border-width))";
+	const MODAL_FULL_SIZE_WITH_BORDER_COMPUTATION_WIDTH = "calc(100vw - var(--modal-border-width) - var(--modal-border-width))";
 	const SHARE_MODAL_HEIGHT = "42%";
 	const SHARE_MODAL_WIDTH = "16.6%";
 	const DESKTOP_MODAL_DEFAULT_SIZE = "50%";
@@ -2861,9 +2862,9 @@
 	) {
 		if (isMobileDevice()) {
 			modal.style.height =
-				height || MODAL_FULL_SIZE_WITH_BORDER_COMPUTATION;
+				height || MODAL_FULL_SIZE_WITH_BORDER_COMPUTATION_HEIGHT;
 			modal.style.width =
-				width || MODAL_FULL_SIZE_WITH_BORDER_COMPUTATION;
+				width || MODAL_FULL_SIZE_WITH_BORDER_COMPUTATION_WIDTH;
 			modal.style.top = "0";
 			modal.style.left = "0";
 		} else {
@@ -2893,10 +2894,10 @@
 	 * @returns {void}
 	 */
 	function maximizeModal(modal) {
-		modal.style.width =
-			MODAL_FULL_SIZE_WITH_BORDER_COMPUTATION;
 		modal.style.height =
-			MODAL_FULL_SIZE_WITH_BORDER_COMPUTATION;
+			MODAL_FULL_SIZE_WITH_BORDER_COMPUTATION_HEIGHT;
+		modal.style.width =
+			MODAL_FULL_SIZE_WITH_BORDER_COMPUTATION_WIDTH;
 		modal.style.top = "0";
 		modal.style.left = "0";
 	}
