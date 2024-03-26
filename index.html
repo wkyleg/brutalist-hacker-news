@@ -894,7 +894,8 @@
 		display: flex;
 		flex-direction: row;
 		flex-grow: 1;
-		width: 30%
+		width: 30%;
+		align-items: baseline;
 	}
 
 	.title-actions-modal .title-actions-modal-title {
@@ -930,7 +931,8 @@
 		border-bottom: var(--color-primary) 3px solid;
 		width: 100%;
 		padding-left: var(--top-level-padding-side);
-		animation: subtle-glow-warble 3s infinite ease-in-out
+		animation: subtle-glow-warble 3s infinite ease-in-out;
+		/* align-items: baseline; */
 	}
 
 	.modal-window-title nav {
@@ -3083,7 +3085,7 @@
 	 * @returns {string}
 	 */
 	const MODAL_OPEN_LINK_BUTTON_STRING =
-		`<nav id="open-link-button" class="text-link-button" title='Open In New Tab'>[^]</nav>`
+		`<nav id="open-link-button" class="text-link-button" title='Open In New Tab'>[⬆️]</nav>`
 
 	/**
 	 * Markup for modal share button
@@ -3504,17 +3506,17 @@
 	 */
 	function StoryModal(story) {
 		const modal = document.createElement("div");
-		modal.classList.add("modal", "use-gpu-rendering");
+		modal.classList.add("modal", "use-gpu-rendering", "title-actions-modal");
 
 		const getStorySummaryStatisticsInnerContent = (story) =>
 			`<a class="user-id">${story.by}</a> | ${formatDate(story.time)} | ⧫ ${story.score
 			} | 💬 ${story.descendants || 0} ${story.parent ? "| <a id=\"parent-comment\">In Thread</a>" : ""
-			}
-			`;
+			}`;
 
 
 		modal.innerHTML = `<header class="modal-window-title" role="dialog" aria-modal="true">
-        ${MODAL_CLOSE_BUTTON_STRING}
+		<div class="modal-action-buttons">
+		${MODAL_CLOSE_BUTTON_STRING}
         </nav>
         ${!isMobileDevice() ? MODAL_MAXIMIZE_BUTTON_STRING : ""}
 		${MODAL_OPEN_LINK_BUTTON_STRING}
@@ -3528,6 +3530,7 @@
 				: getModalFavoriteButtonString(false)
 			}
 		${MODAL_REFRESH_BUTTON_STRING}
+		</div>
       </header>
 
       <main class="modal-content">
