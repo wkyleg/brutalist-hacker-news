@@ -38,11 +38,19 @@ fs.readdir(themesDirectory, (err, files) => {
     const themeName = theme.name;
     const imageFileName = themeName + '.svg';
     const imageFilePath = path.relative(__dirname, path.join(themesDirectory, imageFileName));
+    const jsonFileUrl = path.relative(__dirname, path.join(themesDirectory, themeFile));
 
     // Append theme information to markdown content
-    mdContent += `### ${theme.displayName || themeName}\n`;
-    mdContent += `![${theme.displayName || themeName}](${imageFilePath})\n\n`;
-    mdContent += '```json\n' + JSON.stringify(theme, null, 2) + '\n```\n\n';
+    // mdContent += `### ${theme.displayName || themeName}\n`;
+    // mdContent += `![${theme.displayName || themeName}](${imageFilePath})\n\n`;
+    // mdContent += '```json\n' + JSON.stringify(theme, null, 2) + '\n```\n\n';
+    mdContent += `### ${theme.displayName}\n`;
+    mdContent += `![${themeName}](${imageFilePath})\n\n`;
+    mdContent += `JSON File: [${themeName}.json](${jsonFileUrl})\n\n`;
+    mdContent += 'Download Code: \n';
+    mdContent += '```txt\n';
+    mdContent += `${themeName}\n`;
+    mdContent += '```\n\n';
   });
 
   // Write to the output file
