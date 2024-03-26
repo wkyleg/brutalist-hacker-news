@@ -70,8 +70,11 @@
 		<section id="job-outlet" class="use-gpu-rendering" style="display: none" aria-live="polite"></section>
 		<section id="favorites-outlet" class="use-gpu-rendering" style="display: none" aria-live="polite"></section>
 		<section id="settings-outlet" class="use-gpu-rendering" style="display: none" aria-live="polite">
-			<div class="settings-content" role="table" id="settings-content-container">
-				<h3>THEME</h3>
+			<div class="adjust-theme-content" role="table" id="settings-content-container">
+				<h3>Change Color Settings</h3>
+				<p>
+					You may adjust the colors of this page to your liking
+				</p>
 				<div class="setting-element" id="setting--color-primary">
 					<div class="setting-name" role="label">primary</div>
 					<div class="setting-new-value-input">
@@ -79,10 +82,10 @@
 							style="border-color: var(--color-primary)" />
 					</div>
 					<button class="setting-apply-button" id="apply-setting--color-primary">
-						APPLY
+						Apply
 					</button>
 					<button class="setting-reset-button" id="reset-setting--color-primary">
-						RESET
+						Reset
 					</button>
 				</div>
 				<div class="setting-element" id="setting--color-secondary">
@@ -91,10 +94,10 @@
 						<input type="color" id="setting-input--color-secondary" />
 					</div>
 					<button class="setting-apply-button" id="apply-setting--color-secondary">
-						APPLY
+						Apply
 					</button>
 					<button class="setting-reset-button" id="reset-setting--color-secondary">
-						RESET
+						Reset
 					</button>
 				</div>
 				<div class="setting-element" id="setting--color-accent-1">
@@ -103,10 +106,10 @@
 						<input type="color" id="setting-input--color-accent-1" />
 					</div>
 					<button class="setting-apply-button" id="apply-setting--color-accent-1">
-						APPLY
+						Apply
 					</button>
 					<button class="setting-reset-button" id="reset-setting--color-accent-1">
-						RESET
+						Reset
 					</button>
 				</div>
 				<div class="setting-element" id="setting--color-accent-2">
@@ -115,10 +118,10 @@
 						<input type="color" id="setting-input--color-accent-2" />
 					</div>
 					<button class="setting-apply-button" id="apply-setting--color-accent-2">
-						APPLY
+						Apply
 					</button>
 					<button class="setting-reset-button" id="reset-setting--color-accent-2">
-						RESET
+						Reset
 					</button>
 				</div>
 				<div class="setting-element" id="setting--color-dark">
@@ -127,10 +130,10 @@
 						<input type="color" id="setting-input--color-dark" />
 					</div>
 					<button class="setting-apply-button" id="apply-setting--color-dark">
-						APPLY
+						Apply
 					</button>
 					<button class="setting-reset-button" id="reset-setting--color-dark">
-						RESET
+						Reset
 					</button>
 				</div>
 				<div class="setting-element" id="setting--color-light">
@@ -139,10 +142,10 @@
 						<input type="color" id="setting-input--color-light" />
 					</div>
 					<button class="setting-apply-button" id="apply-setting--color-light">
-						APPLY
+						Apply
 					</button>
 					<button class="setting-reset-button" id="reset-setting--color-light">
-						RESET
+						Reset
 					</button>
 				</div>
 				<div class="setting-element" id="setting--color-text-main">
@@ -151,22 +154,24 @@
 						<input type="color" id="setting-input--color-text-main" />
 					</div>
 					<button class="setting-apply-button" id="apply-setting--color-text-main">
-						APPLY
+						Apply
 					</button>
 					<button class="setting-reset-button" id="reset-setting--color-text-main">
-						RESET
+						Reset
 					</button>
 				</div>
 			</div>
 			<br />
 
 			<button id="download-theme-button" class="button-large">
-				DOWNLOAD CURRENT THEME
+				💾 Download Current Theme Settings
 			</button>
 
 			<br />
 			<br />
-			<p>... or apply a pre-built theme ...</p>
+			<br />
+
+			<h3>Default Themes</h3>
 
 			<div class="theme-buttons-row">
 				<button id="button-theme-default">DEFAULT</button>
@@ -244,43 +249,43 @@
 
 			<br />
 			<br />
-			<p>.
-				.. or add a new theme ...
-				<br />
+			<br />
+
+			<h3>Added Themes</h3>
+			<div class="added-themes theme-buttons-row" id="added-themes-outlet">
+				You have no external themes yet
+			</div>
+			<p>
 				See <a href="https://github.com/wkyleg/brutalist-hacker-news"
 					title="The git repository for this website" data-allow-external="true">GitHub</a> for
-				more themes you can add, as well as how to add your own theme
+				more themes you can add, as and instructions to add your own theme
 			</p>
-
-			<div class="added-themes theme-buttons-row" id="added-themes-outlet"></div>
-
-			<br />
 
 			<button class="button-large" id="add-new-theme-button">
 				+ Add New Theme
 			</button>
 
 
-
-
 			<br />
 			<br />
 			<br />
 
-			<h3>FAVORITES</h3>
-			<button id="download-favorites-button" class="button-large">
-				DOWNLOAD FAVORITES
-			</button>
-			<button id="clear-all-favorites-button" class="button-large">
-				CLEAR ALL FAVORITES
-			</button>
+			<h3>Favorites</h3>
+			<div class="theme-buttons-row">
+				<button id="download-favorites-button" class="button-large">
+					💾 Download Favorites
+				</button>
+				<button id="clear-all-favorites-button" class="button-large">
+					🗑️ Clear All Favorites
+				</button>
+			</div>
 
 			<br />
 			<br />
 			<br />
 
 			<section id="pwa-install-instructions" class="pwa-install-section">
-				<h3>ADD TO HOME SCREEN (PWA SUPPORT)</h3>
+				<h3>Add to Home Screen (PWA Support)</h3>
 				<p>
 					This site is a Progressive Web App (PWA), which is a web page that
 					can be installed as an app on most devices. This allows for a more
@@ -350,7 +355,7 @@
 
 			<br />
 
-			<h3>ABOUT</h3>
+			<h3>About</h3>
 			<p class="about-text">
 				An experiment with
 				<a href="https://brutalist-web.design/" title="A popular page about brutalist web design">
@@ -358,7 +363,8 @@
 				</a>
 				and <a href="http://vanilla-js.com/">Vanilla JavaScript</a>. Built
 				with no libraries, only one HTML/CSS/JS file and the Hacker News API.
-				This page is also an exploration of brutalist and cyberpunk aesthetics
+				This page is also an exploration of what is possible with only open web standards, as well as brutalist
+				and cyberpunk aesthetics
 				in web design. Acknowledgements to the
 				<a href="https://news.ycombinator.com/" title="The original Hacker News website"
 					data-allow-external="true">original Hacker News website</a>
@@ -378,7 +384,7 @@
 
 				<br />
 				<br />
-				<button id="share-website" class="button-large">SHARE THIS WEBSITE</button>
+				<button id="share-website" class="button-large">📤 Share This Website</button>
 
 				<br />
 				<br />
@@ -411,7 +417,8 @@
 		--breakpoint-tablet: 1100px;
 		--breakpoint-desktop: 1600px;
 		--top-level-padding-side: 1%;
-		--modal-border-width: 3px
+		--modal-border-width: 3px;
+		--subtle-text-shadow: 2px 2px rgb(from var(--color-text-main) r g b / 50%)
 	}
 
 	* {
@@ -421,7 +428,8 @@
 		border: 0;
 		scrollbar-color: var(--color-primary) var(--color-secondary);
 		scrollbar-width: auto;
-		transition: all .2s ease-in-out
+		transition: all .2s ease-in-out;
+		font-weight: normal;
 	}
 
 	::-webkit-scrollbar {
@@ -479,6 +487,8 @@
 		margin-bottom: var(--size-xs);
 		color: var(--color-primary);
 		font-size: var(--size-md);
+		font-weight: 800;
+		text-shadow: var(--subtle-text-shadow)
 	}
 
 	input {
@@ -522,7 +532,8 @@
 	}
 
 	a:hover {
-		color: var(--color-primary)
+		color: var(--color-primary);
+		font-weight: bolder;
 	}
 
 	a:visited {
@@ -537,7 +548,10 @@
 		cursor: pointer;
 		background: var(--color-light);
 		color: var(--color-text-main);
-		transition: all .2s ease-in-out
+		transition: all .2s ease-in-out;
+		font-weight: 400;
+		min-height: var(--size-sm);
+		padding: 0.25rem 0.5rem;
 	}
 
 	.button-large {
@@ -546,7 +560,12 @@
 
 	button:hover {
 		filter: brightness(1.2), contrast(1.2);
-		box-shadow: inset 1px 1px 1px var(--color-text-main)
+		box-shadow: inset 1px 1px 1px var(--color-text-main);
+		font-weight: 700
+	}
+
+	strong {
+		font-weight: 800;
 	}
 
 	@keyframes typing {
@@ -571,7 +590,8 @@
 
 	.type {
 		font-size: 1rem;
-		display: inline-flex
+		display: inline-flex;
+		margin-left: 1rem;
 	}
 
 	.type span {
@@ -861,7 +881,6 @@
 		background: var(--color-light);
 		border: var(--color-primary) var(--modal-border-width) solid;
 		resize: both;
-		box-shadow: var(--box-shadow-highlight);
 		z-index: 15;
 		overflow: auto;
 		transition: bottom .5s;
@@ -873,7 +892,7 @@
 	}
 
 	.share-modal {
-		z-index: 400 !important;
+		z-index: 400;
 	}
 
 	.title-actions-modal {
@@ -895,7 +914,9 @@
 		justify-content: center;
 		align-items: center;
 		width: 36.6%;
-		font-size: var(--size-sm)
+		font-size: var(--size-sm);
+		font-weight: 800;
+		;
 	}
 
 	.title-actions-modal .spacer {
@@ -916,7 +937,6 @@
 		color: var(--color-text-main);
 		justify-content: flex-start;
 		border-bottom: var(--color-primary) 3px solid;
-		box-shadow: var(--box-shadow-highlight);
 		width: 100%;
 		padding-left: var(--top-level-padding-side);
 		animation: subtle-glow-warble 3s infinite ease-in-out
@@ -985,7 +1005,7 @@
 
 
 	.modal-content-post {
-		padding: var(--size-md);
+		padding: var(--size-sm);
 		overflow-y: scroll;
 		height: calc(100% - var(--size-lg));
 		background: var(--color-light)
@@ -993,6 +1013,7 @@
 
 	.story-summary-statistics {
 		font-size: var(--size-xss);
+		margin-bottom: var(--size-sm);
 		text-align: center;
 		font-style: italic;
 		margin-top: 0
@@ -1020,6 +1041,10 @@
 		min-width: 10vw;
 		transition: all .5s;
 		animation: fade-in .5s
+	}
+
+	.comment-by {
+		line-height: 2.0;
 	}
 
 	@media screen and (width <=600px) {
@@ -1098,7 +1123,20 @@
 		content: "->"
 	}
 
-	.settings-content {
+	#settings-outlet {
+		padding-left: var(--size-xxs);
+		padding-top: var(--size-xxs);
+		animation: fade-in .5s;
+
+		@media screen and (width <=600px) {
+			#settings-outlet {
+				padding-left: var(--size-xs);
+				padding-top: var(--size-xs)
+			}
+		}
+	}
+
+	.adjust-theme-content {
 		display: flex;
 		flex-direction: column;
 		align-items: flex-start;
@@ -1143,19 +1181,17 @@
 		height: var(--size-md)
 	}
 
-	.settings-content button {
+	.adjust-theme-content button {
 		margin-left: var(--size-xs)
 	}
 
-	.settings-content input {
+	.adjust-theme-content input {
 		height: var(--size-md);
 		margin-top: 6px;
 		margin-bottom: 6px
 	}
 
-	.theme-buttons-row {
-		
-	}
+	.theme-buttons-row {}
 
 	.theme-buttons-row button {
 		margin: var(--size-xxs) var(--size-xxs) 0 0;
@@ -3182,7 +3218,7 @@
 		commentContainer.classList.add("comment-container");
 
 		commentContainer.innerHTML = `<div class="comment">
-        <p><a id="parent-comment" class="comment-by"><strong>In Thread</strong></a></p>
+        <p><a id="parent-comment" class="comment-by">In Thread</a></p>
         <p class="comment-text">${sanitize(item.text) || "[DELETED]"}</p>
         </div>`;
 
@@ -3591,7 +3627,7 @@
 				const commentElement = document.createElement("div");
 				commentElement.classList.add("comment");
 				commentElement.innerHTML = `
-            <a class="comment-by"><strong>${comment.by}</strong></a>
+            <a class="comment-by">${comment.by}</a>
             <p class="comment-text">${sanitize(comment.text)}</p>
             <div class="comments-container"></div>
           `;
