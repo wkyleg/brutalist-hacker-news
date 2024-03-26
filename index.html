@@ -3187,7 +3187,12 @@
       `;
 
 		useModalHeaderDoubleTapResize(modal);
-		setModalDisplayDefaultSize(modal, SHARE_MODAL_HEIGHT, SHARE_MODAL_WIDTH)
+		if (!isMobileDevice()) {
+			setModalDisplayDefaultSize(modal, SHARE_MODAL_HEIGHT, SHARE_MODAL_WIDTH)
+		} else {
+			setModalDisplayDefaultSize(modal);
+		}
+		
 		useModalHeaderCloseButtonBehavior(modal);
 		useModalHeaderMaximizeButtonBehavior(modal)
 		useModalDragBehavior(modal);
