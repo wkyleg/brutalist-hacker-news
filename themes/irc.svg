@@ -1,0 +1,17 @@
+<svg width="600" height="550" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="0" width="600" height="550" fill="#E1E8ED" /><defs>
+    <linearGradient id="displayNameGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#F44336;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFEB3B;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+      <feOffset dx="0" dy="4" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.5"/>
+      </feComponentTransfer>
+      <feMerge> 
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs><rect x="10" y="20" width="580" height="40" fill="url(#displayNameGradient)" filter="url(#shadow)" /><text x="20" y="50" fill="#FFFFFF" font-size="24" font-family="monospace">IRC₍ᴵₙₜₑᵣₙₑₜ ᴿₑₗₐᵧ ₢ₕₐₜ₎</text><rect x="10" y="70" width="580" height="50" fill="#0C7BDC" filter="url(#shadow)" /><text x="20" y="105" fill="#212121" font-size="20" font-family="monospace">--color-primary: #0C7BDC</text><rect x="10" y="130" width="580" height="50" fill="#E1E8ED" filter="url(#shadow)" /><text x="20" y="165" fill="#212121" font-size="20" font-family="monospace">--color-secondary: #E1E8ED</text><rect x="10" y="190" width="580" height="50" fill="#F44336" filter="url(#shadow)" /><text x="20" y="225" fill="#212121" font-size="20" font-family="monospace">--color-accent-1: #F44336</text><rect x="10" y="250" width="580" height="50" fill="#FFEB3B" filter="url(#shadow)" /><text x="20" y="285" fill="#212121" font-size="20" font-family="monospace">--color-accent-2: #FFEB3B</text><rect x="10" y="310" width="580" height="50" fill="#37474F" filter="url(#shadow)" /><text x="20" y="345" fill="#FFFFFF" font-size="20" font-family="monospace">--color-dark: #37474F</text><rect x="10" y="370" width="580" height="50" fill="#FFFFFF" filter="url(#shadow)" /><text x="20" y="405" fill="#212121" font-size="20" font-family="monospace">--color-light: #FFFFFF</text><rect x="10" y="430" width="580" height="50" fill="#212121" filter="url(#shadow)" /><text x="20" y="465" fill="#FFFFFF" font-size="20" font-family="monospace">--color-text-main: #212121</text><rect x="10" y="490" width="580" height="50" fill="#37474F" filter="url(#shadow)" /><text x="20" y="525" fill="#FFFFFF" font-size="20" font-family="monospace">DOWNLOAD CODE: irc</text></svg>

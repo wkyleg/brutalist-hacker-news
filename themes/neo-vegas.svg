@@ -1,0 +1,17 @@
+<svg width="600" height="550" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="0" width="600" height="550" fill="#ffd700" /><defs>
+    <linearGradient id="displayNameGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#008b8b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8b4513;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+      <feOffset dx="0" dy="4" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.5"/>
+      </feComponentTransfer>
+      <feMerge> 
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs><rect x="10" y="20" width="580" height="40" fill="url(#displayNameGradient)" filter="url(#shadow)" /><text x="20" y="50" fill="#f0e68c" font-size="24" font-family="monospace">𝓝𝓮𝓸 𝓥𝓮𝓰𝓪𝓼</text><rect x="10" y="70" width="580" height="50" fill="#ff4500" filter="url(#shadow)" /><text x="20" y="105" fill="#5c0075" font-size="20" font-family="monospace">--color-primary: #ff4500</text><rect x="10" y="130" width="580" height="50" fill="#ffd700" filter="url(#shadow)" /><text x="20" y="165" fill="#5c0075" font-size="20" font-family="monospace">--color-secondary: #ffd700</text><rect x="10" y="190" width="580" height="50" fill="#008b8b" filter="url(#shadow)" /><text x="20" y="225" fill="#5c0075" font-size="20" font-family="monospace">--color-accent-1: #008b8b</text><rect x="10" y="250" width="580" height="50" fill="#8b4513" filter="url(#shadow)" /><text x="20" y="285" fill="#5c0075" font-size="20" font-family="monospace">--color-accent-2: #8b4513</text><rect x="10" y="310" width="580" height="50" fill="#282828" filter="url(#shadow)" /><text x="20" y="345" fill="#f0e68c" font-size="20" font-family="monospace">--color-dark: #282828</text><rect x="10" y="370" width="580" height="50" fill="#f0e68c" filter="url(#shadow)" /><text x="20" y="405" fill="#5c0075" font-size="20" font-family="monospace">--color-light: #f0e68c</text><rect x="10" y="430" width="580" height="50" fill="#5c0075" filter="url(#shadow)" /><text x="20" y="465" fill="#f0e68c" font-size="20" font-family="monospace">--color-text-main: #5c0075</text><rect x="10" y="490" width="580" height="50" fill="#282828" filter="url(#shadow)" /><text x="20" y="525" fill="#f0e68c" font-size="20" font-family="monospace">DOWNLOAD CODE: neo-vegas</text></svg>
