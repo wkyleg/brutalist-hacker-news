@@ -819,6 +819,7 @@
 	}
 
 	.modal {
+		z-index: 50;
 		display: flex;
 		flex-direction: column;
 		position: absolute;
@@ -837,7 +838,15 @@
 	}
 
 	.modal:hover {
-		z-index: 100;
+		z-index: 300;
+	}
+
+	.share-modal {
+		z-index: 400 !important;
+	}
+
+	.title-actions-modal {
+		z-index: 200;
 	}
 
 	.title-actions-modal .modal-action-buttons {
@@ -928,6 +937,7 @@
 
 	.modal-content-post-share {
 		display: flex;
+		height: 100%;
 		flex-direction: column;
 		width: 100%;
 		background: var(--color-light);
@@ -1130,7 +1140,7 @@
 	const LOADING_STORY_ANIMATION_REFRESH_INTERVAL_MINIMUM = 250;
 	const LOADING_STORY_ANIMATION_REFRESH_INTERVAL_MAXIMUM = 2_000;
 	const LOADING_ANIMATION_NUMBER_OF_ROWS = 50;
-	const MODAL_POSITION_RANDOM_OFFSET = 10;
+	const MODAL_POSITION_RANDOM_OFFSET = 20;
 	const MODAL_FULL_SIZE_WITH_BORDER_COMPUTATION_HEIGHT = "calc(100vh - var(--modal-border-width) - var(--modal-border-width))";
 	const MODAL_FULL_SIZE_WITH_BORDER_COMPUTATION_WIDTH = "calc(100vw - var(--modal-border-width) - var(--modal-border-width))";
 	const SHARE_MODAL_HEIGHT = "42%";
@@ -1145,12 +1155,12 @@
 	const LINK_SHARE_DESCRIPTION =
 		"Check out this Hacker News Reader Inspired by Brutalist Web Design and Cyberpunk Aesthetics!";
 	const TWITTER_SHARE_URL =
-		"https://twitter.com/intent/tweet?text=Check%20out%20this%20awesome%20site&url=";
+		"https://twitter.com/intent/tweet?text=Check%20out%20this%20site&url=";
 	const FACEBOOK_SHARE_URL = "https://www.facebook.com/sharer/sharer.php?u=";
 	const LINKEDIN_SHARE_URL =
 		"https://www.linkedin.com/shareArticle?mini=true&url=";
 	const WHATSAPP_SHARE_URL =
-		"https://wa.me/?text=Check%20out%20this%20amazing%20site!%20";
+		"https://wa.me/?text=Check%20out%20this%20site!%20";
 	const REDDIT_SHARE_URL =
 		"https://reddit.com/submit?url=https://brutalisthackernews.com&title=Brutalist%20HN";
 	const TELEGRAM_URL =
@@ -3026,10 +3036,11 @@
 	function ShareModal() {
 		const modal = document.createElement("div");
 		modal.classList.add(
-			"modal",
 			"share-modal",
+			"modal",
 			"title-actions-modal",
-			"use-gpu-rendering"
+			"use-gpu-rendering",
+
 		);
 
 		modal.innerHTML = `
@@ -3058,7 +3069,7 @@
 			shareButton.classList.add("text-link-button");
 			shareButton.id = `share-${shareOption}`;
 			shareButton.innerHTML = shareOption.name
-			shareButton.onclick = shareOption.callback;
+			shareButton.onclick = () => shareOption.callback();
 			modal.querySelector(".modal-content-post-share").appendChild(shareButton);
 		});
 
