@@ -252,7 +252,9 @@
 				more themes you can add, as well as how to add your own theme
 			</p>
 
-			<div class="added-themes" id="added-themes-outlet"></div>
+			<div class="added-themes theme-buttons-row" id="added-themes-outlet"></div>
+
+			<br />
 
 			<button class="button-large" id="add-new-theme-button">
 				+ Add New Theme
@@ -1151,14 +1153,18 @@
 		margin-bottom: 6px
 	}
 
+	.theme-buttons-row {
+		
+	}
+
 	.theme-buttons-row button {
-		margin-bottom: var(--size-xs);
-		height: var(--size-md)
+		margin: var(--size-xxs) var(--size-xxs) 0 0;
 	}
 </style>
 
 <!-- Constants -->
 <script type="text/javascript">
+	const PAGE_ROOT_URL = "https://brutalisthackernews.com/";
 	const MEDIA_URL = "https://brutalisthackernews.com/icon.png";
 	const YCOMBINATOR_URL = "https://news.ycombinator.com/";
 	const HACKER_NEWS_API_URL = "https://hacker-news.firebaseio.com/v0/";
@@ -2330,6 +2336,7 @@
 	 */
 	const applyTheme = (theme) => {
 		Object.entries(theme).map(([key, value]) => {
+			if (!key.startsWith("--")) return;
 			setCSSVariable(key, value);
 			saveSettingToLocalStorage(key, value);
 			updateSettingInputWithCurrentValue(key);
@@ -2433,8 +2440,7 @@
 		Object.entries(SETTINGS).forEach(([_, value]) => {
 			theme[value] = getCSSVariable(value);
 		});
-		const themeName = prompt("Enter name for theme");
-		downloadJSONAsFile(theme, themeName);
+		downloadJSONAsFile(theme, "theme.json");
 	};
 
 
@@ -2449,7 +2455,7 @@
 	const addAddedTheme = (theme) => {
 		const addedThemes = getAddedThemes();
 		addedThemes[theme.name] = theme;
-		localStorage.setItem("addedThemes", JSON.stringify(savedThemes));
+		localStorage.setItem("addedThemes", JSON.stringify(addedThemes));
 	};
 
 
@@ -2457,15 +2463,15 @@
 		$ref("#added-themes-outlet").innerHTML = "";
 		const addedThemes = getAddedThemes();
 
-		const fragent = document.createDocumentFragment();
+		const fragment = document.createDocumentFragment();
 		Object.entries(addedThemes).map(([key, value]) => {
 			const button = document.createElement("button");
 			button.innerHTML = value.displayName
 			// TODO: make apply theme work with user added themes
-			button.addEventListener("click", () => applyTheme(key));
+			button.addEventListener("click", () => applyTheme(value));
 			fragment.appendChild(button);
 		});
-
+		$ref("#added-themes-outlet").appendChild(fragment);
 	}
 
 	/**
@@ -2480,7 +2486,7 @@
 
 		if (!themeName) return;
 
-		fetch(`/themes/${themeName}`)
+		fetch(`${PAGE_ROOT_URL}/themes/${themeName}.json`)
 			.then((response) => response.json())
 			.then((theme) => {
 				themes[themeName] = theme;
@@ -2550,6 +2556,8 @@
 		document.getElementById("share-website").addEventListener("click", () =>
 			new ShareModal()
 		);
+
+		renderAddedThemes();
 	};
 </script>
 
@@ -3024,7 +3032,7 @@
 	 * @returns {string}
 	 */
 	const MODAL_OPEN_LINK_BUTTON_STRING =
-		`<nav id="open-link-button" class="text-link-button" title='Open In New Tab'>[⬆️]</nav>`
+		`<nav id="open-link-button" class="text-link-button" title='Open In New Tab'>[^]</nav>`
 
 	/**
 	 * Markup for modal share button
