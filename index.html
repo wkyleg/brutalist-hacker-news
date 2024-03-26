@@ -3190,7 +3190,7 @@
 		} else {
 			setModalDisplayDefaultSize(modal);
 		}
-		
+
 		useModalHeaderCloseButtonBehavior(modal);
 		useModalHeaderMaximizeButtonBehavior(modal)
 		useModalDragBehavior(modal);
@@ -3483,7 +3483,12 @@
 		const modal = document.createElement("div");
 		modal.classList.add("modal", "use-gpu-rendering");
 
-		const datePosted = formatDate(story.time);
+		const getStorySummaryStatisticsInnerContent = (story) =>
+			`<a class="user-id">${story.by}</a> | ${formatDate(story.time)} | ⧫ ${story.score
+			} | 💬 ${story.descendants || 0} ${story.parent ? "| <a id=\"parent-comment\">In Thread</a>" : ""
+			}
+			`;
+
 
 		modal.innerHTML = `<header class="modal-window-title" role="dialog" aria-modal="true">
         ${MODAL_CLOSE_BUTTON_STRING}
@@ -3509,9 +3514,7 @@
 			}" class="modal-content-post">
             ${story.title ? `<h3>${sanitize(story.title)}</h3>` : ""}
             <p class="story-summary-statistics">
-            <a class="user-id">${story.by}</a> | ${datePosted} | ⧫ ${story.score
-			} | 💬 ${story.descendants || 0} ${story.parent ? "| <a id=\"parent-comment\">In Thread</a>" : ""
-			}
+              ${getStorySummaryStatisticsInnerContent(story)}
             </p>
             ${story.text
 				? `<p class="story-text">${sanitize(story.text)}</p>`
@@ -3652,12 +3655,16 @@
 			});
 		};
 
-		const refreshComments = () => {
+		const refresh = () => {
+			API.item(story.id).then((story) => {
+				modal.querySelector(".story-summary-statistics").innerHTML =
+					getStorySummaryStatisticsInnerContent(story);
+			});
 			commentsRootElement.innerHTML = LOADING_INDICATOR_ELEMENT_STRING;
 			renderCommentsAsync(story.id, commentsRootElement);
 		};
 
-		modal.querySelector("#refresh-button").addEventListener("click", refreshComments);
+		modal.querySelector("#refresh-button").addEventListener("click", refresh);
 
 		// Trigger load of comments tree
 		renderCommentsAsync(story.id, commentsRootElement);
