@@ -1,0 +1,11 @@
+{
+  "name": "l33t",
+  "displayName": "l33+",
+  "--color-primary": "#08fdd8",
+  "--color-secondary": "#f800ff",
+  "--color-accent-1": "#1b1b1b",
+  "--color-accent-2": "#333333",
+  "--color-dark": "#080808",
+  "--color-light": "#f0f0f0",
+  "--color-text-main": "#0033FF"
+}

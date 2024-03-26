@@ -1,0 +1,11 @@
+{
+  "name": "cyber-citrus",
+  "displayName": "ℂ𝕚𝕥𝕣𝕦𝕤",
+  "--color-primary": "#FF8C00",
+  "--color-secondary": "#FFD700",
+  "--color-accent-1": "#9C4F00",
+  "--color-accent-2": "#FFA500",
+  "--color-dark": "#2F4F4F",
+  "--color-light": "#fff266",
+  "--color-text-main": "#664b00"
+}

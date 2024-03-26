@@ -1,0 +1,11 @@
+{
+  "name": "hash",
+  "displayName": "ʜᴀѕн",
+  "--color-primary": "#FF00FF",
+  "--color-secondary": "#00FF00",
+  "--color-accent-1": "#FFFF00",
+  "--color-accent-2": "#00FFFF",
+  "--color-dark": "#FF4500",
+  "--color-light": "#7F00FF",
+  "--color-text-main": "#c2c2c2"
+}

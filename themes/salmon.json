@@ -1,0 +1,11 @@
+{
+  "name": "salmon",
+  "displayName": "ℕ๏ภςє",
+  "--color-primary": "#FF9A8A",
+  "--color-secondary": "#FFD1AC",
+  "--color-accent-1": "#FFB4A2",
+  "--color-accent-2": "#E29587",
+  "--color-dark": "#C6726B",
+  "--color-light": "#FFF0E3",
+  "--color-text-main": "#5C3A4D"
+}

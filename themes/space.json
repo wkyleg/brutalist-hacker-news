@@ -1,0 +1,11 @@
+{
+  "name": "space",
+  "displayName": "2oo4",
+  "--color-primary": "#3B5998",
+  "--color-secondary": "#D9E6F2",
+  "--color-accent-1": "#FF4500",
+  "--color-accent-2": "#FFD700",
+  "--color-dark": "#333333",
+  "--color-light": "#FFFFFF",
+  "--color-text-main": "#000000"
+}

@@ -1,0 +1,11 @@
+{
+  "name": "aero",
+  "displayName": "Aҽɾσ",
+  "--color-primary": "#3C9EE7",
+  "--color-secondary": "#EDE9E6",
+  "--color-accent-1": "#4CAE50",
+  "--color-accent-2": "#FFA500",
+  "--color-dark": "#003366",
+  "--color-light": "#FFFFFF",
+  "--color-text-main": "#4D4D4D"
+}

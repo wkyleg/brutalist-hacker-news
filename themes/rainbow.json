@@ -1,0 +1,11 @@
+{
+  "name": "rainbow",
+  "displayName": "✦☾⇢✧⇠☽✦",
+  "--color-primary": "#FF69B4",
+  "--color-secondary": "#00BFFF",
+  "--color-accent-1": "#FFD700",
+  "--color-accent-2": "#32CD32",
+  "--color-dark": "#8B008B",
+  "--color-light": "#F0E68C",
+  "--color-text-main": "#2F4F4F"
+}

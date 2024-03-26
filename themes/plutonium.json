@@ -1,0 +1,11 @@
+{
+  "name": "plutonium",
+  "displayName": "☢️Pu-239☢️",
+  "--color-primary": "#A40000",
+  "--color-secondary": "#37ff00",
+  "--color-accent-1": "#FF4500",
+  "--color-accent-2": "#C0C0C0",
+  "--color-dark": "#800000",
+  "--color-light": "#dedede",
+  "--color-text-main": "#730c0c"
+}

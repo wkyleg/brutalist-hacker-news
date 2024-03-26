@@ -1,0 +1,11 @@
+{
+  "name": "vaporwave",
+  "displayName": "VAPORWAVE",
+  "--color-primary": "#ff71ce",
+  "--color-secondary": "#01cdfe",
+  "--color-accent-1": "#05ffa1",
+  "--color-accent-2": "#b967ff",
+  "--color-dark": "#21094e",
+  "--color-light": "#e0c3fc",
+  "--color-text-main": "#ffffff"
+}

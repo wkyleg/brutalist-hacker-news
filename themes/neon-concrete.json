@@ -1,0 +1,11 @@
+{
+  "name": "neon-concrete",
+  "displayName": "N3ØN ₵ØN₵RΣTΣ",
+  "--color-primary": "#00D9FF",
+  "--color-secondary": "#FF007F",
+  "--color-accent-1": "#8C8C8C",
+  "--color-accent-2": "#9A9A9A",
+  "--color-dark": "#1A1A1A",
+  "--color-light": "#E5E5E5",
+  "--color-text-main": "#757575"
+}

@@ -1,0 +1,11 @@
+{
+  "name": "spiral",
+  "displayName": "Spiral✵Galaxy",
+  "--color-primary": "#5698c4",
+  "--color-secondary": "#7a6fbe",
+  "--color-accent-1": "#9ad3de",
+  "--color-accent-2": "#ffffff",
+  "--color-dark": "#353535",
+  "--color-light": "#f4f4f4",
+  "--color-text-main": "#353535"
+}

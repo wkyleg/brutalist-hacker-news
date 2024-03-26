@@ -1,0 +1,11 @@
+{
+  "name": "radio",
+  "displayName": "Pïrätë🎙️Rädïo",
+  "--color-primary": "#6D4C41",
+  "--color-secondary": "#3E2723",
+  "--color-accent-1": "#D7CCC8",
+  "--color-accent-2": "#A1887F",
+  "--color-dark": "#1B0000",
+  "--color-light": "#fbedc1;",
+  "--color-text-main": "#01411e"
+}

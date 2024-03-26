@@ -1,0 +1,11 @@
+{
+  "name": "delhi",
+  "displayName": "नई नई दिल्ली",
+  "--color-primary": "#C8102E",
+  "--color-secondary": "#FFD700",
+  "--color-accent-1": "#008000",
+  "--color-accent-2": "#FFFFFF",
+  "--color-dark": "#4B5320",
+  "--color-light": "#FADA5E",
+  "--color-text-main": "#000000"
+}

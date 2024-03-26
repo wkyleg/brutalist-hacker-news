@@ -1,0 +1,11 @@
+{
+  "name": "k-punk",
+  "displayName": "𝕂𝕡𝕦𝕟𝕜",
+  "--color-primary": "#0A0A0A",
+  "--color-secondary": "#D32F2F",
+  "--color-accent-1": "#303F9F",
+  "--color-accent-2": "#FBC02D",
+  "--color-dark": "#000000",
+  "--color-light": "#F5F5F5",
+  "--color-text-main": "#ff0000"
+}

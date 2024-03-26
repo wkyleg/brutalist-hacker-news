@@ -1,0 +1,11 @@
+{
+  "name": "noir",
+  "displayName": "∅byssal Noir",
+  "--color-primary": "#303030",
+  "--color-secondary": "#0a0a0a",
+  "--color-accent-1": "#262626",
+  "--color-accent-2": "#333333",
+  "--color-dark": "#000000",
+  "--color-light": "#141414",
+  "--color-text-main": "#575757"
+}

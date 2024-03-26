@@ -1,0 +1,11 @@
+{
+  "name": "solarpunk",
+  "displayName": "S☼LΛRPUNK",
+  "--color-primary": "#ff8c00",
+  "--color-secondary": "#7ec850",
+  "--color-accent-1": "#ffd700",
+  "--color-accent-2": "#40e0d0",
+  "--color-dark": "#005a51",
+  "--color-light": "#f0f8ff",
+  "--color-text-main": "#3c6e71"
+}

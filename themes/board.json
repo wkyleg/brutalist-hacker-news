@@ -1,0 +1,11 @@
+{
+  "name": "board",
+  "displayName": "Ｂｏａｒｄ",
+  "--color-primary": "#E94E77",
+  "--color-secondary": "#0CDBD3",
+  "--color-accent-1": "#FCF300",
+  "--color-accent-2": "#66FF00",
+  "--color-dark": "#202020",
+  "--color-light": "#F8F8F8",
+  "--color-text-main": "#202020"
+}

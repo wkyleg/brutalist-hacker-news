@@ -1,0 +1,11 @@
+{
+  "name": "merc",
+  "displayName": "ⓜⓔⓡⓒ",
+  "--color-primary": "#4B5320",
+  "--color-secondary": "#78866B",
+  "--color-accent-1": "#6B8E23",
+  "--color-accent-2": "#806B2A",
+  "--color-dark": "#3C341F",
+  "--color-light": "#F0E68C",
+  "--color-text-main": "#333333"
+}

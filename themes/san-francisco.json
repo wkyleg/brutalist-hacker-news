@@ -1,0 +1,11 @@
+{
+  "name": "san-francisco",
+  "displayName": "S⍺n Fr⍺ncisc0",
+  "--color-primary": "#FFA500",
+  "--color-secondary": "#FFD700",
+  "--color-accent-1": "#008080",
+  "--color-accent-2": "#DA70D6",
+  "--color-dark": "#696969",
+  "--color-light": "#F5F5F5",
+  "--color-text-main": "#000000"
+}

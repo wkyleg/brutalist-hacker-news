@@ -1,0 +1,11 @@
+{
+  "name": "pastel-goth",
+  "displayName": "𝔓𝔞𝔰𝔱𝔢𝔩 𝔊𝔬𝔱𝔥",
+  "--color-primary": "#8A4F7D",
+  "--color-secondary": "#4A4063",
+  "--color-accent-1": "#F4BEEE",
+  "--color-accent-2": "#9E768F",
+  "--color-dark": "#22223B",
+  "--color-light": "#FFFFFF",
+  "--color-text-main": "#4A4A4A"
+}

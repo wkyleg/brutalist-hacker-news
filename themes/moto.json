@@ -1,0 +1,11 @@
+{
+  "name": "moto",
+  "displayName": "ⓜⓞⓣⓞ",
+  "--color-primary": "#FF0000",
+  "--color-secondary": "#211E1E",
+  "--color-accent-1": "#087E8B",
+  "--color-accent-2": "#F2C641",
+  "--color-dark": "#0B3C5D",
+  "--color-light": "#E0E1DD",
+  "--color-text-main": "#ff0000"
+}

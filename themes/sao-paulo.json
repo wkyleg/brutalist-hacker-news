@@ -1,0 +1,11 @@
+{
+  "name": "sao-paulo",
+  "displayName": "🄼🄴🅃🄾́🄿🄾🄻🄸🅂 🄿🄰🅄🄻🄸🅂🅃🄰",
+  "--color-primary": "#FFD700",
+  "--color-secondary": "#C0C0C0",
+  "--color-accent-1": "#008000",
+  "--color-accent-2": "#A52A2A",
+  "--color-dark": "#333333",
+  "--color-light": "#F0F0F0",
+  "--color-text-main": "#000000"
+}

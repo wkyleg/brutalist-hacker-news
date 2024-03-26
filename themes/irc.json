@@ -1,0 +1,11 @@
+{
+  "name": "irc",
+  "displayName": "IRC₍ᴵₙₜₑᵣₙₑₜ ᴿₑₗₐᵧ ₢ₕₐₜ₎",
+  "--color-primary": "#0C7BDC",
+  "--color-secondary": "#E1E8ED",
+  "--color-accent-1": "#F44336",
+  "--color-accent-2": "#FFEB3B",
+  "--color-dark": "#37474F",
+  "--color-light": "#FFFFFF",
+  "--color-text-main": "#212121"
+}

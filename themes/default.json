@@ -1,0 +1,11 @@
+{
+  "name": "default",
+  "displayName": "default",
+  "--color-primary": "#e30613",
+  "--color-secondary": "#ffed00",
+  "--color-accent-1": "#f6d365",
+  "--color-accent-2": "#fda085",
+  "--color-dark": "#3c3c3c",
+  "--color-light": "#FFFFFF",
+  "--color-text-main": "#2f4f4f"
+}

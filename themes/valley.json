@@ -1,0 +1,11 @@
+{
+  "name": "valley",
+  "displayName": "ᐯᗩᒪᒪᕮᎩ",
+  "--color-primary": "#FF6600",
+  "--color-secondary": "#0A84FF",
+  "--color-accent-1": "#FF1744",
+  "--color-accent-2": "#FFEA00",
+  "--color-dark": "#000000",
+  "--color-light": "#FFFFFF",
+  "--color-text-main": "#424242"
+}

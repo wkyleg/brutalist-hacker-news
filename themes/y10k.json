@@ -1,0 +1,11 @@
+{
+  "name": "y10k",
+  "displayName": "Y₁₀ₖ",
+  "--color-primary": "#0a0f0d",
+  "--color-secondary": "#1c3b3a",
+  "--color-accent-1": "#4a7070",
+  "--color-accent-2": "#729595",
+  "--color-dark": "#050708",
+  "--color-light": "#cfd8dc",
+  "--color-text-main": "#00444d"
+}

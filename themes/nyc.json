@@ -1,0 +1,11 @@
+{
+  "name": "nyc",
+  "displayName": "𝕟𝕪𝕔",
+  "--color-primary": "#4d4d4d",
+  "--color-secondary": "#999999",
+  "--color-accent-1": "#b3b3b3",
+  "--color-accent-2": "#e6e6e6",
+  "--color-dark": "#333333",
+  "--color-light": "#f2f2f2",
+  "--color-text-main": "#1a1a1a"
+}

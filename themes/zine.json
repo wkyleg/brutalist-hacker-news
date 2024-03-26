@@ -1,0 +1,11 @@
+{
+  "name": "zine",
+  "displayName": "Z̲̅i̲̅n̲̅e̲̅",
+  "--color-primary": "#F4D03F",
+  "--color-secondary": "#E74C3C",
+  "--color-accent-1": "#3498DB",
+  "--color-accent-2": "#2ECC71",
+  "--color-dark": "#34495E",
+  "--color-light": "#ECF0F1",
+  "--color-text-main": "#2C3E50"
+}

@@ -1,0 +1,11 @@
+{
+  "name": "china",
+  "displayName": "中國龍",
+  "--color-primary": "#A80000",
+  "--color-secondary": "#FFD700",
+  "--color-accent-1": "#00A86B",
+  "--color-accent-2": "#8B4513",
+  "--color-dark": "#000000",
+  "--color-light": "#FFFAF0",
+  "--color-text-main": "#363636"
+}

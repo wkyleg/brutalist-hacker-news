@@ -1,0 +1,11 @@
+{
+  "name": "hippie",
+  "displayName": "Ħłρρłε",
+  "--color-primary": "#fabd2f",
+  "--color-secondary": "#d3869b",
+  "--color-accent-1": "#83a598",
+  "--color-accent-2": "#b8bb26",
+  "--color-dark": "#282828",
+  "--color-light": "#ebdbb2",
+  "--color-text-main": "#996b00"
+}

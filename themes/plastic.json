@@ -1,0 +1,11 @@
+{
+  "name": "plastic",
+  "displayName": "ℙ𝕝𝕒𝕤𝕥𝕚𝕔",
+  "--color-primary": "#13CA91",
+  "--color-secondary": "#FF48C4",
+  "--color-accent-1": "#00B2FF",
+  "--color-accent-2": "#FFEB3B",
+  "--color-dark": "#6A1B9A",
+  "--color-light": "#B2F2EF",
+  "--color-text-main": "#cc8b00"
+}

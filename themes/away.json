@@ -1,0 +1,11 @@
+{
+  "name": "away",
+  "displayName": "✉Away✉",
+  "--color-primary": "#8A2BE2",
+  "--color-secondary": "#DEB887",
+  "--color-accent-1": "#FF69B4",
+  "--color-accent-2": "#00FF7F",
+  "--color-dark": "#000080",
+  "--color-light": "#F5F5DC",
+  "--color-text-main": "#000000"
+}

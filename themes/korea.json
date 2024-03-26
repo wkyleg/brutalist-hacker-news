@@ -1,0 +1,11 @@
+{
+  "name": "korea",
+  "displayName": "한국의 빛",
+  "--color-primary": "#d22630",
+  "--color-secondary": "#003478",
+  "--color-accent-1": "#fcc419",
+  "--color-accent-2": "#6799ff",
+  "--color-dark": "#2e2e2e",
+  "--color-light": "#f3f3f3",
+  "--color-text-main": "#101010"
+}

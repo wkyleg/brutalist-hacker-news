@@ -1,0 +1,11 @@
+{
+  "name": "uranium",
+  "displayName": "☢️U-235☢️",
+  "--color-primary": "#4F7942",
+  "--color-secondary": "#7FFFD4",
+  "--color-accent-1": "#A7D30C",
+  "--color-accent-2": "#E6E6FA",
+  "--color-dark": "#003300",
+  "--color-light": "#F0FFF0",
+  "--color-text-main": "#4F7942"
+}

@@ -1,0 +1,11 @@
+{
+  "name": "sudo",
+  "displayName": "sudo rm -rf /*",
+  "--color-primary": "#000000",
+  "--color-secondary": "#000000",
+  "--color-accent-1": "#000000",
+  "--color-accent-2": "#000000",
+  "--color-dark": "#000000",
+  "--color-light": "#00FF00",
+  "--color-text-main": "#000000"
+}

@@ -1,0 +1,11 @@
+{
+  "name": "the-spectacle",
+  "displayName": "𝕿𝖍𝖊 𝕾𝖕𝖊𝖈𝖙𝖆𝖈𝖑𝖊",
+  "--color-primary": "#E03E3E",
+  "--color-secondary": "#0A8F08",
+  "--color-accent-1": "#FFD700",
+  "--color-accent-2": "#6A0DAD",
+  "--color-dark": "#212529",
+  "--color-light": "#F8F9FA",
+  "--color-text-main": "#333333"
+}

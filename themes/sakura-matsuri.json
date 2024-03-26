@@ -1,0 +1,11 @@
+{
+  "name": "sakura-matsuri",
+  "displayName": "桜ーまつり",
+  "--color-primary": "#FF69B4",
+  "--color-secondary": "#FFD700",
+  "--color-accent-1": "#FF6347",
+  "--color-accent-2": "#FF1493",
+  "--color-dark": "#000000",
+  "--color-light": "#FFFAF0",
+  "--color-text-main": "#363636"
+}

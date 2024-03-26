@@ -1,0 +1,11 @@
+{
+  "name": "neo-vegas",
+  "displayName": "𝓝𝓮𝓸 𝓥𝓮𝓰𝓪𝓼",
+  "--color-primary": "#ff4500",
+  "--color-secondary": "#ffd700",
+  "--color-accent-1": "#008b8b",
+  "--color-accent-2": "#8b4513",
+  "--color-dark": "#282828",
+  "--color-light": "#f0e68c",
+  "--color-text-main": "#5c0075"
+}

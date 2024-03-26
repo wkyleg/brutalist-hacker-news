@@ -158,7 +158,16 @@
 					</button>
 				</div>
 			</div>
-			<p>... or apply pre-built theme ...</p>
+			<br />
+
+			<button id="download-theme-button" class="button-large">
+				DOWNLOAD CURRENT THEME
+			</button>
+
+			<br />
+			<br />
+			<p>... or apply a pre-built theme ...</p>
+
 			<div class="theme-buttons-row">
 				<button id="button-theme-default">DEFAULT</button>
 				<button id="button-theme-hacker">H@CK3ᴙ</button>
@@ -234,18 +243,33 @@
 			</div>
 
 			<br />
-			<button id="download-theme-button" class="settings-favorites-button">
-				DOWNLOAD CURRENT THEME
+			<br />
+			<p>.
+				.. or add a new theme ...
+				<br />
+				See <a href="https://github.com/wkyleg/brutalist-hacker-news"
+					title="The git repository for this website" data-allow-external="true">GitHub</a> for
+				more themes you can add, as well as how to add your own theme
+			</p>
+
+			<div class="added-themes" id="added-themes-outlet"></div>
+
+			<button class="button-large" id="add-new-theme-button">
+				+ Add New Theme
 			</button>
+
+
+
+
 			<br />
 			<br />
 			<br />
 
 			<h3>FAVORITES</h3>
-			<button id="download-favorites-button" class="settings-favorites-button">
+			<button id="download-favorites-button" class="button-large">
 				DOWNLOAD FAVORITES
 			</button>
-			<button id="clear-all-favorites-button" class="settings-favorites-button">
+			<button id="clear-all-favorites-button" class="button-large">
 				CLEAR ALL FAVORITES
 			</button>
 
@@ -262,64 +286,64 @@
 					instructions:
 				</p>
 
-				<h4>Android</h4>
-				<ol>
-					<li>
-						Tap the menu icon (3 dots in upper right-hand corner) and tap 'Add
-						to Home screen'.
-					</li>
-					<li>
-						You'll be able to enter a name for the shortcut and then Chrome
-						will add it to your home screen.
-					</li>
-				</ol>
+				<strong>Android<strong>
+						<ol>
+							<li>
+								Tap the menu icon (3 dots in upper right-hand corner) and tap 'Add
+								to Home screen'.
+							</li>
+							<li>
+								You'll be able to enter a name for the shortcut and then Chrome
+								will add it to your home screen.
+							</li>
+						</ol>
 
-				<h4>iOS</h4>
-				<ol>
-					<li>
-						Tap the 'Share' button (the square with an arrow pointing out of
-						it) at the bottom of the screen.
-					</li>
-					<li>
-						Scroll down to the list of actions and tap 'Add to Home Screen'.
-					</li>
-					<li>
-						Enter a name for the shortcut and then Safari will add it to your
-						home screen.
-					</li>
-				</ol>
+						<strong>iOS</strong>
+						<ol>
+							<li>
+								Tap the 'Share' button (the square with an arrow pointing out of
+								it) at the bottom of the screen.
+							</li>
+							<li>
+								Scroll down to the list of actions and tap 'Add to Home Screen'.
+							</li>
+							<li>
+								Enter a name for the shortcut and then Safari will add it to your
+								home screen.
+							</li>
+						</ol>
 
-				<h4>Chrome/Brave/Opera</h4>
-				<ol>
-					<li>
-						Look for a '+' icon in the address bar at the right or an
-						'Install' icon in the right side of the address bar.
-					</li>
-					<li>
-						Click the icon and follow the prompt to install the application.
-					</li>
-				</ol>
+						<strong>Chrome/Brave/Opera</strong>
+						<ol>
+							<li>
+								Look for a '+' icon in the address bar at the right or an
+								'Install' icon in the right side of the address bar.
+							</li>
+							<li>
+								Click the icon and follow the prompt to install the application.
+							</li>
+						</ol>
 
-				<h4>Microsoft Edge</h4>
-				<ol>
-					<li>
-						Click on the 'Settings and more' menu (3 dots in upper right-hand
-						corner) or look for an 'Install' icon on the right side of the
-						address bar.
-					</li>
-					<li>Select 'Apps' > 'Install this site as an app'.</li>
-					<li>Enter a name for the app and confirm the installation.</li>
-				</ol>
+						<strong>Microsoft Edge</strong>
+						<ol>
+							<li>
+								Click on the 'Settings and more' menu (3 dots in upper right-hand
+								corner) or look for an 'Install' icon on the right side of the
+								address bar.
+							</li>
+							<li>Select 'Apps' > 'Install this site as an app'.</li>
+							<li>Enter a name for the app and confirm the installation.</li>
+						</ol>
 
-				<h4>Firefox</h4>
-				<ol>
-					<li>
-						Click on the 'Page Actions' menu (3 dots in the address bar) or
-						look for an 'Install' icon on the right side of the address bar.
-					</li>
-					<li>Select 'Install Site as App'.</li>
-					<li>Enter a name for the app and confirm the installation.</li>
-				</ol>
+						<strong>Firefox</stong>
+							<ol>
+								<li>
+									Click on the 'Page Actions' menu (3 dots in the address bar) or
+									look for an 'Install' icon on the right side of the address bar.
+								</li>
+								<li>Select 'Install Site as App'.</li>
+								<li>Enter a name for the app and confirm the installation.</li>
+							</ol>
 			</section>
 
 			<br />
@@ -352,7 +376,7 @@
 
 				<br />
 				<br />
-				<button id="share-website">SHARE THIS WEBSITE</button>
+				<button id="share-website" class="button-large">SHARE THIS WEBSITE</button>
 
 				<br />
 				<br />
@@ -451,7 +475,8 @@
 	h3 {
 		margin-top: 0;
 		margin-bottom: var(--size-xs);
-		color: var(--color-primary)
+		color: var(--color-primary);
+		font-size: var(--size-md);
 	}
 
 	input {
@@ -511,6 +536,10 @@
 		background: var(--color-light);
 		color: var(--color-text-main);
 		transition: all .2s ease-in-out
+	}
+
+	.button-large {
+		height: var(--size-lg);
 	}
 
 	button:hover {
@@ -1076,8 +1105,14 @@
 		animation: fade-in .5s
 	}
 
-	.settings-favorites-button {
-		height: var(--size-md)
+	#settings-outlet p,
+	ol,
+	li {
+		font-size: var(--size-sm);
+	}
+
+	#settings-outlet strong {
+		color: var(--color-primary);
 	}
 
 	.setting-element {
@@ -1117,11 +1152,6 @@
 	}
 
 	.theme-buttons-row button {
-		margin-bottom: var(--size-xs);
-		height: var(--size-md)
-	}
-
-	.about-text button {
 		margin-bottom: var(--size-xs);
 		height: var(--size-md)
 	}
@@ -2408,6 +2438,63 @@
 	};
 
 
+	const getAddedThemes = () => {
+		const addedThemes = localStorage.getItem("addedThemes");
+		if (addedThemes) {
+			return JSON.parse(addedThemes);
+		}
+		return {};
+	};
+
+	const addAddedTheme = (theme) => {
+		const addedThemes = getAddedThemes();
+		addedThemes[theme.name] = theme;
+		localStorage.setItem("addedThemes", JSON.stringify(savedThemes));
+	};
+
+
+	function renderAddedThemes() {
+		$ref("#added-themes-outlet").innerHTML = "";
+		const addedThemes = getAddedThemes();
+
+		const fragent = document.createDocumentFragment();
+		Object.entries(addedThemes).map(([key, value]) => {
+			const button = document.createElement("button");
+			button.innerHTML = value.displayName
+			// TODO: make apply theme work with user added themes
+			button.addEventListener("click", () => applyTheme(key));
+			fragment.appendChild(button);
+		});
+
+	}
+
+	/**
+	 * Download JSON object as file
+	 * @param {object} object
+	 * @param {string} filename
+	 * @returns {void}
+	 */
+
+	function onAddNewThemeButtonClick() {
+		const themeName = prompt("Theme name:", "A theme name from the Github repo");
+
+		if (!themeName) return;
+
+		fetch(`/themes/${themeName}`)
+			.then((response) => response.json())
+			.then((theme) => {
+				themes[themeName] = theme;
+				addAddedTheme(theme);
+				renderAddedThemes();
+			})
+			.catch((error) => {
+				console.error(error);
+				alert("Failed to fetch theme");
+			});
+
+	}
+
+
 	/**
 	 * Initializes settings
 	 * Reads users settings preferences from local storage and applies them to the document
@@ -2448,11 +2535,17 @@
 			.querySelector("#download-theme-button")
 			.addEventListener("click", downloadCurrentColorTheme);
 
+		Object.entries(getAddedThemes()).map(([key, value]) =>
+			themes[key] = value
+		);
+
 		Object.entries(themes).forEach(([key, value]) => {
 			document
 				.querySelector(`#button-theme-${key}`)
 				.addEventListener("click", () => applyTheme(value));
 		});
+
+		document.querySelector("#add-new-theme-button").addEventListener("click", onAddNewThemeButtonClick);
 
 		document.getElementById("share-website").addEventListener("click", () =>
 			new ShareModal()

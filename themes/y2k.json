@@ -1,0 +1,11 @@
+{
+  "name": "y2k",
+  "displayName": "ⓨ²ⓚ",
+  "--color-primary": "#00FF00",
+  "--color-secondary": "#FF69B4",
+  "--color-accent-1": "#0000FF",
+  "--color-accent-2": "#FFD700",
+  "--color-dark": "#000080",
+  "--color-light": "#FFFFFF",
+  "--color-text-main": "#000000"
+}

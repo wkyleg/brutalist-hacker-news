@@ -1,0 +1,11 @@
+{
+  "name": "neo-tokyo",
+  "displayName": "新しい東京",
+  "--color-primary": "#DC143C",
+  "--color-secondary": "#FFC0CB",
+  "--color-accent-1": "#87CEEB",
+  "--color-accent-2": "#32CD32",
+  "--color-dark": "#00008B",
+  "--color-light": "#FFFFFF",
+  "--color-text-main": "#2F4F4F"
+}

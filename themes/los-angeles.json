@@ -1,0 +1,11 @@
+{
+  "name": "los-angeles",
+  "displayName": "L0S@NGeLE$",
+  "--color-primary": "#FFCC00",
+  "--color-secondary": "#C0C0C0",
+  "--color-accent-1": "#00AEEF",
+  "--color-accent-2": "#FF6E4A",
+  "--color-dark": "#2D2D2D",
+  "--color-light": "#FFFFFF",
+  "--color-text-main": "#000000"
+}

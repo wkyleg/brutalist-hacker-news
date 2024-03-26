@@ -1,0 +1,11 @@
+{
+  "name": "psyc",
+  "displayName": "ᑭѕүᴄʜ",
+  "--color-primary": "#DF00FF",
+  "--color-secondary": "#FFD700",
+  "--color-accent-1": "#00FF00",
+  "--color-accent-2": "#FF007F",
+  "--color-dark": "#0000FF",
+  "--color-light": "#FFA500",
+  "--color-text-main": "#FFFFFF"
+}

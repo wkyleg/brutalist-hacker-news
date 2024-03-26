@@ -1,0 +1,11 @@
+{
+  "name": "mp3",
+  "displayName": "♫ₘₚ₃♫",
+  "--color-primary": "#4A90E2",
+  "--color-secondary": "#AAB8C2",
+  "--color-accent-1": "#F8E71C",
+  "--color-accent-2": "#D0021B",
+  "--color-dark": "#4A4A4A",
+  "--color-light": "#FFFFFF",
+  "--color-text-main": "#000000"
+}

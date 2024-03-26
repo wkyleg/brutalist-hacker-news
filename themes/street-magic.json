@@ -1,0 +1,11 @@
+{
+  "name": "street-magic",
+  "displayName": "ⓈⓉⓇⒺⒺⓉ ⓂⒶⒼⒾⒸ",
+  "--color-primary": "#ffcc00",
+  "--color-secondary": "#ff6600",
+  "--color-accent-1": "#ff0000",
+  "--color-accent-2": "#6600ff",
+  "--color-dark": "#000000",
+  "--color-light": "#ffffff",
+  "--color-text-main": "#000000"
+}

@@ -1,0 +1,11 @@
+{
+  "name": "petal-dream",
+  "displayName": "✿ Pétäl Drëäm ✿",
+  "--color-primary": "#F78FB3",
+  "--color-secondary": "#CF9FFF",
+  "--color-accent-1": "#A4DEFF",
+  "--color-accent-2": "#FFD670",
+  "--color-dark": "#7E5475",
+  "--color-light": "#ffdbe1",
+  "--color-text-main": "#e85995"
+}

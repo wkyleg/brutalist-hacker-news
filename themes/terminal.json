@@ -1,0 +1,11 @@
+{
+  "name": "terminal",
+  "displayName": "0DAY",
+  "--color-primary": "#FFD700",
+  "--color-secondary": "#000000",
+  "--color-accent-1": "#FF0000",
+  "--color-accent-2": "#00FF00",
+  "--color-dark": "#0000FF",
+  "--color-light": "#FFFFFF",
+  "--color-text-main": "#000000"
+}

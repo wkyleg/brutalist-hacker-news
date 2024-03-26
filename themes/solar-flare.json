@@ -1,0 +1,11 @@
+{
+  "name": "solar-flare",
+  "displayName": "S☉l@r ⒻⓁⒶⓇⒺ",
+  "--color-primary": "#ffffff",
+  "--color-secondary": "#000000",
+  "--color-accent-1": "#ff0000",
+  "--color-accent-2": "#ffff00",
+  "--color-dark": "#000000",
+  "--color-light": "#ffffff",
+  "--color-text-main": "#282828"
+}

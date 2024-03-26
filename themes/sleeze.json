@@ -1,0 +1,11 @@
+{
+  "name": "sleeze",
+  "displayName": "𝕾𝖑𝖊𝖆𝖟𝖊",
+  "--color-primary": "#C2185B",
+  "--color-secondary": "#00E5FF",
+  "--color-accent-1": "#CDDC39",
+  "--color-accent-2": "#FFEB3B",
+  "--color-dark": "#212121",
+  "--color-light": "#F5F5F5",
+  "--color-text-main": "#ad8800"
+}

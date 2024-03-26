@@ -1,0 +1,11 @@
+{
+  "name": "scene",
+  "displayName": "𝚛𝚎𝚜𝚌𝚎𝚗𝚌𝚎",
+  "--color-primary": "#35465C",
+  "--color-secondary": "#A77DC2",
+  "--color-accent-1": "#58C9B9",
+  "--color-accent-2": "#F4ACB7",
+  "--color-dark": "#263238",
+  "--color-light": "#ECEFF1",
+  "--color-text-main": "#b25ed9"
+}

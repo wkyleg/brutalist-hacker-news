@@ -1,0 +1,11 @@
+{
+  "name": "washington",
+  "displayName": "Ⓦⓐⓢⓗⓘⓝⓖⓣⓞⓝ",
+  "--color-primary": "#B22234",
+  "--color-secondary": "#3C3B6E",
+  "--color-accent-1": "#FFFFFF",
+  "--color-accent-2": "#F0EDEE",
+  "--color-dark": "#212529",
+  "--color-light": "#F0E68C",
+  "--color-text-main": "#002D62"
+}

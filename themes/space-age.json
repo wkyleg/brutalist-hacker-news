@@ -1,0 +1,11 @@
+{
+  "name": "space-age",
+  "displayName": "🛸🛸🛸",
+  "--color-primary": "#0b3d91",
+  "--color-secondary": "#ffffff",
+  "--color-accent-1": "#ff6f61",
+  "--color-accent-2": "#ffd700",
+  "--color-dark": "#000080",
+  "--color-light": "#f8f9fa",
+  "--color-text-main": "595959;"
+}
