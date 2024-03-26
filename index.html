@@ -1195,9 +1195,6 @@
 		return response.json();
 	}
 
-	const itemCache = new Map();
-
-
 	/**
 	 * Regarding the Hacker News API:
 	 * Stories, comments, jobs, Ask HNs and even polls are just items. They're
@@ -1245,23 +1242,13 @@
 		jobStories: () =>
 			getRequestWithLoadingAnimation(`${HACKER_NEWS_API_URL}jobstories.json`),
 		item: (id) => {
-			if (itemCache.has(id)) return Promise.resolve(itemCache.get(id));
 			return fetch(`${HACKER_NEWS_API_URL}item/${id}.json`)
 				.then((response) => response.json())
-				.then((item) => {
-					itemCache.set(id, item);
-					return item;
-				})
 				.catch((error) => console.error(error));
 		},
 		user: (id) => {
-			if (itemCache.has(id)) return Promise.resolve(itemCache.get(id));
 			return fetch(`${HACKER_NEWS_API_URL}user/${id}.json`)
 				.then((response) => response.json())
-				.then((item) => {
-					itemCache.set(id, item);
-					return item;
-				})
 				.catch((error) => console.error(error));
 		},
 	};
@@ -2929,29 +2916,32 @@
 	 * Markup for modal close button
 	 * @returns {string}
 	 */
-	const getModalCloseButtonString = () =>
+	const MODAL_CLOSE_BUTTON_STRING =
 		`<nav id="close-button" class="text-link-button" title="Close Modal">[X]</nav>`;
 
 	/**
 	 * Markup for modal maximize button
 	 * @returns {string}
 	 */
-	const getModalMaximizeButtonString = () =>
+	const MODAL_MAXIMIZE_BUTTON_STRING =
 		`<nav id="maximize-button" class="text-link-button" title="Toggle Full Screen">[+]</nav>`;
 
 	/**
 	 * Markup for modal open link button
 	 * @returns {string}
 	 */
-	const getModalOpenLinkString = () =>
+	const MODAL_OPEN_LINK_BUTTON_STRING =
 		`<nav id="open-link-button" class="text-link-button" title='Open In New Tab'>[⬆️]</nav>`
 
 	/**
 	 * Markup for modal share button
 	 * @returns {string}
 	 */
-	const getModalShareButtonString = () =>
+	const MODAL_SHARE_BUTTON_STRING =
 		`<nav id="share-button" class="text-link-button" title='Share'>[📤]</nav>`;
+
+	const MODAL_REFRESH_BUTTON_STRING =
+		`<nav id="refresh-button" class="text-link-button" title='Refresh'>[🔄]</nav>`;
 
 	/**
 	 * Markup for modal favorite button
@@ -2961,6 +2951,8 @@
 	const getModalFavoriteButtonString = (isFavorited) =>
 		`<nav id="favorite-button" class="text-link-button" title='Save/Unsave Story'>[${isFavorited ? MODAL_ICON_IS_FAVORITED : MODAL_ICON_NOT_FAVORITED}]</nav>`;
 
+
+	const LOADING_INDICATOR_ELEMENT_STRING = "<span id=\"loading-comments\" class=\"type\"><span>Loading...</span></span>";
 	/**
 	 * Double tap on modal header to resize
 	 * @param {HTMLElement} modal
@@ -3040,14 +3032,13 @@
 			"modal",
 			"title-actions-modal",
 			"use-gpu-rendering",
-
 		);
 
 		modal.innerHTML = `
       <header class="modal-window-title" role="dialog" aria-modal="true">
         <div class="modal-action-buttons">
-          ${getModalCloseButtonString()}
-          ${!isMobileDevice() ? getModalMaximizeButtonString() : ""}
+          ${MODAL_CLOSE_BUTTON_STRING}
+          ${!isMobileDevice() ? MODAL_MAXIMIZE_BUTTON_STRING : ""}
         </div>
         <div class="title-actions-modal-title">Share</div>
         <div class="spacer"></div>
@@ -3217,8 +3208,10 @@
 
 		modal.innerHTML = `<header class="modal-window-title" role="dialog" aria-modal="true">
         <div class="modal-action-buttons">
-          ${getModalCloseButtonString()}
-          ${!isMobileDevice() ? getModalMaximizeButtonString() : ""}
+          ${MODAL_CLOSE_BUTTON_STRING}
+          ${!isMobileDevice() ? MODAL_MAXIMIZE_BUTTON_STRING : ""}
+		  ${MODAL_SHARE_BUTTON_STRING}
+		  ${MODAL_REFRESH_BUTTON_STRING}
         </div>
         <title class="title-actions-modal-title">${userId}</title>
         <div class="spacer"></div>
@@ -3232,15 +3225,19 @@
         </section>
       </main>`;
 
+		setModalDisplayDefaultSize(modal);
+
 		useModalHeaderCloseButtonBehavior(modal, () => removeProfileModalFromURL(userId));
 		useModalHeaderDoubleTapResize(modal);
 		useModalHeaderMaximizeButtonBehavior(modal);
 		useModalDragBehavior(modal);
-		setModalDisplayDefaultSize(modal);
+		useModalHeaderShareButtonBehavior(modal);
 
-		API.user(userId).then((user) => {
-			const userDetails = modal.querySelector(".user-details");
-			userDetails.innerHTML = `<div class="user-description">
+		const render = () => {
+
+			API.user(userId).then((user) => {
+				const userDetails = modal.querySelector(".user-details");
+				userDetails.innerHTML = `<div class="user-description">
             <strong>JOINED:</strong> ${formatDate(user.created)}
             <br />
             <strong>KARMA:</strong> ${user.karma || 0}
@@ -3253,34 +3250,39 @@
         </div>
         `;
 
-			const userSubmitted = userDetails.querySelector(".user-submitted");
-			user.submitted.forEach((storyId) => {
-				userSubmitted.appendChild(new UserSubmittedItemElement(storyId));
+				const userSubmitted = userDetails.querySelector(".user-submitted");
+				user.submitted.forEach((storyId) => {
+					userSubmitted.appendChild(new UserSubmittedItemElement(storyId));
+				});
+
+				// Load items as they come into view. Users can have submitted 
+				// thosands of items so this needs to be throttled
+				const submittedStoriesObserver = new IntersectionObserver(
+					(entries) => {
+						entries.forEach((entry) => {
+							if (entry.isIntersecting) {
+								const storyId = entry.target.id;
+								if (userProfileItemCallbacks[storyId]) {
+									userProfileItemCallbacks[storyId]();
+									delete userProfileItemCallbacks[storyId];
+								}
+							}
+						});
+					},
+					{ rootMargin: "0px 0px 100px 0px" }
+				);
+
+				userSubmitted
+					.querySelectorAll(".profile-item-container")
+					.forEach((story) => {
+						submittedStoriesObserver.observe(story);
+					});
 			});
 
-			// Load items as they come into view. Users can have submitted 
-			// thosands of items so this needs to be throttled
-			const submittedStoriesObserver = new IntersectionObserver(
-				(entries) => {
-					entries.forEach((entry) => {
-						if (entry.isIntersecting) {
-							const storyId = entry.target.id;
-							if (userProfileItemCallbacks[storyId]) {
-								userProfileItemCallbacks[storyId]();
-								delete userProfileItemCallbacks[storyId];
-							}
-						}
-					});
-				},
-				{ rootMargin: "0px 0px 100px 0px" }
-			);
+		}
 
-			userSubmitted
-				.querySelectorAll(".profile-item-container")
-				.forEach((story) => {
-					submittedStoriesObserver.observe(story);
-				});
-		});
+		modal.querySelector("#refresh-button").addEventListener("click", render);
+		render();
 
 		addProfileModalToURL(userId);
 		document.body.appendChild(modal);
@@ -3305,10 +3307,10 @@
 		);
 
 		modal.innerHTML = `<header class="modal-window-title" role="dialog" aria-modal="true">
-		${getModalCloseButtonString()}
-        ${!isMobileDevice() ? getModalMaximizeButtonString() : ""}
-		${getModalOpenLinkString()}
-        ${getModalShareButtonString()}
+		${MODAL_CLOSE_BUTTON_STRING}
+        ${!isMobileDevice() ? MODAL_MAXIMIZE_BUTTON_STRING : ""}
+		${MODAL_OPEN_LINK_BUTTON_STRING}
+        ${MODAL_SHARE_BUTTON_STRING}
       </header>
 
       <main class="modal-content">
@@ -3344,22 +3346,20 @@
 		const datePosted = formatDate(story.time);
 
 		modal.innerHTML = `<header class="modal-window-title" role="dialog" aria-modal="true">
-        ${getModalCloseButtonString()}
+        ${MODAL_CLOSE_BUTTON_STRING}
         </nav>
-        ${!isMobileDevice() ? getModalMaximizeButtonString() : ""}
-		${getModalOpenLinkString()}
-
-        ${getModalShareButtonString()}
-
+        ${!isMobileDevice() ? MODAL_MAXIMIZE_BUTTON_STRING : ""}
+		${MODAL_OPEN_LINK_BUTTON_STRING}
+        ${MODAL_SHARE_BUTTON_STRING}
         ${story.url
 				? "<nav id=\"toggle-url-or-post-button\" class=\"text-link-button\" title=\"Toggle Webpage Preview or Hacker News Post\"> [🖥️] </nav>"
 				: ""
 			}
-
         ${isStoryFavorited(story.id)
 				? getModalFavoriteButtonString(true)
 				: getModalFavoriteButtonString(false)
 			}
+		${MODAL_REFRESH_BUTTON_STRING}
       </header>
 
       <main class="modal-content">
@@ -3378,10 +3378,7 @@
 				: ""
 			}
             <div class="comments">
-              ${story.descendants
-				? "<span id=\"loading-comments\" class=\"type\"><span>Loading...</span></span>"
-				: ""
-			}
+              ${story.descendants ? LOADING_INDICATOR_ELEMENT_STRING : ""}
             </div>
           </section>
       </main>`;
@@ -3463,11 +3460,11 @@
 			});
 		}
 
-		const loadingIndicator = modal.querySelector("#loading-comments");
-
 		const hideLoadingMessage = () => {
-			if (loadingIndicator) loadingIndicator.style.display = "none";
+			modal.querySelector("#loading-comments").style.display = "none";
 		};
+
+		const commentsRootElement = modal.querySelector(".comments");
 
 		/*
 		 * Recursive function to load comments asynchronously
@@ -3515,8 +3512,15 @@
 			});
 		};
 
+		const refreshComments = () => {
+			commentsRootElement.innerHTML = LOADING_INDICATOR_ELEMENT_STRING;
+			renderCommentsAsync(story.id, commentsRootElement);
+		};
+
+		modal.querySelector("#refresh-button").addEventListener("click", refreshComments);
+
 		// Trigger load of comments tree
-		renderCommentsAsync(story.id, modal.querySelector(".comments"));
+		renderCommentsAsync(story.id, commentsRootElement);
 
 		document.body.appendChild(modal);
 		addStoryModalToURL(story.id);
