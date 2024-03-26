@@ -868,7 +868,7 @@
 	}
 
 	.modal {
-		z-index: 50;
+		z-index: 100;
 		display: flex;
 		flex-direction: column;
 		position: absolute;
@@ -885,16 +885,9 @@
 		animation: fade-in .75s cubic-bezier(0.165, 0.840, 0.440, 1.000) forwards
 	}
 
-	.modal:hover {
-		z-index: 300;
-	}
 
 	.share-modal {
 		z-index: 400;
-	}
-
-	.title-actions-modal {
-		z-index: 200;
 	}
 
 	.title-actions-modal .modal-action-buttons {
@@ -2630,6 +2623,30 @@
 		});
 	}
 
+	function setModalOnTop(modal, delay = true) {
+		const activeModals = Array.from(
+			document.querySelectorAll('.modal')
+		)
+		activeModals.forEach((m) => m.style.zIndex = "99")
+
+		// The click event from another modal will set itself on top so delay is
+		// needed to ensure the modal is on top.
+		if (delay) {
+			setTimeout(() => {
+				modal.style.zIndex = "200";
+			}, 100)
+			return;
+		}
+
+		modal.style.zIndex = "200";
+	}
+
+	const useModalTilingBehavior = (modal) =>
+		modal.addEventListener("click", () =>
+			setModalOnTop(modal, false)
+		)
+
+
 	/**
 	 * Launch modals corresponding to search params in URL
 	 */
@@ -3194,6 +3211,7 @@
 		useModalHeaderCloseButtonBehavior(modal);
 		useModalHeaderMaximizeButtonBehavior(modal)
 		useModalDragBehavior(modal);
+		useModalTilingBehavior(modal)
 
 		SHARE_OPTIONS.map((shareOption) => {
 			const shareButton = document.createElement("nav");
@@ -3205,6 +3223,7 @@
 		});
 
 		document.body.appendChild(modal);
+		setModalOnTop(modal);
 
 		return modal;
 	}
@@ -3367,6 +3386,7 @@
 
 		setModalDisplayDefaultSize(modal);
 
+		useModalTilingBehavior(modal);
 		useModalHeaderCloseButtonBehavior(modal, () => removeProfileModalFromURL(userId));
 		useModalHeaderDoubleTapResize(modal);
 		useModalHeaderMaximizeButtonBehavior(modal);
@@ -3426,6 +3446,7 @@
 
 		addProfileModalToURL(userId);
 		document.body.appendChild(modal);
+		setModalOnTop(modal);
 
 		return modal;
 	}
@@ -3457,6 +3478,7 @@
         <iframe id="link-iframe" src="${url}"></iframe>
       </main>`;
 
+		useModalTilingBehavior(modal);
 		setModalDisplayDefaultSize(modal);
 		useModalHeaderDoubleTapResize(modal);
 		useModalDragBehavior(modal);
@@ -3469,6 +3491,7 @@
 		);
 
 		document.body.appendChild(modal);
+		setModalOnTop(modal);
 
 		return modal;
 	}
@@ -3530,6 +3553,7 @@
 		useModalHeaderDoubleTapResize(modal);
 		useModalDragBehavior(modal);
 
+		useModalTilingBehavior(modal);
 		useModalHeaderCloseButtonBehavior(modal, () => removeStoryModalFromURL(story.id));
 		useModalHeaderMaximizeButtonBehavior(modal);
 		useModalHeaderShareButtonBehavior(modal);
@@ -3671,6 +3695,7 @@
 
 		document.body.appendChild(modal);
 		addStoryModalToURL(story.id);
+		setModalOnTop(modal);
 
 		return modal;
 	}
