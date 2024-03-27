@@ -1533,126 +1533,104 @@ Other message: "${message}""`);
 	}
 
 
-	function shareOnTwitter(url) {
-		window.open(
-			`${TWITTER_SHARE_URL}${url || window.location.href}`,
-			"_blank"
-		);
-	}
+	const shareOnTwitterUrl = (url) => `${TWITTER_SHARE_URL}${url || window.location.href}`;
 
-	function shareOnFacebook(url) {
-		window.open(
-			`${FACEBOOK_SHARE_URL}${url || window.location.href}`,
-			"_blank"
-		);
-	}
+	const shareOnFacebookUrl = (url) =>
+		`${FACEBOOK_SHARE_URL}${url || window.location.href}`;
 
-	function shareOnLinkedIn(url) {
-		window.open(
-			`${LINKEDIN_SHARE_URL}${url || window.location.href}`,
-			"_blank"
-		);
-	}
 
-	const shareOnWhatsApp = (url) =>
-		window.open(
-			`${WHATSAPP_SHARE_URL}${url || window.location.href}`,
-			"_blank"
-		);
+	const shareOnLinkedInUrl = (url) =>
+		`${LINKEDIN_SHARE_URL}${url || window.location.href}`;
 
-	const shareOnReddit = (url) =>
-		window.open(
-			`${REDDIT_SHARE_URL}${url || window.location.href}`,
-			"_blank"
-		);
 
-	const shareOnTelegram = (url) =>
-		window.open(`${TELEGRAM_URL}${url || window.location.href}`, "_blank");
+	const shareOnWhatsAppUrl = (url) =>
+		`${WHATSAPP_SHARE_URL}${url || window.location.href}`;
 
-	const shareViaEmail = (url) =>
-		window.open(`${EMAIL_SHARE_URL}${url || window.location.href}`, "_blank");
 
-	const shareOnPintrest = () => {
-		window.open(
-			`https://pinterest.com/pin/create/button/?url=${encodeURIComponent(
-				window.location.href
-			)}&media=${encodeURIComponent(
-				MEDIA_URL
-			)}&description=${encodeURIComponent(LINK_SHARE_DESCRIPTION)}`
-		);
-	};
+	const shareOnRedditUrl = (url) =>
+		`${REDDIT_SHARE_URL}${url || window.location.href}`;
 
-	const shareOnTumblr = () => {
-		window.open(
-			`https://www.tumblr.com/widgets/share/tool?canonicalUrl=${encodeURIComponent(
-				window.location.href
-			)}&title=${encodeURIComponent(
-				"BRUTALIST HACKER NEWS"
-			)}&caption=${encodeURIComponent(
-				"A Hacker News reader inspired by Brutalist Web Design"
-			)}&tags=${encodeURIComponent(
-				"brutalist,hackernews,webdesign,cyberpunk,accesibility"
-			)}`
-		);
-	};
+
+	const shareOnTelegramUrl = (url) =>
+		`${TELEGRAM_URL}${url || window.location.href}`;
+
+	const shareViaEmailUrl = (url) =>
+		`${EMAIL_SHARE_URL}${url || window.location.href}`;
+
+	const shareOnPintrestUrl = () => `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(window.location.href)}&media=${encodeURIComponent(MEDIA_URL)}&description=${encodeURIComponent(LINK_SHARE_DESCRIPTION)}`;
+
+
+	const shareOnTumblrUrl = () =>
+		`https://www.tumblr.com/widgets/share/tool?canonicalUrl=${encodeURIComponent(
+			window.location.href
+		)}&title=${encodeURIComponent(
+			"BRUTALIST HACKER NEWS"
+		)}&caption=${encodeURIComponent(
+			"A Hacker News reader inspired by Brutalist Web Design"
+		)}&tags=${encodeURIComponent(
+			"brutalist,hackernews,webdesign,cyberpunk,accessibility"
+		)}`;
 
 	function builtInShare() {
-		if (!!navigator.canShare && navigator.canShare() && !!navigator.share) {
-			navigator
-				.share({
-					title: "Check out this article on Brutalist Hacker News",
-					text: "Check out this article on Brutalist Hacker News",
-					url: window.location.href,
-				})
-				// .then(() => console.log("Successful share"))
-				.catch(shareViaEmail);
-		} else {
-			shareViaEmail();
+		try {
+			if (navigator.canShare()) {
+				navigator
+					.share({
+						title: "Check out this article on Brutalist Hacker News",
+						text: "Check out this article on Brutalist Hacker News",
+						url: window.location.href,
+					})
+					.catch(() => window.open(shareViaEmailUrl()));
+			} else {
+				window.open(shareViaEmailUrl());
+			}
+		} catch (error) {
+			window.open(shareViaEmailUrl());
 		}
 	}
 
 	const SHARE_OPTIONS = [
 		{
 			name: "Twitter/X",
-			callback: shareOnTwitter,
+			buildUrl: shareOnTwitterUrl,
 		},
 		{
 			name: "Facebook",
-			callback: shareOnFacebook,
+			buildUrl: shareOnFacebookUrl,
 		},
 		{
 			name: "LinkedIn",
-			callback: shareOnLinkedIn,
+			buildUrl: shareOnLinkedInUrl,
 		},
 		{
 			name: "WhatsApp",
-			callback: shareOnWhatsApp,
+			buildUrl: shareOnWhatsAppUrl,
 		},
 		{
 			name: "Reddit",
-			callback: shareOnReddit,
+			buildUrl: shareOnRedditUrl,
 		},
 		{
 			name: "Telegram",
-			callback: shareOnTelegram,
+			buildUrl: shareOnTelegramUrl,
 		},
 		{
 			name: "Email",
-			callback: shareViaEmail,
+			buildUrl: shareViaEmailUrl,
 		},
 		{
 			name: "Pintrest",
-			callback: shareOnPintrest,
+			buildUrl: shareOnPintrestUrl,
 		},
 		{
 			name: "Tumblr",
-			callback: shareOnTumblr,
+			buildUrl: shareOnTumblrUrl,
 		},
 		{
 			name: "Built-in Share",
-			callback: builtInShare,
+			buildUrl: builtInShare,
 		},
-	]
+	];
 
 	/**
 	 * Downloads a JSON object as a file
@@ -3199,12 +3177,19 @@ Other message: "${message}""`);
 		useModalTilingBehavior(modal);
 
 		SHARE_OPTIONS.map((shareOption) => {
-			const shareButton = document.createElement("nav");
-			shareButton.classList.add("text-link-button");
-			shareButton.id = `share-${shareOption}`;
-			shareButton.innerHTML = shareOption.name;
-			shareButton.onclick = () => shareOption.callback();
-			modal.querySelector(".modal-content-post-share").appendChild(shareButton);
+			const shareLink = document.createElement("a");
+			shareLink.classList.add("text-link-button");
+			shareLink.id = `share-${shareOption}`;
+			shareLink.innerHTML = shareOption.name;
+			// Built in share isn't a string and needs to be launched with a click event 
+			if (shareOption.name === "Built-in Share") {
+				shareLink.addEventListener("click", shareOption.buildUrl);
+			} else {
+				shareLink.href = shareOption.buildUrl();
+			}
+
+			shareLink.setAttribute("data-allow-external", "true");
+			modal.querySelector(".modal-content-post-share").appendChild(shareLink);
 		});
 
 		document.body.appendChild(modal);
