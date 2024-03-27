@@ -1237,6 +1237,16 @@
 	#theme-applied-outlet {
 		padding-left: var(--size-xxs);
 	}
+
+	.modal-about-site {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		padding: 0 var(--size-sm);
+		height: 100%;
+		margin-top: calc(-1 * var(--size-sm));
+	}
 </style>
 
 <!-- Constants -->
@@ -3162,21 +3172,21 @@
 
 		useModalHeaderDoubleTapResize(modal);
 		if (!isMobileDevice()) {
-			handleModalSizing(modal, SHARE_MODAL_HEIGHT, SHARE_MODAL_WIDTH)
+			handleModalSizing(modal, SHARE_MODAL_HEIGHT, SHARE_MODAL_WIDTH);
 		} else {
 			handleModalSizing(modal);
 		}
 
 		useModalHeaderCloseButtonBehavior(modal);
-		useModalHeaderMaximizeButtonBehavior(modal)
+		useModalHeaderMaximizeButtonBehavior(modal);
 		useModalDragBehavior(modal);
-		useModalTilingBehavior(modal)
+		useModalTilingBehavior(modal);
 
 		SHARE_OPTIONS.map((shareOption) => {
 			const shareButton = document.createElement("nav");
 			shareButton.classList.add("text-link-button");
 			shareButton.id = `share-${shareOption}`;
-			shareButton.innerHTML = shareOption.name
+			shareButton.innerHTML = shareOption.name;
 			shareButton.onclick = () => shareOption.callback();
 			modal.querySelector(".modal-content-post-share").appendChild(shareButton);
 		});
@@ -3187,6 +3197,56 @@
 		return modal;
 	}
 
+	function AboutSiteModal() {
+		const modal = document.createElement("div");
+		modal.classList.add("modal", "title-actions-modal", "use-gpu-rendering", "about-modal");
+
+		modal.innerHTML = `<header class="modal-window-title" role="dialog" aria-modal="true">
+		<div class="modal-action-buttons">
+		${MODAL_CLOSE_BUTTON_STRING}
+		</div>
+		<div class="title-actions-modal-title">About</div>
+		<div class="spacer"></div>
+		
+	  </header>
+
+	  <main class="modal-content">
+		<div class="modal-about-site">
+			<p>
+			This site is an experiment with
+				<a href="https://brutalist-web.design/" title="A popular page about brutalist web design">
+					Brutalist Web Design</a>,
+				<a href="http://vanilla-js.com/">Vanilla JavaScript</a>, and more broadly what can be built with only
+				open web standards. You can add contribute on <a href="https://github.com/wkyleg/brutalist-hacker-news/" data-allow-external="true">Github</a>
+				or download a theme that you like.
+			</p>
+			<button id="share-website" class="button-large">📤 Share This Website</button>
+		</div>
+	  </main>`;
+
+		modal.querySelector("#share-website").addEventListener("click", () => new ShareModal());
+
+		if (isMobileDevice()) {
+			handleModalSizing(modal, '40%', MODAL_FULL_SIZE_WITH_BORDER_COMPUTATION_WIDTH, '30%', '0');
+		} else {
+			handleModalSizing(modal, '33%', '33%');
+		}
+
+		useModalDragBehavior(modal);
+		useModalTilingBehavior(modal);
+		useModalHeaderCloseButtonBehavior(modal);
+
+		document.body.appendChild(modal);
+		setModalOnTop(modal);
+
+		return modal;
+
+	}
+
+	function initAboutModalBehavior() {
+		document.querySelector("#title").addEventListener("click", () => new AboutSiteModal());
+
+	}
 
 	/**
 	 * Element for comments on items/stories
@@ -3912,6 +3972,7 @@
 		launchModalsFromNavigationParams();
 		initLinkClickInterceptBehavior();
 		applyInitialNavigationState();
+		initAboutModalBehavior();
 	}
 
 	// Call main when other data loaded
