@@ -171,7 +171,7 @@
 			<br />
 			<br />
 
-			<h3>Default Themes</h3>
+			<h3>Default Color Themes</h3>
 
 			<div class="setting-buttons-row">
 				<button id="button-theme-default">DEFAULT</button>
@@ -230,7 +230,7 @@
 			<br />
 			<br />
 
-			<h3>Added Themes</h3>
+			<h3>Added Color Themes</h3>
 			<div class="added-themes setting-buttons-row" id="added-themes-outlet">
 				You have no external themes yet
 			</div>
@@ -251,8 +251,57 @@
 				</button>
 			</div>
 
-
 			<br />
+			<br />
+			<br />
+
+			<h3>Other Theme Settings</h3>
+			<p>See <a href="https://www.w3schools.com/cssref/playdemo.php?filename=playcss_border-radius"
+					data-allow-external="true">border radius documentation</a> and
+				<a href="https://www.w3schools.com/cssref/pr_font_font-family.php" data-allow-external="true">font
+					documentation</a> for more information.
+			</p>
+			<div class="other-theme-settings">
+				<div class="other-theme-setting">
+					<label for="user-border-radius-modal-input">Modal Border Radius</label>
+					<input type="text" id="setting-input--user-border-radius-modal" />
+					<div class="settings-button-row">
+						<button class="setting-apply-button" id="apply-setting--user-border-radius-modal">
+							Apply
+						</button>
+						<button class="setting-reset-button" id="reset-setting--user-border-radius-modal">
+							Reset
+						</button>
+					</div>
+				</div>
+
+				<div class="other-theme-setting">
+					<label for="user-border-radius-modal-input">Button Border Radius</label>
+					<input type="text" id="setting-input--user-border-radius-button" />
+					<div class="settings-button-row">
+						<button class="setting-apply-button" id="apply-setting--user-border-radius-button">
+							Apply
+						</button>
+						<button class="setting-reset-button" id="reset-setting--user-border-radius-button">
+							Reset
+						</button>
+					</div>
+				</div>
+
+				<div class="other-theme-setting">
+					<label for="user-border-radius-modal-input">Font Family</label>
+					<input type="text" id="setting-input--user-font" />
+					<div class="settings-button-row">
+						<button class="setting-apply-button" id="apply-setting--user-font">
+							Apply
+						</button>
+						<button class="setting-reset-button" id="reset-setting--user-font">
+							Reset
+						</button>
+					</div>
+				</div>
+			</div>
+
 			<br />
 			<br />
 
@@ -393,6 +442,10 @@
 		--color-dark: #3c3c3c;
 		--color-light: #FFF;
 		--color-text-main: #2f4f4f;
+		/* User editable but not from theme */
+		--user-border-radius-modal: 9px;
+		--user-border-radius-button: 3px;
+		--user-font: Menlo, monospace;
 		/* Other repeated CSS utilities */
 		--shadow-opacity-color: rgba(0, 0, 0, 0.1);
 		--text-shadow-highlight: 1px 1px var(--color-primary), -1px -1px var(--color-secondary);
@@ -412,7 +465,7 @@
 	}
 
 	* {
-		font-family: Menlo, monospace;
+		font-family: var(--user-font);
 		border-radius: 0;
 		color: var(--color-text-main);
 		border: 0;
@@ -484,10 +537,11 @@
 
 	input {
 		color: var(--color-text-main);
-		padding-block: 0;
-		padding-inline: 0;
-		margin-block: 0;
-		margin-inline: 0
+		/* padding-block: 0;
+		padding-inline: 0; */
+		/* margin-block: 0;
+		margin-inline: 0; */
+		border-radius: var(--user-border-radius-button);
 	}
 
 	a {
@@ -543,7 +597,8 @@
 		font-weight: 400;
 		min-height: var(--size-sm);
 		padding: 0.25rem 0.5rem;
-		box-shadow: 1px 1px 2px var(--color-text-main)
+		box-shadow: 1px 1px 2px var(--color-text-main);
+		border-radius: var(--user-border-radius-button);
 	}
 
 	button:active {
@@ -893,6 +948,7 @@
 		transition: bottom .5s;
 		animation: fade-in .75s cubic-bezier(0.165, 0.840, 0.440, 1.000) forwards;
 		box-shadow: var(--bow-shadow-top-level-element);
+		border-radius: var(--user-border-radius-modal);
 	}
 
 
@@ -960,14 +1016,15 @@
 
 	.user-description {
 		color: var(--color-text-main);
-		font-size: var(--size-sm)
+		font-size: var(--size-sm);
 	}
 
 	.user-description,
 	.user-submitted {
 		padding: var(--size-xs);
-		margin-bottom: var(--size-md);
-		border: var(--color-primary) 1px solid
+		margin-bottom: var(--size-sm);
+		border: var(--color-primary) 1px solid;
+		border-radius: var(--user-border-radius-modal);
 	}
 
 	.user-description:hover,
@@ -1043,7 +1100,8 @@
 		background: var(--color-light);
 		min-width: 10vw;
 		transition: all .5s;
-		animation: fade-in .5s
+		animation: fade-in .5s;
+		border-radius: var(--user-border-radius-modal);
 	}
 
 	.comment-by {
@@ -1189,10 +1247,10 @@
 		margin-left: var(--size-xs)
 	}
 
-	.adjust-theme-content input {
+	#settings-outlet input {
 		height: var(--size-md);
 		margin-top: 6px;
-		margin-bottom: 6px
+		margin-bottom: 6px;
 	}
 
 	.setting-buttons-row {
@@ -1249,6 +1307,34 @@
 		padding: 0 var(--size-sm);
 		height: 100%;
 		margin-top: calc(-1 * var(--size-sm));
+	}
+
+	.other-theme-setting {
+		display: flex;
+		flex-direction: column;
+		align-items: left;
+		max-width: 16rem;
+		margin-bottom: var(--size-sm);
+	}
+
+	.other-theme-setting label {
+		font-weight: 700;
+	}
+
+	@media screen and (width <=600px) {
+		.other-theme-setting {
+			max-width: 20rem;
+		}
+	}
+
+	.other-theme-setting .settings-button-row {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+	}
+
+	.other-theme-setting .settings-button-row button {
+		width: 49%
 	}
 </style>
 
@@ -1307,7 +1393,7 @@ Error string: "${error.toString()}""
 Error JSON: "${JSON.stringify(error, null, 2)}"
 
 Other message: "${message}""`);
-
+		console.error(error);
 	}
 </script>
 
@@ -2327,7 +2413,7 @@ Other message: "${message}""`);
 			if (!key.startsWith("--")) return;
 			setCSSVariable(key, value);
 			saveSettingToLocalStorage(key, value);
-			updateSettingInputWithCurrentValue(key);
+			updateColorSettingInputWithCurrentValue(key);
 		});
 		setCurrentThemeCode(theme.name);
 
@@ -2414,7 +2500,7 @@ Other message: "${message}""`);
 	 * @param {string} setting
 	 * @returns {void}
 	 */
-	const updateSettingInputWithCurrentValue = (setting) => {
+	const updateColorSettingInputWithCurrentValue = (setting) => {
 		document.querySelector(`#setting-input${setting}`).value =
 			asColorSelectorInputValue(getCSSVariable(setting));
 	};
@@ -2424,9 +2510,9 @@ Other message: "${message}""`);
 	 * @param {string} setting
 	 * @returns {void}
 	 */
-	const resetSetting = (setting) => {
+	const resetColorSetting = (setting) => {
 		changeSetting(setting, themes[getCurrentThemeCode()][setting]);
-		updateSettingInputWithCurrentValue(setting);
+		updateColorSettingInputWithCurrentValue(setting);
 	};
 
 	/**
@@ -2493,7 +2579,6 @@ Other message: "${message}""`);
 			const button = document.createElement("button");
 			button.id = `button-theme-${key}`;
 			button.innerHTML = value.displayName
-			// TODO: make apply theme work with user added themes
 			button.addEventListener("click", () => applyTheme(value));
 			fragment.appendChild(button);
 		});
@@ -2504,6 +2589,53 @@ Other message: "${message}""`);
 		fetch(`${PAGE_ROOT_URL}/themes/${name}.json`)
 			.then((response) => response.json())
 
+
+	const NON_COLOR_SETTINGS = {
+		USER_BORDER_RADIUS_MODAL: "--user-border-radius-modal",
+		USER_BORDER_RADIUS_BUTTON: "--user-border-radius-button",
+		USER_FONT: "--user-font",
+	};
+
+	const NON_COLOR_SETTINGS_DEFAULT_VALUES = {
+		"--user-border-radius-modal": "9px",
+		"--user-border-radius-button": "3px",
+		"--user-font": "Menlo, monospace",
+	};
+
+
+	const loadNonColorSettings = () => {
+		Object.entries(NON_COLOR_SETTINGS).map(([_, value]) => {
+			try {
+				const storedValue = localStorage.getItem(value);
+				if (storedValue) {
+					setCSSVariable(value, storedValue);
+				} else {
+					setCSSVariable(value, NON_COLOR_SETTINGS_DEFAULT_VALUES[value]);
+					saveSettingToLocalStorage(value, NON_COLOR_SETTINGS_DEFAULT_VALUES[value]);
+				}
+
+				document.querySelector(`#setting-input${value}`).value = storedValue || NON_COLOR_SETTINGS_DEFAULT_VALUES[value];
+
+				document
+					.querySelector(`#apply-setting${value}`)
+					.addEventListener("click", () => {
+						changeSetting(
+							value,
+							document.querySelector(`#setting-input${value}`).value
+						);
+					});
+
+				document
+					.querySelector(`#reset-setting${value}`)
+					.addEventListener("click", () => {
+						changeSetting(value, NON_COLOR_SETTINGS_DEFAULT_VALUES[value]);
+						document.querySelector(`#setting-input${value}`).value = NON_COLOR_SETTINGS_DEFAULT_VALUES[value];
+					});
+			} catch (error) {
+				logError(error, `Error loading non-color setting ${value}`);
+			}
+		});
+	};
 
 	/**
 	 * Initializes settings
@@ -2521,7 +2653,7 @@ Other message: "${message}""`);
 					saveSettingToLocalStorage(value, themes.default[value]);
 				}
 
-				updateSettingInputWithCurrentValue(value);
+				updateColorSettingInputWithCurrentValue(value);
 
 				document
 					.querySelector(`#apply-setting${value}`)
@@ -2534,10 +2666,10 @@ Other message: "${message}""`);
 
 				document
 					.querySelector(`#reset-setting${value}`)
-					.addEventListener("click", () => resetSetting(value));
+					.addEventListener("click", () => resetColorSetting(value));
 			} catch (e) {
 				logError(e, `Error initializing setting pair "${key}/${value}"`);
-				resetSetting(value);
+				resetColorSetting(value);
 			}
 		});
 
@@ -2563,12 +2695,15 @@ Other message: "${message}""`);
 			new ShareModal()
 		);
 
-		document.querySelector('#remove-added-themes-button').addEventListener('click', () => {
+		document.querySelector("#remove-added-themes-button").addEventListener("click", () => {
 			localStorage.removeItem("addedThemes");
 			renderAddedThemes();
 		});
 
 		renderThemeAppliedText();
+
+
+		loadNonColorSettings();
 
 	};
 </script>
