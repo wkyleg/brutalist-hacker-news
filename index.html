@@ -72,9 +72,6 @@
 		<section id="settings-outlet" class="use-gpu-rendering" style="display: none" aria-live="polite">
 			<div class="adjust-theme-content" role="table" id="settings-content-container">
 				<h3>Change Color Settings</h3>
-				<p>
-					You may adjust the colors of this page to your liking
-				</p>
 				<div class="setting-element" id="setting--color-primary">
 					<div class="setting-name" role="label">primary</div>
 					<div class="setting-new-value-input">
@@ -164,7 +161,7 @@
 			<br />
 
 			<button id="download-theme-button" class="button-large">
-				💾 Download Current Theme Settings
+				💾 Download Current Color Theme
 			</button>
 
 			<br />
@@ -173,7 +170,7 @@
 
 			<h3>Default Themes</h3>
 
-			<div class="theme-buttons-row">
+			<div class="setting-buttons-row">
 				<button id="button-theme-default">DEFAULT</button>
 				<button id="button-theme-hacker">H@CK3ᴙ</button>
 				<button id="button-theme-l33t">l33+</button>
@@ -252,18 +249,24 @@
 			<br />
 
 			<h3>Added Themes</h3>
-			<div class="added-themes theme-buttons-row" id="added-themes-outlet">
+			<div class="added-themes setting-buttons-row" id="added-themes-outlet">
 				You have no external themes yet
 			</div>
 			<p>
-				See <a href="https://github.com/wkyleg/brutalist-hacker-news"
+				See <a href="https://github.com/wkyleg/brutalist-hacker-news/blob/main/themes.md"
 					title="The git repository for this website" data-allow-external="true">GitHub</a> for
-				more themes you can add, as and instructions to add your own theme
+				more themes you can add, and instructions to add your own theme
 			</p>
 
-			<button class="button-large" id="add-new-theme-button">
-				+ Add New Theme
-			</button>
+			<div class="setting-buttons-row">
+				<button class="button-large" id="remove-added-themes-button" style="display:none;">
+					🗑️ Clear Added Themes
+				</button>
+
+				<button class="button-large" id="add-new-theme-button">
+					+ Add New Theme
+				</button>
+			</div>
 
 
 			<br />
@@ -271,7 +274,7 @@
 			<br />
 
 			<h3>Favorites</h3>
-			<div class="theme-buttons-row">
+			<div class="setting-buttons-row">
 				<button id="download-favorites-button" class="button-large">
 					💾 Download Favorites
 				</button>
@@ -376,8 +379,8 @@
 				<br />
 				<br />
 				You can contribute to the development of this page or give a star on
-				<a href="https://github.com/wkyleg/brutalist-hacker-news" title="The git repository for this website"
-					data-allow-external="true">GitHub.</a>
+				<a href="https://github.com/wkyleg/brutalist-hacker-news/blob/main/themes.md"
+					title="The git repository for this website" data-allow-external="true">GitHub.</a>
 				New themes are welcomed! If you have a theme you'd like to see on this
 				page, please submit a pull request or open an issue on the GitHub
 				repository.
@@ -554,6 +557,10 @@
 
 	.button-large {
 		height: var(--size-lg);
+	}
+
+	button:active {
+		transform: scale(0.95)
 	}
 
 	button:hover {
@@ -1184,10 +1191,42 @@
 		margin-bottom: 6px
 	}
 
-	.theme-buttons-row {}
 
-	.theme-buttons-row button {
+	.setting-buttons-row button {
 		margin: var(--size-xxs) var(--size-xxs) 0 0;
+	}
+
+	.add-theme-modal {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.add-theme-modal .modal-content {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.add-theme-modal-content #download-code {
+		height: var(--size-sm);
+		padding: var(--size-xxs);
+		margin-top: var(--size-sm);
+		margin-bottom: var(--size-sm);
+	}
+
+	.add-theme-modal-content {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.add-theme-modal-content p {
+		margin: 0;
+	}
+
+	.add-theme-modal #add-theme-button {
+		background: var(--color-primary);
+		color: var(--color-secondary);
 	}
 </style>
 
@@ -2441,10 +2480,12 @@
 			updateSettingInputWithCurrentValue(key);
 		});
 
-		Array.from(document.querySelectorAll(".theme-buttons-row button"))
+		Array.from(document.querySelectorAll(".setting-buttons-row button"))
 			.forEach((button) => button.style.boxShadow = "none");
 
-		document.querySelector(`#button-theme-${theme.name}`).style.boxShadow = "var(--box-shadow-highlight)";
+		Array.from(document.querySelectorAll(`#button-theme-${theme.name}`)).forEach((button) => {
+			button.style.boxShadow = "var(--box-shadow-highlight)";
+		});
 	};
 
 	/**
@@ -2567,6 +2608,14 @@
 		$ref("#added-themes-outlet").innerHTML = "";
 		const addedThemes = getAddedThemes();
 
+		if (Object.keys(addedThemes).length === 0) {
+			$ref("#added-themes-outlet").innerHTML = "No added themes";
+			document.querySelector('#remove-added-themes-button').style.display = 'none';
+			return;
+		}
+
+		document.querySelector('#remove-added-themes-button').style.display = 'block';
+
 		const fragment = document.createDocumentFragment();
 		Object.entries(addedThemes).map(([key, value]) => {
 			const button = document.createElement("button");
@@ -2579,31 +2628,9 @@
 		$ref("#added-themes-outlet").appendChild(fragment);
 	}
 
-	/**
-	 * Download JSON object as file
-	 * @param {object} object
-	 * @param {string} filename
-	 * @returns {void}
-	 */
-
-	function onAddNewThemeButtonClick() {
-		const themeName = prompt("Theme name:", "A theme name from the Github repo");
-
-		if (!themeName) return;
-
-		fetch(`${PAGE_ROOT_URL}/themes/${themeName}.json`)
+	const loadExternalTheme = (name) =>
+		fetch(`${PAGE_ROOT_URL}/themes/${name}.json`)
 			.then((response) => response.json())
-			.then((theme) => {
-				themes[themeName] = theme;
-				addAddedTheme(theme);
-				renderAddedThemes();
-			})
-			.catch((error) => {
-				console.error(error);
-				alert("Failed to fetch theme");
-			});
-
-	}
 
 
 	/**
@@ -2656,11 +2683,16 @@
 				.addEventListener("click", () => applyTheme(value));
 		});
 
-		document.querySelector("#add-new-theme-button").addEventListener("click", onAddNewThemeButtonClick);
+		document.querySelector("#add-new-theme-button").addEventListener("click", AddNewThemeModal);
 
 		document.getElementById("share-website").addEventListener("click", () =>
 			new ShareModal()
 		);
+
+		document.querySelector('#remove-added-themes-button').addEventListener('click', () => {
+			localStorage.removeItem("addedThemes");
+			renderAddedThemes();
+		});
 
 		renderAddedThemes();
 	};
@@ -3082,31 +3114,34 @@
 	 * @returns {void}
 	 * TODO: refactor because these params aren't needed
 	 */
-	function setModalDisplayDefaultSize(
+	function handleModalSizing(
 		modal,
 		height = undefined,
-		width = undefined
+		width = undefined,
+		top = undefined,
+		left = undefined
 	) {
 		if (isMobileDevice()) {
 			modal.style.height =
 				height || MODAL_FULL_SIZE_WITH_BORDER_COMPUTATION_HEIGHT;
 			modal.style.width =
 				width || MODAL_FULL_SIZE_WITH_BORDER_COMPUTATION_WIDTH;
-			modal.style.top = "0";
-			modal.style.left = "0";
+			modal.style.top = top || "0";
+			modal.style.left = left || "0";
 		} else {
 			modal.style.height = height || DESKTOP_MODAL_DEFAULT_SIZE;
 			modal.style.width = width || DESKTOP_MODAL_DEFAULT_SIZE;
 
-			modal.style.left =
-				DESKTOP_MODAL_DEFAULT_POSITION +
+			modal.style.top =
+				top || DESKTOP_MODAL_DEFAULT_POSITION +
 				getRandomNumberBetween(
 					-MODAL_POSITION_RANDOM_OFFSET,
 					MODAL_POSITION_RANDOM_OFFSET
 				) +
 				"%";
-			modal.style.top =
-				DESKTOP_MODAL_DEFAULT_POSITION +
+
+			modal.style.left =
+				left || DESKTOP_MODAL_DEFAULT_POSITION +
 				getRandomNumberBetween(
 					-MODAL_POSITION_RANDOM_OFFSET,
 					MODAL_POSITION_RANDOM_OFFSET
@@ -3193,7 +3228,7 @@
 			.querySelector(".modal-window-title")
 			.addEventListener("dblclick", () => {
 				if (isModalMaximized(modal)) {
-					setModalDisplayDefaultSize(modal);
+					handleModalSizing(modal);
 				} else {
 					maximizeModal(modal);
 				}
@@ -3212,7 +3247,7 @@
 				.querySelector("#maximize-button")
 				.addEventListener("click", () => {
 					if (isModalMaximized(modal)) {
-						setModalDisplayDefaultSize(modal);
+						handleModalSizing(modal);
 					} else {
 						maximizeModal(modal);
 					}
@@ -3281,9 +3316,9 @@
 
 		useModalHeaderDoubleTapResize(modal);
 		if (!isMobileDevice()) {
-			setModalDisplayDefaultSize(modal, SHARE_MODAL_HEIGHT, SHARE_MODAL_WIDTH)
+			handleModalSizing(modal, SHARE_MODAL_HEIGHT, SHARE_MODAL_WIDTH)
 		} else {
-			setModalDisplayDefaultSize(modal);
+			handleModalSizing(modal);
 		}
 
 		useModalHeaderCloseButtonBehavior(modal);
@@ -3462,7 +3497,7 @@
         </section>
       </main>`;
 
-		setModalDisplayDefaultSize(modal);
+		handleModalSizing(modal);
 
 		useModalTilingBehavior(modal);
 		useModalHeaderCloseButtonBehavior(modal, () => removeProfileModalFromURL(userId));
@@ -3557,7 +3592,7 @@
       </main>`;
 
 		useModalTilingBehavior(modal);
-		setModalDisplayDefaultSize(modal);
+		handleModalSizing(modal);
 		useModalHeaderDoubleTapResize(modal);
 		useModalDragBehavior(modal);
 		useModalHeaderCloseButtonBehavior(modal);
@@ -3586,7 +3621,7 @@
 
 		const getStorySummaryStatisticsInnerContent = (story) =>
 			`<a class="user-id">${story.by}</a> | ${formatDate(story.time)} | ⧫ ${story.score
-			} | 💬 ${story.descendants || 0} ${story.parent ? "| <a id=\"parent-comment\">In Thread</a>" : ""
+			|| 0} | 💬 ${story.descendants || 0} ${story.parent ? "| <a id=\"parent-comment\">In Thread</a>" : ""
 			}`;
 
 
@@ -3628,7 +3663,7 @@
           </section>
       </main>`;
 
-		setModalDisplayDefaultSize(modal);
+		handleModalSizing(modal);
 		useModalHeaderDoubleTapResize(modal);
 		useModalDragBehavior(modal);
 
@@ -3777,6 +3812,100 @@
 		setModalOnTop(modal);
 
 		return modal;
+	}
+
+	function AddNewThemeModal() {
+		const modal = document.createElement("div");
+		modal.classList.add("modal", "title-actions-modal", "use-gpu-rendering", "add-theme-modal");
+
+		modal.innerHTML = `<header class="modal-window-title" role="dialog" aria-modal="true">
+		<div class="modal-action-buttons">
+		${MODAL_CLOSE_BUTTON_STRING}
+		</div>
+		<div class="title-actions-modal-title">Add New Theme</div>
+		<div class="spacer"></div>
+		
+	  </header>
+
+	  <main class="modal-content">
+		<div class="add-theme-modal-content">
+		<p>
+			Enter download code from
+			<a href="https://github.com/wkyleg/brutalist-hacker-news/blob/main/themes.md"
+				title="The git repository for this website" data-allow-external="true">
+				themes.md</a>
+		</p>
+		<input id="download-code" type="text" placeholder="Download Code" />
+		
+		<p id="error-outlet" style="display: none;"></p>
+		
+		<button id="add-theme-button" class="button-large">Add Theme</button>
+		</div>
+	  </main>`;
+
+		if (isMobileDevice()) {
+			handleModalSizing(modal, '33%', MODAL_FULL_SIZE_WITH_BORDER_COMPUTATION_WIDTH, '33%', '0');
+		} else {
+			handleModalSizing(modal, '33%', '33%');
+		}
+
+		useModalDragBehavior(modal);
+		useModalTilingBehavior(modal);
+		useModalHeaderCloseButtonBehavior(modal);
+
+		const applyError = (error) => {
+			modal.querySelector("#error-outlet").textContent = error;
+			modal.querySelector("#error-outlet").style.display = "block";
+		}
+
+		const resetError = () => {
+			modal.querySelector("#error-outlet").textContent = "";
+			modal.querySelector("#error-outlet").style.display = "none";
+		}
+
+		const applyLoadingBehavior = () => {
+			modal.querySelector("#add-theme-button").textContent = "Loading...";
+			modal.querySelector("#add-theme-button").disabled = true;
+			modal.querySelector("#download-code").disabled = true;
+		}
+
+		const removeLoadingBehavior = () => {
+			modal.querySelector("#add-theme-button").textContent = "Add Theme";
+			modal.querySelector("#add-theme-button").disabled = false;
+			modal.querySelector("#download-code").disabled = false;
+		}
+
+		const onAddThemeButtonClick = async () => {
+			applyLoadingBehavior();
+			try {
+				resetError();
+				const code = modal.querySelector("#download-code").value;
+				const theme = await loadExternalTheme(code);
+				addAddedTheme(theme);
+				renderAddedThemes();
+				applyTheme(theme);
+				removeLoadingBehavior();
+				modal.remove();
+			} catch (error) {
+				console.log(error);
+				applyError('Eᴙᴙ0ᴙ... could not load theme');
+			} finally {
+				removeLoadingBehavior();
+			}
+		}
+
+		modal.querySelector("#add-theme-button").addEventListener("click", onAddThemeButtonClick);
+		modal.querySelector("#download-code").addEventListener("keydown", (event) => {
+			if (event.key === "Enter") {
+				onAddThemeButtonClick();
+			}
+		});
+
+		document.body.appendChild(modal);
+		setModalOnTop(modal);
+
+		return modal;
+
 	}
 
 	/**
