@@ -254,13 +254,13 @@
 			<br />
 			<br />
 
-			<h3>Favorites</h3>
+			<h3>Saved</h3>
 			<div class="setting-buttons-row">
 				<button id="download-favorites-button" class="button-large">
-					💾 Download Favorites
+					💾 Download Saved Stories
 				</button>
 				<button id="clear-all-favorites-button" class="button-large">
-					🗑️ Clear All Favorites
+					🗑️ Clear All Saved Stories
 				</button>
 			</div>
 
@@ -2468,6 +2468,8 @@
 			themes[key] = value
 		);
 
+		renderAddedThemes();
+
 		Object.entries(themes).forEach(([key, value]) => {
 			document
 				.querySelector(`#button-theme-${key}`)
@@ -2485,7 +2487,7 @@
 			renderAddedThemes();
 		});
 
-		renderAddedThemes();
+		
 	};
 </script>
 
