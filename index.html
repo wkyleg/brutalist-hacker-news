@@ -167,6 +167,7 @@
 			<br />
 			<br />
 			<br />
+			<br />
 
 			<h3>Default Themes</h3>
 
@@ -253,18 +254,19 @@
 				You have no external themes yet
 			</div>
 			<p>
-				See <a href="https://github.com/wkyleg/brutalist-hacker-news/blob/main/themes.md"
-					title="The git repository for this website" data-allow-external="true">GitHub</a> for
-				more themes you can add, and instructions to add your own theme
+				Visit <a href="https://github.com/wkyleg/brutalist-hacker-news/blob/main/themes.md"
+					title="The git repository for this website" data-allow-external="true">this project's Github
+					Repo</a> to add more
+				themes, or to submit your own theme.
 			</p>
 
 			<div class="setting-buttons-row">
-				<button class="button-large" id="remove-added-themes-button" style="display:none;">
-					🗑️ Clear Added Themes
+				<button id="add-new-theme-button" class="button-large">
+					+ Add New Theme
 				</button>
 
-				<button class="button-large" id="add-new-theme-button">
-					+ Add New Theme
+				<button id="remove-added-themes-button" class="button-large" style="display:none;">
+					🗑️ Clear Added Themes
 				</button>
 			</div>
 
@@ -291,9 +293,8 @@
 				<h3>Add to Home Screen (PWA Support)</h3>
 				<p>
 					This site is a Progressive Web App (PWA), which is a web page that
-					can be installed as an app on most devices. This allows for a more
-					app-like experience. To install this page as an app, follow these
-					instructions:
+					can be installed as an app on most devices. Follow these pwa-install-instructions
+					to install:
 				</p>
 
 				<strong>Android<strong>
@@ -357,18 +358,19 @@
 			</section>
 
 			<br />
+			<br />
 
 			<h3>About</h3>
 			<p class="about-text">
-				An experiment with
+				This site is an experiment with
 				<a href="https://brutalist-web.design/" title="A popular page about brutalist web design">
-					Brutalist Web Design
-				</a>
-				and <a href="http://vanilla-js.com/">Vanilla JavaScript</a>. Built
-				with no libraries, only one HTML/CSS/JS file and the Hacker News API.
-				This page is also an exploration of what is possible with only open web standards, as well as brutalist
-				and cyberpunk aesthetics
-				in web design. Acknowledgements to the
+					Brutalist Web Design</a>,
+				<a href="http://vanilla-js.com/">Vanilla JavaScript</a>, and more broadly what can be built with only
+				<a href="https://www.w3schools.com/">open web standards</a>.
+				It is built with one HTML/CSS/JS file without any libraries, and the Hacker News API. As such is is
+				also a good playground for students learning web development.
+				This page is also an exploration of glitch art, cyberpunk, and brutalist trends in web design.
+				Acknowledgements to the
 				<a href="https://news.ycombinator.com/" title="The original Hacker News website"
 					data-allow-external="true">original Hacker News website</a>
 				for their API and
@@ -385,12 +387,13 @@
 				page, please submit a pull request or open an issue on the GitHub
 				repository.
 
-				<br />
-				<br />
-				<button id="share-website" class="button-large">📤 Share This Website</button>
+			</p>
 
-				<br />
-				<br />
+			<br />
+			<button id="share-website" class="button-large">📤 Share This Website</button>
+
+			<br />
+			<br />
 			</p>
 		</section>
 	</main>
@@ -576,7 +579,7 @@
 	.button-large {
 		height: var(--size-lg);
 	}
-	
+
 
 	strong {
 		font-weight: 800;
@@ -1205,6 +1208,10 @@
 		margin-bottom: 6px
 	}
 
+	.setting-buttons-row {
+		display: flex;
+		flex-wrap: wrap;
+	}
 
 	.setting-buttons-row button {
 		margin: var(--size-xxs) var(--size-xxs) 0 0;
