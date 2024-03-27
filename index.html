@@ -157,6 +157,8 @@
 						Reset
 					</button>
 				</div>
+
+				<p id="theme-applied-outlet"></p>
 			</div>
 			<br />
 
@@ -1228,6 +1230,10 @@
 		background: var(--color-primary);
 		color: var(--color-secondary);
 	}
+
+	#theme-applied-outlet {
+		padding-left: var(--size-xxs);
+	}
 </style>
 
 <!-- Constants -->
@@ -2270,6 +2276,9 @@
 			saveSettingToLocalStorage(key, value);
 			updateSettingInputWithCurrentValue(key);
 		});
+		setCurrentThemeCode(theme.name);
+
+		renderThemeAppliedText();
 
 		Array.from(document.querySelectorAll(".setting-buttons-row button"))
 			.forEach((button) => button.style.boxShadow = "none");
@@ -2363,7 +2372,7 @@
 	 * @returns {void}
 	 */
 	const resetSetting = (setting) => {
-		changeSetting(setting, themes.default[setting]);
+		changeSetting(setting, themes[getCurrentThemeCode()][setting]);
 		updateSettingInputWithCurrentValue(setting);
 	};
 
@@ -2377,6 +2386,25 @@
 			theme[value] = getCSSVariable(value);
 		});
 		downloadJSONAsFile(theme, "theme.json");
+	};
+
+	const getCurrentThemeCode = () => {
+		const currentThemeCode = localStorage.getItem("currentThemeCode");
+		if (currentThemeCode) return currentThemeCode;
+		return "default";
+	};
+
+	const setCurrentThemeCode = (themeCode) => localStorage.setItem("currentThemeCode", themeCode);
+
+	const getCurrentThemeDisplayName = () => {
+		const currentThemeCode = getCurrentThemeCode();
+		return document.querySelector(`#button-theme-${currentThemeCode}`).innerHTML;
+	};
+
+
+	const renderThemeAppliedText = () => {
+		document.querySelector("#theme-applied-outlet").innerHTML = `Current theme: ${getCurrentThemeDisplayName()}`;
+		document.querySelector("#theme-applied-outlet").display = "block";
 	};
 
 
@@ -2487,7 +2515,8 @@
 			renderAddedThemes();
 		});
 
-		
+		renderThemeAppliedText();
+
 	};
 </script>
 
