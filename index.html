@@ -385,6 +385,7 @@
 
 <style>
 	:root {
+		/* Theme colors */
 		--color-primary: #e30613;
 		--color-secondary: #ffed00;
 		--color-accent-1: #f6d365;
@@ -392,10 +393,13 @@
 		--color-dark: #3c3c3c;
 		--color-light: #FFF;
 		--color-text-main: #2f4f4f;
+		/* Other repeated CSS utilities */
+		--shadow-opacity-color:  rgba(0,0,0, 0.1);
 		--text-shadow-highlight: 1px 1px var(--color-primary), -1px -1px var(--color-secondary);
-		--box-shadow-highlight: 5px 5px var(--color-primary), -5px -5px var(--color-secondary);
-		--box-shadow-modal: 2px 2px 8px var(--color-text-main);
-		--backgound-linear-gradient: linear-gradient(120deg, var(--color-accent-1) 0%, var(--color-accent-2) 100%);
+		--box-shadow-highlight-mild: 1px 1px 2px var(--color-primary), -1px -1px 2px var(--color-secondary);
+		--bow-shadow-top-level-element: 2px 2px 8px var(--shadow-opacity-color);
+		--background-linear-gradient: linear-gradient(120deg, var(--color-accent-1) 0%, var(--color-accent-2) 100%);
+		--text-shadow-mild: 1px 1px 2px var(--shadow-opacity-color);
 		--size-xxs: 0.5rem;
 		--size-xs: 0.75rem;
 		--size-sm: 1rem;
@@ -403,9 +407,6 @@
 		--size-lg: 2rem;
 		--size-xl: 3rem;
 		--size-xxl: 6rem;
-		--breakpoint-mobile: 600px;
-		--breakpoint-tablet: 1100px;
-		--breakpoint-desktop: 1600px;
 		--top-level-padding-side: 1%;
 		--modal-border-width: 3px;
 	}
@@ -420,6 +421,7 @@
 		transition: all .2s ease-in-out;
 		font-weight: normal;
 		text-shadow: var(--text-shadow-text-main);
+		text-shadow: var(--text-shadow-mild);
 	}
 
 	::-webkit-scrollbar {
@@ -890,7 +892,7 @@
 		overflow: auto;
 		transition: bottom .5s;
 		animation: fade-in .75s cubic-bezier(0.165, 0.840, 0.440, 1.000) forwards;
-		box-shadow: var(--box-shadow-modal);
+		box-shadow: var(--bow-shadow-top-level-element);
 	}
 
 
@@ -1000,7 +1002,7 @@
 	}
 
 	.modal-content-post-share nav {
-		font-size: var(--size-md);
+		font-size: var(--size-sm);
 		margin-bottom: var(--size-xs)
 	}
 
@@ -1074,7 +1076,8 @@
 		padding-left: var(--top-level-padding-side);
 		background: var(--color-accent-1);
 		width: 100%;
-		z-index: 10
+		z-index: 10;
+		box-shadow: var(--bow-shadow-top-level-element);
 	}
 
 	.title-content:hover {
@@ -1086,7 +1089,7 @@
 	}
 
 	.main-content {
-		background-image: var(--backgound-linear-gradient);
+		background-image: var(--background-linear-gradient);
 		padding-left: var(--top-level-padding-side);
 		padding-right: var(--top-level-padding-side);
 		height: calc(100vh - var(--size-lg));
