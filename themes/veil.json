@@ -1,0 +1,11 @@
+{
+    "name": "veil",
+    "displayName": "ⓋⒺⒾⓁ",
+    "--color-primary": "#5A5A5A", 
+    "--color-secondary": "#7B7B7B",
+    "--color-accent-1": "#A7A7A7",
+    "--color-accent-2": "#E5E5E5",
+    "--color-dark": "#303030",
+    "--color-light": "#F0F0F0", 
+    "--color-text-main": "#000000"
+  }

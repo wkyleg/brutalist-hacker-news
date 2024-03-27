@@ -1,0 +1,12 @@
+{
+    "name": "circuit-bending",
+    "displayName": "Ⓒⓘⓡⓒⓤⓘⓣ ⓑⓔⓝⓓⓘⓝⓖ",
+    "--color-primary": "#606060",
+    "--color-secondary": "#8a8a8a",
+    "--color-accent-1": "#ff33cc", 
+    "--color-accent-2": "#33ccff",
+    "--color-dark": "#1a1a1a",
+    "--color-light": "#e6e6e6",
+    "--color-text-main": "#333333"
+}
+  

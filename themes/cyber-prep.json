@@ -1,0 +1,11 @@
+{
+  "name": "cyber-prep",
+  "displayName": "Cyber Prep",
+  "--color-primary": "#ffff95",
+  "--color-secondary": "#c0e79a",
+  "--color-accent-1": "#bddecb",
+  "--color-accent-2": "#86d8cb",
+  "--color-dark": "#363636",
+  "--color-light": "#F0E68C",
+  "--color-text-main": "#333333"
+}

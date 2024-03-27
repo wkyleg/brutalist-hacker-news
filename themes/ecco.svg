@@ -1,0 +1,17 @@
+<svg width="600" height="490" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="0" width="600" height="490" fill="#0094cc" /><defs>
+    <linearGradient id="displayNameGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#72bcd4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ffffff;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+      <feOffset dx="0" dy="4" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.5"/>
+      </feComponentTransfer>
+      <feMerge> 
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs><rect x="10" y="20" width="580" height="40" fill="url(#displayNameGradient)" filter="url(#shadow)" /><text x="20" y="50" fill="#a3d1ec" font-size="24" font-family="monospace">€¢¢0</text><rect x="10" y="70" width="580" height="50" fill="#0077be" filter="url(#shadow)" /><text x="20" y="105" fill="#e0ffff" font-size="20" font-family="monospace">--color-primary: #0077be</text><rect x="10" y="130" width="580" height="50" fill="#0094cc" filter="url(#shadow)" /><text x="20" y="165" fill="#e0ffff" font-size="20" font-family="monospace">--color-secondary: #0094cc</text><rect x="10" y="190" width="580" height="50" fill="#72bcd4" filter="url(#shadow)" /><text x="20" y="225" fill="#e0ffff" font-size="20" font-family="monospace">--color-accent-1: #72bcd4</text><rect x="10" y="250" width="580" height="50" fill="#ffffff" filter="url(#shadow)" /><text x="20" y="285" fill="#e0ffff" font-size="20" font-family="monospace">--color-accent-2: #ffffff</text><rect x="10" y="310" width="580" height="50" fill="#02577a" filter="url(#shadow)" /><text x="20" y="345" fill="#a3d1ec" font-size="20" font-family="monospace">--color-dark: #02577a</text><rect x="10" y="370" width="580" height="50" fill="#a3d1ec" filter="url(#shadow)" /><text x="20" y="405" fill="#e0ffff" font-size="20" font-family="monospace">--color-light: #a3d1ec</text><rect x="10" y="430" width="580" height="50" fill="#e0ffff" filter="url(#shadow)" /><text x="20" y="465" fill="#a3d1ec" font-size="20" font-family="monospace">--color-text-main: #e0ffff</text></svg>

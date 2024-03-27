@@ -1,0 +1,11 @@
+{
+  "name": "ring0",
+  "displayName": "Ring0",
+  "--color-primary": "#7e2b89",
+  "--color-secondary": "#b753c0",
+  "--color-accent-1": "#d4d41c",
+  "--color-accent-2": "#2186a7",
+  "--color-dark": "#105f7e",
+  "--color-light": "#1a1a1a",
+  "--color-text-main": "#f2f2f2"
+}

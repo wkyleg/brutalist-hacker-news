@@ -91,6 +91,16 @@ Download Code:
 board
 ```
 
+### Ⓑⓤⓕⓕⓔⓡ ⓞⓥⓔⓡⓕⓛⓞⓦ
+![buffer-overflow](themes/buffer-overflow.svg)
+
+JSON File: [buffer-overflow.json](themes/buffer-overflow.json)
+
+Download Code: 
+```txt
+buffer-overflow
+```
+
 ### 中國龍
 ![china](themes/china.svg)
 
@@ -101,6 +111,26 @@ Download Code:
 china
 ```
 
+### ¢h!p
+![chip](themes/chip.svg)
+
+JSON File: [chip.json](themes/chip.json)
+
+Download Code: 
+```txt
+chip
+```
+
+### Ⓒⓘⓡⓒⓤⓘⓣ ⓑⓔⓝⓓⓘⓝⓖ
+![circuit-bending](themes/circuit-bending.svg)
+
+JSON File: [circuit-bending.json](themes/circuit-bending.json)
+
+Download Code: 
+```txt
+circuit-bending
+```
+
 ### ℂ𝕚𝕥𝕣𝕦𝕤
 ![cyber-citrus](themes/cyber-citrus.svg)
 
@@ -109,6 +139,16 @@ JSON File: [cyber-citrus.json](themes/cyber-citrus.json)
 Download Code: 
 ```txt
 cyber-citrus
+```
+
+### Cyber Prep
+![cyber-prep](themes/cyber-prep.svg)
+
+JSON File: [cyber-prep.json](themes/cyber-prep.json)
+
+Download Code: 
+```txt
+cyber-prep
 ```
 
 ### ⊂¥βΞ尺ภΞ†เς Ð尺ΞΛⓜ
@@ -141,6 +181,16 @@ Download Code:
 delhi
 ```
 
+### ✧𝔻𝕚𝕘𝕚𝕥𝕒𝕝 𝕎𝕠𝕟𝕕𝕖𝕣𝕝𝕒𝕟𝕕✧
+![digital-wonderland](themes/digital-wonderland.svg)
+
+JSON File: [digital-wonderland.json](themes/digital-wonderland.json)
+
+Download Code: 
+```txt
+digital-wonderland
+```
+
 ### DrE∀M P♡P
 ![dream-pop](themes/dream-pop.svg)
 
@@ -149,6 +199,16 @@ JSON File: [dream-pop.json](themes/dream-pop.json)
 Download Code: 
 ```txt
 dream-pop
+```
+
+### €¢¢0
+![ecco](themes/ecco.svg)
+
+JSON File: [ecco.json](themes/ecco.json)
+
+Download Code: 
+```txt
+ecco
 ```
 
 ### ɆⱠł₱₮ł₵ ₵ɄⱤVɆ
@@ -249,6 +309,16 @@ JSON File: [k-punk.json](themes/k-punk.json)
 Download Code: 
 ```txt
 k-punk
+```
+
+### ⓚⓐⓛⓘ
+![kali](themes/kali.svg)
+
+JSON File: [kali.json](themes/kali.json)
+
+Download Code: 
+```txt
+kali
 ```
 
 ### 한국의 빛
@@ -491,6 +561,16 @@ Download Code:
 rainbow
 ```
 
+### Ring0
+![ring0](themes/ring0.svg)
+
+JSON File: [ring0.json](themes/ring0.json)
+
+Download Code: 
+```txt
+ring0
+```
+
 ### 桜ーまつり
 ![sakura-matsuri](themes/sakura-matsuri.svg)
 
@@ -679,6 +759,16 @@ JSON File: [vaporwave.json](themes/vaporwave.json)
 Download Code: 
 ```txt
 vaporwave
+```
+
+### ⓋⒺⒾⓁ
+![veil](themes/veil.svg)
+
+JSON File: [veil.json](themes/veil.json)
+
+Download Code: 
+```txt
+veil
 ```
 
 ### Ⓦⓐⓢⓗⓘⓝⓖⓣⓞⓝ

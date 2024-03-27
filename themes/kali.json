@@ -1,0 +1,11 @@
+{
+  "name": "kali",
+  "displayName": "ⓚⓐⓛⓘ",
+  "--color-primary": "#557c3e",
+  "--color-secondary": "#2c2c2c",
+  "--color-accent-1": "#00ffcc",
+  "--color-accent-2": "#ffffff",
+  "--color-dark": "#121212",
+  "--color-light": "#343a40",
+  "--color-text-main": "#f8f9fa"
+}

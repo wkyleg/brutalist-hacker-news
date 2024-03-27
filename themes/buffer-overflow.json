@@ -1,0 +1,11 @@
+{
+  "name": "buffer-overflow",
+  "displayName": "Ⓑⓤⓕⓕⓔⓡ ⓞⓥⓔⓡⓕⓛⓞⓦ",
+  "--color-primary": "#DC143C",
+  "--color-secondary": "#8B0000",
+  "--color-accent-1": "#FFD700",
+  "--color-accent-2": "#00FF00",
+  "--color-dark": "#000000",
+  "--color-light": "#FFFFFF",
+  "--color-text-main": "#000000"
+}

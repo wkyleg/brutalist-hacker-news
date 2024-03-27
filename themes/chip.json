@@ -1,0 +1,12 @@
+{
+    "name": "chip",
+    "displayName": "¢h!p",
+    "--color-primary": "#004d00", 
+    "--color-secondary": "#e6e6e6",
+    "--color-accent-1": "#ffbf00",
+    "--color-accent-2": "#ccff33",
+    "--color-dark": "#003300",
+    "--color-light": "#ffffff", 
+    "--color-text-main": "#4d4d4d"
+  }
+  
