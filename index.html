@@ -1292,6 +1292,22 @@
 		"mailto:?subject=Check%20out%20this%20site!&body=I%20thought%20you%20might%20like%20this%20site:%20";
 </script>
 
+<!-- Error handling -->
+<script type="text/javascript">
+	function logError(error = {}, message = "N/A") {
+		console.error(`RUNTIME ERROR
+
+You can copy this message and post at https://github.com/wkyleg/brutalist-hacker-news/issues/new
+for support.
+
+Error string: "${error.toString()}""
+Error JSON: "${JSON.stringify(error, null, 2)}"
+
+Other message: "${message}""`);
+
+	}
+</script>
+
 <!-- API -->
 <script type="text/javascript">
 	/**
@@ -1308,7 +1324,7 @@
 			if (!response.ok)
 				throw new Error(`HTTP error! status: ${response.status}`);
 		} catch (error) {
-			console.error(error);
+			logError(error, "Error fetching data from Hacker News API");
 			hideLoadingAnimation();
 			throw error;
 		} finally {
@@ -1367,12 +1383,12 @@
 		item: (id) => {
 			return fetch(`${HACKER_NEWS_API_URL}item/${id}.json`)
 				.then((response) => response.json())
-				.catch((error) => console.error(error));
+				.catch((error) => logError(error, `Error fetching item ${id}`));
 		},
 		user: (id) => {
 			return fetch(`${HACKER_NEWS_API_URL}user/${id}.json`)
 				.then((response) => response.json())
-				.catch((error) => console.error(error));
+				.catch((error) => logError(error, `Error fetching user ${id}`));
 		},
 	};
 </script>
@@ -2494,7 +2510,7 @@
 	 * @returns {void}
 	 */
 	const initializeSettings = () => {
-		Object.entries(SETTINGS).forEach(([_, value]) => {
+		Object.entries(SETTINGS).forEach(([key, value]) => {
 			try {
 				const storedValue = localStorage.getItem(value);
 				if (!storedValue) {
@@ -2517,7 +2533,7 @@
 					.querySelector(`#reset-setting${value}`)
 					.addEventListener("click", () => resetSetting(value));
 			} catch (e) {
-				console.error(e);
+				logError(e, `Error initializing setting pair "${key}/${value}"`);
 				resetSetting(value);
 			}
 		});
@@ -3311,7 +3327,7 @@
 					}
 				})
 				.catch((error) => {
-					console.error(error);
+					logError(error, `Error loading user submitted item ${itemId}`);
 					storyContainer.firstChild.textContent = "Eᴙᴙ0ᴙ...";
 				});
 		};
@@ -3361,7 +3377,7 @@
 			API.item(storyId)
 				.then(async (story) => render(story))
 				.catch((error) => {
-					console.error(error);
+					logError(error, `Error loading story ${storyId}`);
 					storyContainer.firstChild.textContent = "Eᴙᴙ0ᴙ...";
 				});
 		};
@@ -3915,7 +3931,7 @@
 					onNavigationChange(NAVIGATION_OPTIONS.TOP);
 			}
 		} catch (error) {
-			console.error(error);
+			logError(error, `Error changing navigation state to ${newState}`);
 			onNavigationChange(NAVIGATION_OPTIONS.TOP);
 		}
 	};
