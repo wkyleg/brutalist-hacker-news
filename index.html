@@ -257,6 +257,9 @@
 			<br />
 
 			<h3>Saved</h3>
+			<p>
+				You may save stories to read later
+			</p>
 			<div class="setting-buttons-row">
 				<button id="download-favorites-button" class="button-large">
 					💾 Download Saved Stories
@@ -1413,6 +1416,23 @@
 	}
 
 	/**
+	 * Downloads a string as a CSV file
+	 * @param {string} str
+	 * @returns {void}
+	 */
+	function downloadStringAsCSV(str) {
+		const blob = new Blob([str], { type: "text/csv" });
+		const url = URL.createObjectURL(blob);
+		const a = document.createElement("a");
+		a.href =
+			url;
+		a.download = "data.csv";
+		document.body.appendChild(a);
+		a.click();
+		URL.revokeObjectURL(url);
+	}
+
+	/**
 	 * Returns a random number between `min` and `max`
 	 * @param {number} min
 	 * @param {number} max
@@ -1729,10 +1749,14 @@
 	}
 
 	/*
-	 * Download current favorites as a JSON file
+	 * Download saved stories as a CSV
 	 * @returns {void}
 	 */
-	const downloadFavorites = () => downloadJSONAsFile(getFavorites(), "favorites.json");
+	const downloadFavorites = () =>
+		downloadStringAsCSV(
+			getFavorites()
+				.map(id => `${YCOMBINATOR_URL}item?id=${id}`)
+				.join("\r\n"));
 
 	/*
 	 * Attach event listeners for favorites buttons on settings page
