@@ -407,7 +407,7 @@
 		--color-text-main: #2f4f4f;
 		--text-shadow-highlight: 1px 1px var(--color-primary), -1px -1px var(--color-secondary);
 		--box-shadow-highlight: 5px 5px var(--color-primary), -5px -5px var(--color-secondary);
-		--box-shadow-highlight-mild: 1px 1px var(--color-primary), -1px -1px var(--color-secondary);
+		--box-shadow-modal: 2px 2px 8px var(--color-text-main);
 		--backgound-linear-gradient: linear-gradient(120deg, var(--color-accent-1) 0%, var(--color-accent-2) 100%);
 		--size-xxs: 0.5rem;
 		--size-xs: 0.75rem;
@@ -432,6 +432,7 @@
 		scrollbar-width: auto;
 		transition: all .2s ease-in-out;
 		font-weight: normal;
+		text-shadow: var(--text-shadow-text-main);
 	}
 
 	::-webkit-scrollbar {
@@ -553,21 +554,29 @@
 		font-weight: 400;
 		min-height: var(--size-sm);
 		padding: 0.25rem 0.5rem;
+		box-shadow: 1px 1px 2px var(--color-text-main)
+	}
+
+	button:active {
+		transform: scale(0.95);
+		box-shadow: inset 2px 2px 2px var(--color-text-main)
+	}
+
+	button:hover {
+		filter: brightness(1.2), contrast(1.2);
+		box-shadow: inset 1px 1px 2px var(--color-text-main);
+		font-weight: 700
+	}
+
+	button:disabled {
+		opacity: 0.5;
+		cursor: not-allowed
 	}
 
 	.button-large {
 		height: var(--size-lg);
 	}
-
-	button:active {
-		transform: scale(0.95)
-	}
-
-	button:hover {
-		filter: brightness(1.2), contrast(1.2);
-		box-shadow: inset 1px 1px 1px var(--color-text-main);
-		font-weight: 700
-	}
+	
 
 	strong {
 		font-weight: 800;
@@ -874,6 +883,10 @@
 		text-shadow: var(--text-shadow-highlight)
 	}
 
+	.text-link-button:active {
+		color: var(--color-secondary)
+	}
+
 	.modal {
 		z-index: 100;
 		display: flex;
@@ -889,7 +902,8 @@
 		z-index: 15;
 		overflow: auto;
 		transition: bottom .5s;
-		animation: fade-in .75s cubic-bezier(0.165, 0.840, 0.440, 1.000) forwards
+		animation: fade-in .75s cubic-bezier(0.165, 0.840, 0.440, 1.000) forwards;
+		box-shadow: var(--box-shadow-modal);
 	}
 
 
