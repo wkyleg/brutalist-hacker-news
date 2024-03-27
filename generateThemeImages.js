@@ -28,7 +28,7 @@ function generateSvg(theme) {
     key.startsWith("--color")
   );
   const svgWidth = 600;
-  const svgHeight = colorKeys.length * 60 + 70 + 60; // Adjust height for additional styling
+  const svgHeight = colorKeys.length * 60 + 70; // Adjust height for additional styling
   const textMainColor = theme["--color-text-main"];
   const textLightColor = theme["--color-light"];
 
@@ -79,17 +79,6 @@ function generateSvg(theme) {
       }</text>`;
     }
   });
-
-  // Bottom rectangle for "Download code"
-  const bottomRectY = svgHeight - 60;
-  svgContent += `<rect x="10" y="${bottomRectY}" width="${
-    svgWidth - 20
-  }" height="50" fill="${theme["--color-dark"]}" filter="url(#shadow)" />`;
-  svgContent += `<text x="20" y="${
-    bottomRectY + 35
-  }" fill="${textLightColor}" font-size="20" font-family="monospace">DOWNLOAD CODE: ${
-    theme.name
-  }</text>`;
 
   svgContent += "</svg>";
   return svgContent;
