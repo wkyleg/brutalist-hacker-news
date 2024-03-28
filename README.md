@@ -1,4 +1,4 @@
-# brutalist-hacker-news
+# Brutalist Hacker News
 
 [https://brutalisthackernews.com](https://brutalisthackernews.com)
 
