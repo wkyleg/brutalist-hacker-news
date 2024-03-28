@@ -1,8 +1,8 @@
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
-const themesDirectory = path.join(__dirname, 'themes');
-const outputFile = path.join(__dirname, 'themes.md');
+const themesDirectory = path.join(__dirname, "themes");
+const outputFile = path.join(__dirname, "themes.md");
 
 // Markdown header with instructions for contributing
 const mdHeader = `# Themes Gallery
@@ -25,35 +25,32 @@ let mdContent = mdHeader;
 
 // Read the themes directory
 fs.readdir(themesDirectory, (err, files) => {
-  if (err) {
-    console.error('Could not list the directory.', err);
-    return;
-  }
+	if (err) {
+		console.error("Could not list the directory.", err);
+		return;
+	}
 
-  const themes = files.filter(file => path.extname(file) === '.json');
+	const themes = files.filter(file => path.extname(file) === ".json");
 
-  themes.forEach(themeFile => {
-    const filePath = path.join(themesDirectory, themeFile);
-    const theme = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-    const themeName = theme.name;
-    const imageFileName = themeName + '.svg';
-    const imageFilePath = path.relative(__dirname, path.join(themesDirectory, imageFileName));
-    const jsonFileUrl = path.relative(__dirname, path.join(themesDirectory, themeFile));
+	themes.forEach(themeFile => {
+		const filePath = path.join(themesDirectory, themeFile);
+		const theme = JSON.parse(fs.readFileSync(filePath, "utf8"));
+		const themeName = theme.name;
+		const imageFileName = themeName + ".svg";
+		const imageFilePath = path.relative(__dirname, path.join(themesDirectory, imageFileName));
+		const jsonFileUrl = path.relative(__dirname, path.join(themesDirectory, themeFile));
 
-    // Append theme information to markdown content
-    // mdContent += `### ${theme.displayName || themeName}\n`;
-    // mdContent += `![${theme.displayName || themeName}](${imageFilePath})\n\n`;
-    // mdContent += '```json\n' + JSON.stringify(theme, null, 2) + '\n```\n\n';
-    mdContent += `### ${theme.displayName}\n`;
-    mdContent += `![${themeName}](${imageFilePath})\n\n`;
-    mdContent += `JSON File: [${themeName}.json](${jsonFileUrl})\n\n`;
-    mdContent += 'Download Code: \n';
-    mdContent += '```txt\n';
-    mdContent += `${themeName}\n`;
-    mdContent += '```\n\n';
-  });
+		// Append theme information to markdown content
+		mdContent += `### ${theme.displayName}\n`;
+		mdContent += `![${themeName}](${imageFilePath})\n\n`;
+		mdContent += `JSON File: [${themeName}.json](${jsonFileUrl})\n\n`;
+		mdContent += "Download Code: \n";
+		mdContent += "```txt\n";
+		mdContent += `${themeName}\n`;
+		mdContent += "```\n\n";
+	});
 
-  // Write to the output file
-  fs.writeFileSync(outputFile, mdContent);
-  console.log(`Markdown file ${outputFile} has been generated.`);
+	// Write to the output file
+	fs.writeFileSync(outputFile, mdContent);
+	console.log(`Markdown file ${outputFile} has been generated.`);
 });

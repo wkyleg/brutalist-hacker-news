@@ -388,7 +388,7 @@
 								<li>Select 'Install Site as App'.</li>
 								<li>Enter a name for the app and confirm the installation.</li>
 							</ol>
-			</section>
+</section>
 
 			<br />
 			<br />
@@ -427,9 +427,9 @@
 
 			<br />
 			<br />
-			</p>
-		</section>
-	</main>
+</p>
+</section>
+</main>
 </body>
 
 <style>
@@ -442,12 +442,14 @@
 		--color-dark: #3c3c3c;
 		--color-light: #FFF;
 		--color-text-main: #2f4f4f;
+
 		/* User editable but not from theme */
 		--user-border-radius-modal: 9px;
 		--user-border-radius-button: 3px;
-		--user-font: Menlo, monospace;
+		--user-font: menlo, monospace;
+
 		/* Other repeated CSS utilities */
-		--shadow-opacity-color: rgba(0, 0, 0, 0.1);
+		--shadow-opacity-color: rgb(0 0 0 / 10%);
 		--text-shadow-highlight: 1px 1px var(--color-primary), -1px -1px var(--color-secondary);
 		--box-shadow-highlight-mild: 1px 1px 2px var(--color-primary), -1px -1px 2px var(--color-secondary);
 		--bow-shadow-top-level-element: 2px 2px 8px var(--shadow-opacity-color);
@@ -473,7 +475,6 @@
 		scrollbar-width: auto;
 		transition: all .2s ease-in-out;
 		font-weight: normal;
-		text-shadow: var(--text-shadow-text-main);
 		text-shadow: var(--text-shadow-mild);
 	}
 
@@ -622,7 +623,6 @@
 	}
 
 	@keyframes typing {
-
 		100%,
 		90% {
 			width: 100%
@@ -630,7 +630,6 @@
 	}
 
 	@keyframes caret {
-
 		0%,
 		100% {
 			box-shadow: .66rem 0 0 transparent
@@ -927,7 +926,6 @@
 	}
 
 	.modal {
-		z-index: 100;
 		display: flex;
 		flex-direction: column;
 		position: absolute;
@@ -1110,6 +1108,10 @@
 		}
 	}
 
+	.add-theme-modal-content p {
+		margin: 0;
+	}
+
 	.modal-content-post .comment p {
 		margin-top: 0
 	}
@@ -1279,10 +1281,6 @@
 		flex-direction: column;
 	}
 
-	.add-theme-modal-content p {
-		margin: 0;
-	}
-
 	.add-theme-modal #add-theme-button {
 		background: var(--color-primary);
 		color: var(--color-secondary);
@@ -1353,8 +1351,8 @@
 	const DESKTOP_MODAL_DEFAULT_SIZE = "50%";
 	const DESKTOP_MODAL_DEFAULT_POSITION = 25;
 	const MODAL_MAXIMIZATION_THRESHOLD = 0.9;
-	const MODAL_ICON_IS_FAVORITED = '♥';
-	const MODAL_ICON_NOT_FAVORITED = '♡';
+	const MODAL_ICON_IS_FAVORITED = "♥";
+	const MODAL_ICON_NOT_FAVORITED = "♡";
 	const ANIMATION_CHARACTERS_STRING =
 		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+=-[]{}|;:,.<>?♥♦♣♠•◘○◆☻☺♂♀♪♫☼►◄↕‼¶§▬↨↑↓→←∟↔▲▼ァアィイゥウェエォオカガキギクゲゴサザシジスゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャユョヨラリルレロヮワヰヱヲン々〆〤￥「」『』【】〒〓─━│┃┄┅┆┇┈┉┊┋┌┍┎┏┐┑┒┓└┕┖┗┘┙┚┛├┝┞┟┠┡┢┣┤┥┦┧┨┩┪┫┬┭┮┯┰┱┲┳┴┵┶┷┸┹┺┻┼┽┾┿╀╁╂╃╄╅╆╇╈╉╊╋╌╍╎╏═║╒╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡╢╣╤╥╦╧╨╩╪╫╬§¶☊☋☌☍ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθικλμνξοπρςστυφχψω←↑→↓↔↕↖↗↘↙↚↛↜↝↞↟↠↡↢↣↤↥↦↧↨↩↪↫↬↭↮↯↰↱↲↳↴↵↶↷↸↹↺↻↼↽↾↿⇀⇁⇂⇃⇄⇅⇆⇇⇈⇉⇊⇋⇌⇍⇎⇏⇐⇑⇒⇓⇔⇕⇖⇗⇘⇙⇚⇛⇜⇝⇞⇟⇠⇡⇢⇣⇤⇥⇦⇧⇨⇩⇪⌨";
 	const LINK_SHARE_DESCRIPTION =
@@ -1742,7 +1740,7 @@ Other message: "${message}""`);
 			name: "Built-in Share",
 			callback: builtInShare,
 		},
-	]
+	];
 
 	/**
 	 * Downloads a JSON object as a file
@@ -2597,17 +2595,17 @@ Other message: "${message}""`);
 
 		if (Object.keys(addedThemes).length === 0) {
 			$ref("#added-themes-outlet").innerHTML = "No added themes";
-			document.querySelector('#remove-added-themes-button').style.display = 'none';
+			document.querySelector("#remove-added-themes-button").style.display = "none";
 			return;
 		}
 
-		document.querySelector('#remove-added-themes-button').style.display = 'block';
+		document.querySelector("#remove-added-themes-button").style.display = "block";
 
 		const fragment = document.createDocumentFragment();
 		Object.entries(addedThemes).map(([key, value]) => {
 			const button = document.createElement("button");
 			button.id = `button-theme-${key}`;
-			button.innerHTML = value.displayName
+			button.innerHTML = value.displayName;
 			button.addEventListener("click", () => applyTheme(value));
 			fragment.appendChild(button);
 		});
@@ -2787,7 +2785,7 @@ Other message: "${message}""`);
 	 */
 	function setModalOnTop(modal, delay = true) {
 		const activeModals = Array.from(
-			document.querySelectorAll('.modal')
+			document.querySelectorAll(".modal")
 		);
 		activeModals.forEach((m) => m.style.zIndex = "99");
 
@@ -3238,31 +3236,31 @@ Other message: "${message}""`);
 	 * @returns {string}
 	 */
 	const MODAL_CLOSE_BUTTON_STRING =
-		`<nav id="close-button" class="text-link-button" title="Close Modal">[X]</nav>`;
+		"<nav id=\"close-button\" class=\"text-link-button\" title=\"Close Modal\">[X]</nav>";
 
 	/**
 	 * Markup for modal maximize button
 	 * @returns {string}
 	 */
 	const MODAL_MAXIMIZE_BUTTON_STRING =
-		`<nav id="maximize-button" class="text-link-button" title="Toggle Full Screen">[+]</nav>`;
+		"<nav id=\"maximize-button\" class=\"text-link-button\" title=\"Toggle Full Screen\">[+]</nav>";
 
 	/**
 	 * Markup for modal open link button
 	 * @returns {string}
 	 */
 	const MODAL_OPEN_LINK_BUTTON_STRING =
-		`<nav id="open-link-button" class="text-link-button" title='Open In New Tab'>[⬆️]</nav>`
+		"<nav id=\"open-link-button\" class=\"text-link-button\" title='Open In New Tab'>[⬆️]</nav>";
 
 	/**
 	 * Markup for modal share button
 	 * @returns {string}
 	 */
 	const MODAL_SHARE_BUTTON_STRING =
-		`<nav id="share-button" class="text-link-button" title='Share'>[📤]</nav>`;
+		"<nav id=\"share-button\" class=\"text-link-button\" title='Share'>[📤]</nav>";
 
 	const MODAL_REFRESH_BUTTON_STRING =
-		`<nav id="refresh-button" class="text-link-button" title='Refresh'>[🔄]</nav>`;
+		"<nav id=\"refresh-button\" class=\"text-link-button\" title='Refresh'>[🔄]</nav>";
 
 	/**
 	 * Markup for modal favorite button
@@ -3432,9 +3430,9 @@ Other message: "${message}""`);
 		modal.querySelector("#share-website").addEventListener("click", () => new ShareModal());
 
 		if (isMobileDevice()) {
-			handleModalSizing(modal, '40%', MODAL_FULL_SIZE_WITH_BORDER_COMPUTATION_WIDTH, '30%', '0');
+			handleModalSizing(modal, "40%", MODAL_FULL_SIZE_WITH_BORDER_COMPUTATION_WIDTH, "30%", "0");
 		} else {
-			handleModalSizing(modal, '33%', '33%');
+			handleModalSizing(modal, "33%", "33%");
 		}
 
 		useModalDragBehavior(modal);
@@ -3667,7 +3665,7 @@ Other message: "${message}""`);
 					});
 			});
 
-		}
+		};
 
 		modal.querySelector("#refresh-button").addEventListener("click", render);
 		render();
@@ -3748,30 +3746,30 @@ Other message: "${message}""`);
 		${MODAL_OPEN_LINK_BUTTON_STRING}
         ${MODAL_SHARE_BUTTON_STRING}
         ${story.url
-				? "<nav id=\"toggle-url-or-post-button\" class=\"text-link-button\" title=\"Toggle Webpage Preview or Hacker News Post\"> [🖥️] </nav>"
-				: ""
-			}
+			? "<nav id=\"toggle-url-or-post-button\" class=\"text-link-button\" title=\"Toggle Webpage Preview or Hacker News Post\"> [🖥️] </nav>"
+			: ""
+	}
         ${isStoryFavorited(story.id)
-				? getModalFavoriteButtonString(true)
-				: getModalFavoriteButtonString(false)
-			}
+			? getModalFavoriteButtonString(true)
+			: getModalFavoriteButtonString(false)
+	}
 		${MODAL_REFRESH_BUTTON_STRING}
 		</div>
       </header>
 
       <main class="modal-content">
           <iframe id="story-iframe-${story.id}" src="${story.url
-			}" style="display:none;"></iframe>
+	}" style="display:none;"></iframe>
           <section id="modal-content-post-${story.id
-			}" class="modal-content-post">
+	}" class="modal-content-post">
             ${story.title ? `<h3>${sanitize(story.title)}</h3>` : ""}
             <p class="story-summary-statistics">
               ${getStorySummaryStatisticsInnerContent(story)}
             </p>
             ${story.text
-				? `<p class="story-text">${sanitize(story.text)}</p>`
-				: ""
-			}
+			? `<p class="story-text">${sanitize(story.text)}</p>`
+			: ""
+	}
             <div class="comments">
               ${story.descendants ? LOADING_INDICATOR_ELEMENT_STRING : ""}
             </div>
@@ -3959,9 +3957,9 @@ Other message: "${message}""`);
 	  </main>`;
 
 		if (isMobileDevice()) {
-			handleModalSizing(modal, '33%', MODAL_FULL_SIZE_WITH_BORDER_COMPUTATION_WIDTH, '33%', '0');
+			handleModalSizing(modal, "33%", MODAL_FULL_SIZE_WITH_BORDER_COMPUTATION_WIDTH, "33%", "0");
 		} else {
-			handleModalSizing(modal, '33%', '33%');
+			handleModalSizing(modal, "33%", "33%");
 		}
 
 		useModalDragBehavior(modal);
@@ -3971,24 +3969,24 @@ Other message: "${message}""`);
 		const applyError = (error) => {
 			modal.querySelector("#error-outlet").textContent = error;
 			modal.querySelector("#error-outlet").style.display = "block";
-		}
+		};
 
 		const resetError = () => {
 			modal.querySelector("#error-outlet").textContent = "";
 			modal.querySelector("#error-outlet").style.display = "none";
-		}
+		};
 
 		const applyLoadingBehavior = () => {
 			modal.querySelector("#add-theme-button").textContent = "Loading...";
 			modal.querySelector("#add-theme-button").disabled = true;
 			modal.querySelector("#download-code").disabled = true;
-		}
+		};
 
 		const removeLoadingBehavior = () => {
 			modal.querySelector("#add-theme-button").textContent = "Add Theme";
 			modal.querySelector("#add-theme-button").disabled = false;
 			modal.querySelector("#download-code").disabled = false;
-		}
+		};
 
 		const onAddThemeButtonClick = async () => {
 			applyLoadingBehavior();
@@ -4003,11 +4001,11 @@ Other message: "${message}""`);
 				modal.remove();
 			} catch (error) {
 				console.log(error);
-				applyError('Eᴙᴙ0ᴙ... could not load theme');
+				applyError("Eᴙᴙ0ᴙ... could not load theme");
 			} finally {
 				removeLoadingBehavior();
 			}
-		}
+		};
 
 		modal.querySelector("#add-theme-button").addEventListener("click", onAddThemeButtonClick);
 		modal.querySelector("#download-code").addEventListener("keydown", (event) => {
@@ -4033,14 +4031,14 @@ Other message: "${message}""`);
 		loadingContainer.classList.add("item-title-preview");
 
 		const render = () =>
-		(loadingContainer.innerHTML = `<span>${generateLoadingString(
-			getRandomNumberBetween(
-				LOADING_STRING_MIN_LENGTH,
-				isMobileDevice()
-					? LOADING_STRING_MAX_LENGTH_MOBILE
-					: LOADING_STRING_MAX_LENGTH_DESKTOP
-			)
-		)}</span>`);
+			(loadingContainer.innerHTML = `<span>${generateLoadingString(
+				getRandomNumberBetween(
+					LOADING_STRING_MIN_LENGTH,
+					isMobileDevice()
+						? LOADING_STRING_MAX_LENGTH_MOBILE
+						: LOADING_STRING_MAX_LENGTH_DESKTOP
+				)
+			)}</span>`);
 
 		const animationSpeed = getRandomNumberBetween(
 			LOADING_STORY_ANIMATION_REFRESH_INTERVAL_MINIMUM,
@@ -4095,33 +4093,33 @@ Other message: "${message}""`);
 			};
 
 			switch (newState) {
-				case NAVIGATION_OPTIONS.TOP:
-					API.topStories().then(renderStoriesToOutlet);
-					break;
-				case NAVIGATION_OPTIONS.NEW:
-					API.newStories().then(renderStoriesToOutlet);
-					break;
-				case NAVIGATION_OPTIONS.BEST:
-					API.bestStories().then(renderStoriesToOutlet);
-					break;
-				case NAVIGATION_OPTIONS.ASK:
-					API.askStories().then(renderStoriesToOutlet);
-					break;
-				case NAVIGATION_OPTIONS.SHOW:
-					API.showStories().then(renderStoriesToOutlet);
-					break;
-				case NAVIGATION_OPTIONS.JOB:
-					API.jobStories().then(renderStoriesToOutlet);
-					break;
-				case NAVIGATION_OPTIONS.FAVORITES:
-					renderFavorites();
-					startStoryIntersectionObservers();
-					break;
-				case NAVIGATION_OPTIONS.SETTINGS:
-					$ref("#settings-outlet").scrollIntoView({ behavior: "instant" });
-					break;
-				default:
-					onNavigationChange(NAVIGATION_OPTIONS.TOP);
+			case NAVIGATION_OPTIONS.TOP:
+				API.topStories().then(renderStoriesToOutlet);
+				break;
+			case NAVIGATION_OPTIONS.NEW:
+				API.newStories().then(renderStoriesToOutlet);
+				break;
+			case NAVIGATION_OPTIONS.BEST:
+				API.bestStories().then(renderStoriesToOutlet);
+				break;
+			case NAVIGATION_OPTIONS.ASK:
+				API.askStories().then(renderStoriesToOutlet);
+				break;
+			case NAVIGATION_OPTIONS.SHOW:
+				API.showStories().then(renderStoriesToOutlet);
+				break;
+			case NAVIGATION_OPTIONS.JOB:
+				API.jobStories().then(renderStoriesToOutlet);
+				break;
+			case NAVIGATION_OPTIONS.FAVORITES:
+				renderFavorites();
+				startStoryIntersectionObservers();
+				break;
+			case NAVIGATION_OPTIONS.SETTINGS:
+				$ref("#settings-outlet").scrollIntoView({ behavior: "instant" });
+				break;
+			default:
+				onNavigationChange(NAVIGATION_OPTIONS.TOP);
 			}
 		} catch (error) {
 			logError(error, `Error changing navigation state to ${newState}`);
