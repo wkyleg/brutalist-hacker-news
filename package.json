@@ -4,7 +4,7 @@
   "description": "An even more brutalist hacker news reader",
   "main": "index.js",
   "scripts": {
-    "dev": "python3 dev_server.py",
+    "dev": "node devServer.js",
     "lint:js": "eslint .",
     "lint:js:fix": "eslint . --fix",
     "lint:css": "stylelint 'index.html'",
