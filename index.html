@@ -593,7 +593,7 @@
 	code {
 		white-space: pre-wrap;
 		overflow-wrap: break-word;
-		background: var(--color-dark);
+		background: var(--color-text-main);
 		color: var(--color-light);
 	}
 
@@ -649,6 +649,7 @@
 	p {
 		margin-top: var(--size-xxs);
 		margin-bottom: var(--size-xxs);
+		font-size: var(--size-xs);
 	}
 
 	.button-large {
@@ -1077,7 +1078,7 @@
 		overflow: hidden;
 		overflow-y: hidden;
 		background: var(--color-light);
-		height: calc(100% - var(--size-lg));
+		height: 100%;
 	}
 
 	.modal-content-post-share {
@@ -1099,17 +1100,21 @@
 
 
 	.modal-content-post {
-		padding: var(--size-sm);
+		padding: var(--size-xs);
 		overflow-y: scroll;
-		height: calc(100% - var(--size-lg) + var(--modal-border-width));
+		height: calc(100% - var(--size-md));
 		background: var(--color-light);
 	}
 
 	.story-summary-statistics {
-		font-size: var(--size-xss);
+		font-size: var(--size-xs);
 		margin-bottom: var(--size-sm);
 		text-align: center;
 		margin-top: 0
+	}
+
+	.story-text {
+		font-size: var(--size-xs);
 	}
 
 	.modal-content-post h3 {
@@ -1121,7 +1126,7 @@
 	.comment {
 		font-size: var(--size-xs);
 		padding: var(--size-xs);
-		margin: var(--size-xs);
+		margin: var(--size-sm) var(--size-xs);
 		border: var(--color-primary) 1px solid;
 		background: var(--color-light);
 		min-width: 10vw;
@@ -1136,12 +1141,11 @@
 		font-weight: bolder;
 	}
 
-	@media screen and (width <=600px) {
+	@media screen and (width <600px) {
 		.comment {
 			min-width: 33vw
 		}
 	}
-
 	.add-theme-modal-content p {
 		margin: 0;
 	}
@@ -1328,7 +1332,6 @@
 		align-items: center;
 		padding: 0 var(--size-sm);
 		height: 100%;
-		margin-top: calc(-1 * var(--size-sm));
 	}
 
 	.other-theme-setting {
@@ -1343,9 +1346,9 @@
 		font-weight: 700;
 	}
 
-	@media screen and (width <=600px) {
+	@media screen and (width <=1000px) {
 		.other-theme-setting {
-			max-width: 20rem;
+			max-width: 25rem;
 		}
 	}
 
@@ -1377,8 +1380,6 @@
 	const MODAL_POSITION_RANDOM_OFFSET = 20;
 	const MODAL_FULL_SIZE_WITH_BORDER_COMPUTATION_HEIGHT = "calc(100vh - var(--modal-border-width) - var(--modal-border-width))";
 	const MODAL_FULL_SIZE_WITH_BORDER_COMPUTATION_WIDTH = "calc(100vw - var(--modal-border-width) - var(--modal-border-width))";
-	const SHARE_MODAL_HEIGHT = "42%";
-	const SHARE_MODAL_WIDTH = "16.6%";
 	const DESKTOP_MODAL_DEFAULT_SIZE = "50%";
 	const DESKTOP_MODAL_DEFAULT_POSITION = 25;
 	const MODAL_MAXIMIZATION_THRESHOLD = 0.9;
@@ -3420,10 +3421,10 @@ Other message: "${message}""`);
       `;
 
 		useModalHeaderDoubleTapResize(modal);
-		if (!isMobileDevice()) {
-			handleModalSizing(modal, SHARE_MODAL_HEIGHT, SHARE_MODAL_WIDTH);
+		if (isMobileDevice()) {
+			handleModalSizing(modal, "40%", MODAL_FULL_SIZE_WITH_BORDER_COMPUTATION_WIDTH, "30%", "0");
 		} else {
-			handleModalSizing(modal);
+			handleModalSizing(modal, "33%", "33%");
 		}
 
 		useModalHeaderCloseButtonBehavior(modal);
@@ -3817,7 +3818,7 @@ Other message: "${message}""`);
               ${getStorySummaryStatisticsInnerContent(story)}
             </p>
             ${story.text
-				? `<p class="story-text">${sanitize(story.text)}</p>`
+				? `<div class="story-text">${sanitize(story.text)}</div>`
 				: ""
 			}
             <div class="comments">
