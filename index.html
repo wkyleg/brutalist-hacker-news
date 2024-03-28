@@ -494,7 +494,6 @@
 		background: var(--color-primary);
 		border-radius: 0;
 		min-height: var(--size-xxl);
-		z-index: 100
 	}
 
 	::-webkit-scrollbar-track:active {
@@ -1006,7 +1005,7 @@
 		text-align: center;
 		justify-content: center;
 		align-items: center;
-		width: 36.6%;
+		width: 36.7%;
 		font-size: var(--size-sm);
 		font-weight: 800;
 		;
@@ -1016,7 +1015,7 @@
 		display: flex;
 		flex-direction: row;
 		flex-grow: 1;
-		width: 33.3%
+		width: 33.333%
 	}
 
 	.modal-window-title {
@@ -1032,6 +1031,7 @@
 		border-bottom: var(--color-primary) 3px solid;
 		padding-left: var(--top-level-padding-side);
 		animation: subtle-glow-warble 3s infinite ease-in-out;
+		width: calc(100% - var(--top-level-padding-side));
 	}
 
 	.modal-window-title nav {
@@ -1077,6 +1077,7 @@
 		overflow: hidden;
 		overflow-y: hidden;
 		background: var(--color-light);
+		height: calc(100% - var(--size-lg));
 	}
 
 	.modal-content-post-share {
@@ -1381,6 +1382,7 @@
 	const DESKTOP_MODAL_DEFAULT_SIZE = "50%";
 	const DESKTOP_MODAL_DEFAULT_POSITION = 25;
 	const MODAL_MAXIMIZATION_THRESHOLD = 0.9;
+	const DOUBLE_TAP_THRESHOLD = 200;
 	const MODAL_ICON_IS_FAVORITED = "♥";
 	const MODAL_ICON_NOT_FAVORITED = "♡";
 	const ANIMATION_CHARACTERS_STRING =
@@ -3317,6 +3319,24 @@ Other message: "${message}""`);
 				} else {
 					maximizeModal(modal);
 				}
+			});
+
+		// Now add click event for double tap from touch screens
+		let lastTouch = 0;
+
+		modal
+			.querySelector(".modal-window-title")
+			.addEventListener("touchstart", () => {
+				const now = new Date().getTime();
+				const timeSinceLastTouch = now - lastTouch;
+				if (timeSinceLastTouch < DOUBLE_TAP_THRESHOLD && timeSinceLastTouch > 0) {
+					if (isModalMaximized(modal)) {
+						handleModalSizing(modal);
+					} else {
+						maximizeModal(modal);
+					}
+				}
+				lastTouch = now;
 			});
 	}
 
