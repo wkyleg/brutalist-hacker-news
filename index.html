@@ -20,7 +20,7 @@
 		<meta name="twitter:card" content="https://brutalisthackernews.com/icon.png" />
 	<meta name="twitter:title" content="BRUTALIST HACKER NEWS" />
 	<meta name="twitter:description"
-		content="A Hacker Rews reader inspired by Brutalist Web Design, cyberpunk, and glitch art" />
+		content="A Hacker News reader inspired by Brutalist Web Design, cyberpunk, and glitch art" />
 	<meta name="twitter:image" content="https://brutalisthackernews.com/icon.png" />
 
 	<meta property="og:type" content="website" />
@@ -537,10 +537,6 @@
 
 	input {
 		color: var(--color-text-main);
-		/* padding-block: 0;
-		padding-inline: 0; */
-		/* margin-block: 0;
-		margin-inline: 0; */
 		border-radius: var(--user-border-radius-button);
 	}
 
@@ -620,7 +616,6 @@
 	.button-large {
 		height: var(--size-lg);
 	}
-
 
 	strong {
 		font-weight: 800;
@@ -951,7 +946,6 @@
 		border-radius: var(--user-border-radius-modal);
 	}
 
-
 	.share-modal {
 		z-index: 400;
 	}
@@ -998,7 +992,6 @@
 		width: 100%;
 		padding-left: var(--top-level-padding-side);
 		animation: subtle-glow-warble 3s infinite ease-in-out;
-		/* align-items: baseline; */
 	}
 
 	.modal-window-title nav {
@@ -1163,7 +1156,7 @@
 	.item-title-preview {
 		margin-top: var(--size-xxs);
 		margin-bottom: var(--size-xxs);
-		text-rendering: optimizespeed
+		text-rendering: optimizespeed;
 	}
 
 	.item-title-preview span {
@@ -1383,6 +1376,11 @@
 
 <!-- Error handling -->
 <script type="text/javascript">
+	/**
+	 * Logs an error to the console user support instructions
+	 * @param {Error} error
+	 * @param {string} message
+	 */
 	function logError(error = {}, message = "N/A") {
 		console.error(`RUNTIME ERROR
 
@@ -1484,10 +1482,10 @@ Other message: "${message}""`);
 
 <!-- Utils -->
 <script type="text/javascript">
-	const _$refs = {}
+	const _$refs = {};
 
 	/**
-	 * Returns a reference to a DOM element with caching if it has been accesed
+	 * Returns a reference to a DOM element with caching if it has been accessed
 	 * previously. This should only be used for high level elements not expected 
 	 * to change or re-render.
 	 * @param {string} query
@@ -1621,7 +1619,6 @@ Other message: "${message}""`);
 		return doc.body.innerHTML;
 	}
 
-
 	function shareOnTwitter(url) {
 		window.open(
 			`${TWITTER_SHARE_URL}${url || window.location.href}`,
@@ -1680,11 +1677,15 @@ Other message: "${message}""`);
 			)}&caption=${encodeURIComponent(
 				"A Hacker News reader inspired by Brutalist Web Design"
 			)}&tags=${encodeURIComponent(
-				"brutalist,hackernews,webdesign,cyberpunk,accesibility"
+				"brutalist,hackernews,webdesign,cyberpunk,accessibility"
 			)}`
 		);
 	};
 
+	/**
+	 * Attempts to use the built-in share API, if not available, falls back to email
+	 * @returns {void}
+	 */
 	function builtInShare() {
 		if (!!navigator.canShare && navigator.canShare() && !!navigator.share) {
 			navigator
@@ -2527,26 +2528,45 @@ Other message: "${message}""`);
 		downloadJSONAsFile(theme, "theme.json");
 	};
 
+	/**
+	 * Returns the code of currently applied theme
+	 * @returns {string}
+	 */
 	const getCurrentThemeCode = () => {
 		const currentThemeCode = localStorage.getItem("currentThemeCode");
 		if (currentThemeCode) return currentThemeCode;
 		return "default";
 	};
 
+	/**
+	 * Update current theme code in local storage
+	 * @param {string} themeCode
+	 * @returns {void}
+	 */
 	const setCurrentThemeCode = (themeCode) => localStorage.setItem("currentThemeCode", themeCode);
 
+	/**
+	 * The display name of the currently applied theme
+	 * @returns {void}
+	 */
 	const getCurrentThemeDisplayName = () => {
 		const currentThemeCode = getCurrentThemeCode();
 		return document.querySelector(`#button-theme-${currentThemeCode}`).innerHTML;
 	};
 
-
+	/**
+	 * Render the name of the applied theme to the theming section in settings page
+	 * @returns {void}
+	 */
 	const renderThemeAppliedText = () => {
 		document.querySelector("#theme-applied-outlet").innerHTML = `Current theme: ${getCurrentThemeDisplayName()}`;
 		document.querySelector("#theme-applied-outlet").display = "block";
 	};
 
-
+	/**
+	 * Returns all user installed themes
+	 * @returns {void}
+	 */
 	const getAddedThemes = () => {
 		const addedThemes = localStorage.getItem("addedThemes");
 		if (addedThemes) {
@@ -2555,6 +2575,11 @@ Other message: "${message}""`);
 		return {};
 	};
 
+	/**
+	 * Add new theme to user installed themes by saving in local storage
+	 * @param {object} theme
+	 * @returns {void}
+	 */
 	const addAddedTheme = (theme) => {
 		const addedThemes = getAddedThemes();
 		addedThemes[theme.name] = theme;
@@ -2562,6 +2587,10 @@ Other message: "${message}""`);
 	};
 
 
+	/**
+	 * Renders buttons that allow to apply all user added themes
+	 * @returns {void}
+	 */
 	function renderAddedThemes() {
 		$ref("#added-themes-outlet").innerHTML = "";
 		const addedThemes = getAddedThemes();
@@ -2585,10 +2614,14 @@ Other message: "${message}""`);
 		$ref("#added-themes-outlet").appendChild(fragment);
 	}
 
+	/**
+	 * Load theme from static site with it's code name maping to the name of the
+	 * JSON file.
+	 * @returns {Promise<{}}
+	 */
 	const loadExternalTheme = (name) =>
 		fetch(`${PAGE_ROOT_URL}/themes/${name}.json`)
-			.then((response) => response.json())
-
+			.then((response) => response.json());
 
 	const NON_COLOR_SETTINGS = {
 		USER_BORDER_RADIUS_MODAL: "--user-border-radius-modal",
@@ -2602,7 +2635,10 @@ Other message: "${message}""`);
 		"--user-font": "Menlo, monospace",
 	};
 
-
+	/**
+	 * Load non color settings from local storage and apply to document, also
+	 * attach click event handlers for updating these settings.
+	 */
 	const loadNonColorSettings = () => {
 		Object.entries(NON_COLOR_SETTINGS).map(([_, value]) => {
 			try {
@@ -2743,29 +2779,39 @@ Other message: "${message}""`);
 		});
 	}
 
+	/**
+	 * Sets `modal` on top of other modals with z-index
+	 * @param {HTMLElement} modal
+	 * @param {boolean} delay
+	 * @returns {void}
+	 */
 	function setModalOnTop(modal, delay = true) {
 		const activeModals = Array.from(
 			document.querySelectorAll('.modal')
-		)
-		activeModals.forEach((m) => m.style.zIndex = "99")
+		);
+		activeModals.forEach((m) => m.style.zIndex = "99");
 
 		// The click event from another modal will set itself on top so delay is
 		// needed to ensure the modal is on top.
 		if (delay) {
 			setTimeout(() => {
 				modal.style.zIndex = "200";
-			}, 100)
+			}, 100);
 			return;
 		}
 
 		modal.style.zIndex = "200";
 	}
 
+	/**
+	 * Adds modal tiling behavior to modal
+	 * @param {HTMLElement} modal
+	 * @returns {void}
+	 */
 	const useModalTilingBehavior = (modal) =>
 		modal.addEventListener("click", () =>
 			setModalOnTop(modal, false)
-		)
-
+		);
 
 	/**
 	 * Launch modals corresponding to search params in URL
@@ -3066,7 +3112,7 @@ Other message: "${message}""`);
 	}
 
 	/**
-	 * Precomputes loading strings for the loading animation
+	 * Pre-computes loading strings for the loading animation
 	 * @returns {Promise<string[]>}
 	 */
 	async function precomputeLoadingStrings() {
@@ -3228,6 +3274,7 @@ Other message: "${message}""`);
 
 
 	const LOADING_INDICATOR_ELEMENT_STRING = "<span id=\"loading-comments\" class=\"type\"><span>Loading...</span></span>";
+	
 	/**
 	 * Double tap on modal header to resize
 	 * @param {HTMLElement} modal
@@ -3351,6 +3398,10 @@ Other message: "${message}""`);
 		return modal;
 	}
 
+	/**
+	 * Modal for information about the site
+	 * @returns {HTMLElement}
+	 */
 	function AboutSiteModal() {
 		const modal = document.createElement("div");
 		modal.classList.add("modal", "title-actions-modal", "use-gpu-rendering", "about-modal");
@@ -3397,6 +3448,10 @@ Other message: "${message}""`);
 
 	}
 
+	/**
+	 * Attack click event listener for `AboutSiteModal` to the title element in nav
+	 * @returns {HTMLElement}
+	 */
 	function initAboutModalBehavior() {
 		document.querySelector("#title").addEventListener("click", () => new AboutSiteModal());
 
@@ -3589,7 +3644,7 @@ Other message: "${message}""`);
 				});
 
 				// Load items as they come into view. Users can have submitted 
-				// thosands of items so this needs to be throttled
+				// thousands of items so this needs to be throttled
 				const submittedStoriesObserver = new IntersectionObserver(
 					(entries) => {
 						entries.forEach((entry) => {
@@ -3818,7 +3873,7 @@ Other message: "${message}""`);
 		const renderCommentsAsync = async (itemId, parent) => {
 			const currentStory = await API.item(itemId);
 
-			if (!currentStory.kids) return; // Base case for end of coment tree
+			if (!currentStory.kids) return; // Base case for end of comment tree
 
 			// Load all child comments in parallel
 			const comments = await Promise.all(
