@@ -388,7 +388,7 @@
 								<li>Select 'Install Site as App'.</li>
 								<li>Enter a name for the app and confirm the installation.</li>
 							</ol>
-</section>
+			</section>
 
 			<br />
 			<br />
@@ -427,9 +427,9 @@
 
 			<br />
 			<br />
-</p>
-</section>
-</main>
+			</p>
+		</section>
+	</main>
 </body>
 
 <style>
@@ -459,7 +459,7 @@
 		--size-xs: 0.75rem;
 		--size-sm: 1rem;
 		--size-md: 1.5rem;
-		--size-lg: 2rem;
+		--size-lg: 2.25rem;
 		--size-xl: 3rem;
 		--size-xxl: 6rem;
 		--top-level-padding-side: 1%;
@@ -476,6 +476,9 @@
 		transition: all .2s ease-in-out;
 		font-weight: normal;
 		text-shadow: var(--text-shadow-mild);
+		-webkit-text-size-adjust: 100%;
+		text-size-adjust: 100%;
+		line-height: 1.3;
 	}
 
 	::-webkit-scrollbar {
@@ -510,14 +513,31 @@
 		box-shadow: 1px 3px var(--color-text-main)
 	}
 
+	html {
+		-webkit-text-size-adjust: 100%;
+		text-size-adjust: 100%;
+	}
+
 	body {
 		margin: 0;
 		padding: 0;
 		height: 100%;
+		max-height: 100%;
 		width: 100%;
+		max-width: 100%;
 		overflow: hidden;
 		display: flex;
-		flex-direction: column
+		flex-direction: column;
+		position: fixed;
+		text-rendering: optimizeLegibility;
+		overflow: hidden;
+		touch-action: manipulation;
+		-webkit-user-drag: none;
+		-ms-content-zooming: none;
+		word-wrap: break-word;
+		overscroll-behavior-y: none;
+		-webkit-text-size-adjust: none;
+		text-size-adjust: none;
 	}
 
 	h1 {
@@ -560,17 +580,30 @@
 	}
 
 	code,
-	pre {
+	kbd,
+	pre,
+	samp,
+	a,
+	.modal-content-post {
 		word-break: break-word;
 		word-wrap: break-word;
-		text-wrap: wrap
+		text-wrap: wrap;
 	}
 
-	code,
-	a,
 	pre,
-	.modal-content-post {
-		word-wrap: break-word
+	code {
+		white-space: pre-wrap;
+		overflow-wrap: break-word;
+		background: var(--color-dark);
+		color: var(--color-light);
+	}
+
+	pre {
+		border: var(--color-light) 1px inset;
+		border-radius: var(--user-border-radius-modal);
+		padding-top: var(--size-xs);
+		padding-bottom: var(--size-xs);
+		cursor: text;
 	}
 
 	a:hover {
@@ -614,6 +647,11 @@
 		cursor: not-allowed
 	}
 
+	p {
+		margin-top: var(--size-xxs);
+		margin-bottom: var(--size-xxs);
+	}
+
 	.button-large {
 		height: var(--size-lg);
 	}
@@ -623,6 +661,7 @@
 	}
 
 	@keyframes typing {
+
 		100%,
 		90% {
 			width: 100%
@@ -630,6 +669,7 @@
 	}
 
 	@keyframes caret {
+
 		0%,
 		100% {
 			box-shadow: .66rem 0 0 transparent
@@ -902,7 +942,8 @@
 		transition: text-indent .5s;
 		font-size: var(--size-sm);
 		background: 0 0;
-		border: 0
+		border: 0;
+		text-shadow: 2px 2px 4px var(--shadow-opacity-color);
 	}
 
 	@media screen and (width <=600px) {
@@ -918,11 +959,13 @@
 
 	.text-link-button:hover {
 		color: var(--color-primary);
-		text-shadow: var(--text-shadow-highlight)
+		text-shadow: var(--text-shadow-highlight);
+		scale: 1.05;
 	}
 
 	.text-link-button:active {
-		color: var(--color-secondary)
+		color: var(--color-secondary);
+		scale: 0.95;
 	}
 
 	.modal {
@@ -987,7 +1030,6 @@
 		color: var(--color-text-main);
 		justify-content: flex-start;
 		border-bottom: var(--color-primary) 3px solid;
-		width: 100%;
 		padding-left: var(--top-level-padding-side);
 		animation: subtle-glow-warble 3s infinite ease-in-out;
 	}
@@ -1034,7 +1076,7 @@
 		height: 100%;
 		overflow: hidden;
 		overflow-y: hidden;
-		background: var(--color-light)
+		background: var(--color-light);
 	}
 
 	.modal-content-post-share {
@@ -1058,15 +1100,14 @@
 	.modal-content-post {
 		padding: var(--size-sm);
 		overflow-y: scroll;
-		height: calc(100% - var(--size-lg));
-		background: var(--color-light)
+		height: calc(100% - var(--size-lg) + var(--modal-border-width));
+		background: var(--color-light);
 	}
 
 	.story-summary-statistics {
 		font-size: var(--size-xss);
 		margin-bottom: var(--size-sm);
 		text-align: center;
-		font-style: italic;
 		margin-top: 0
 	}
 
@@ -1074,14 +1115,7 @@
 		text-align: center
 	}
 
-	.modal-content-post .story-text {
-		font-size: var(--size-xs)
-	}
 
-	.modal-content-post p {
-		font-size: var(--size-xs);
-		word-wrap: break-word
-	}
 
 	.comment {
 		font-size: var(--size-xs);
@@ -1093,17 +1127,16 @@
 		transition: all .5s;
 		animation: fade-in .5s;
 		border-radius: var(--user-border-radius-modal);
+		line-height: 1.5;
 	}
 
 	.comment-by {
-		line-height: 2.0;
+		font-size: var(--size-xs);
+		font-weight: bolder;
 	}
 
 	@media screen and (width <=600px) {
 		.comment {
-			font-size: var(--size-xxs);
-			padding: var(--size-xxs);
-			margin: var(--size-xxs);
 			min-width: 33vw
 		}
 	}
@@ -1112,9 +1145,6 @@
 		margin: 0;
 	}
 
-	.modal-content-post .comment p {
-		margin-top: 0
-	}
 
 	.comment:hover {
 		box-shadow: var(--box-shadow-highlight-mild)
@@ -3272,7 +3302,7 @@ Other message: "${message}""`);
 
 
 	const LOADING_INDICATOR_ELEMENT_STRING = "<span id=\"loading-comments\" class=\"type\"><span>Loading...</span></span>";
-	
+
 	/**
 	 * Double tap on modal header to resize
 	 * @param {HTMLElement} modal
@@ -3466,7 +3496,7 @@ Other message: "${message}""`);
 		commentContainer.classList.add("comment-container");
 
 		commentContainer.innerHTML = `<div class="comment">
-        <p><a id="parent-comment" class="comment-by">In Thread</a></p>
+        <a id="parent-comment" class="comment-by">In Thread</a>
         <p class="comment-text">${sanitize(item.text) || "[DELETED]"}</p>
         </div>`;
 
@@ -3746,30 +3776,30 @@ Other message: "${message}""`);
 		${MODAL_OPEN_LINK_BUTTON_STRING}
         ${MODAL_SHARE_BUTTON_STRING}
         ${story.url
-			? "<nav id=\"toggle-url-or-post-button\" class=\"text-link-button\" title=\"Toggle Webpage Preview or Hacker News Post\"> [🖥️] </nav>"
-			: ""
-	}
+				? "<nav id=\"toggle-url-or-post-button\" class=\"text-link-button\" title=\"Toggle Webpage Preview or Hacker News Post\"> [🖥️] </nav>"
+				: ""
+			}
         ${isStoryFavorited(story.id)
-			? getModalFavoriteButtonString(true)
-			: getModalFavoriteButtonString(false)
-	}
+				? getModalFavoriteButtonString(true)
+				: getModalFavoriteButtonString(false)
+			}
 		${MODAL_REFRESH_BUTTON_STRING}
 		</div>
       </header>
 
       <main class="modal-content">
           <iframe id="story-iframe-${story.id}" src="${story.url
-	}" style="display:none;"></iframe>
+			}" style="display:none;"></iframe>
           <section id="modal-content-post-${story.id
-	}" class="modal-content-post">
+			}" class="modal-content-post">
             ${story.title ? `<h3>${sanitize(story.title)}</h3>` : ""}
             <p class="story-summary-statistics">
               ${getStorySummaryStatisticsInnerContent(story)}
             </p>
             ${story.text
-			? `<p class="story-text">${sanitize(story.text)}</p>`
-			: ""
-	}
+				? `<p class="story-text">${sanitize(story.text)}</p>`
+				: ""
+			}
             <div class="comments">
               ${story.descendants ? LOADING_INDICATOR_ELEMENT_STRING : ""}
             </div>
@@ -4031,14 +4061,14 @@ Other message: "${message}""`);
 		loadingContainer.classList.add("item-title-preview");
 
 		const render = () =>
-			(loadingContainer.innerHTML = `<span>${generateLoadingString(
-				getRandomNumberBetween(
-					LOADING_STRING_MIN_LENGTH,
-					isMobileDevice()
-						? LOADING_STRING_MAX_LENGTH_MOBILE
-						: LOADING_STRING_MAX_LENGTH_DESKTOP
-				)
-			)}</span>`);
+		(loadingContainer.innerHTML = `<span>${generateLoadingString(
+			getRandomNumberBetween(
+				LOADING_STRING_MIN_LENGTH,
+				isMobileDevice()
+					? LOADING_STRING_MAX_LENGTH_MOBILE
+					: LOADING_STRING_MAX_LENGTH_DESKTOP
+			)
+		)}</span>`);
 
 		const animationSpeed = getRandomNumberBetween(
 			LOADING_STORY_ANIMATION_REFRESH_INTERVAL_MINIMUM,
@@ -4093,33 +4123,33 @@ Other message: "${message}""`);
 			};
 
 			switch (newState) {
-			case NAVIGATION_OPTIONS.TOP:
-				API.topStories().then(renderStoriesToOutlet);
-				break;
-			case NAVIGATION_OPTIONS.NEW:
-				API.newStories().then(renderStoriesToOutlet);
-				break;
-			case NAVIGATION_OPTIONS.BEST:
-				API.bestStories().then(renderStoriesToOutlet);
-				break;
-			case NAVIGATION_OPTIONS.ASK:
-				API.askStories().then(renderStoriesToOutlet);
-				break;
-			case NAVIGATION_OPTIONS.SHOW:
-				API.showStories().then(renderStoriesToOutlet);
-				break;
-			case NAVIGATION_OPTIONS.JOB:
-				API.jobStories().then(renderStoriesToOutlet);
-				break;
-			case NAVIGATION_OPTIONS.FAVORITES:
-				renderFavorites();
-				startStoryIntersectionObservers();
-				break;
-			case NAVIGATION_OPTIONS.SETTINGS:
-				$ref("#settings-outlet").scrollIntoView({ behavior: "instant" });
-				break;
-			default:
-				onNavigationChange(NAVIGATION_OPTIONS.TOP);
+				case NAVIGATION_OPTIONS.TOP:
+					API.topStories().then(renderStoriesToOutlet);
+					break;
+				case NAVIGATION_OPTIONS.NEW:
+					API.newStories().then(renderStoriesToOutlet);
+					break;
+				case NAVIGATION_OPTIONS.BEST:
+					API.bestStories().then(renderStoriesToOutlet);
+					break;
+				case NAVIGATION_OPTIONS.ASK:
+					API.askStories().then(renderStoriesToOutlet);
+					break;
+				case NAVIGATION_OPTIONS.SHOW:
+					API.showStories().then(renderStoriesToOutlet);
+					break;
+				case NAVIGATION_OPTIONS.JOB:
+					API.jobStories().then(renderStoriesToOutlet);
+					break;
+				case NAVIGATION_OPTIONS.FAVORITES:
+					renderFavorites();
+					startStoryIntersectionObservers();
+					break;
+				case NAVIGATION_OPTIONS.SETTINGS:
+					$ref("#settings-outlet").scrollIntoView({ behavior: "instant" });
+					break;
+				default:
+					onNavigationChange(NAVIGATION_OPTIONS.TOP);
 			}
 		} catch (error) {
 			logError(error, `Error changing navigation state to ${newState}`);
