@@ -10,7 +10,7 @@
 	<meta name="msapplication-tap-highlight" content="no" />
 	<link rel="icon" type="image/x-icon" href="assets/icon/favicon.ico" />
 	<link rel="manifest" href="manifest.json" />
-	<meta name="theme-color" content="#f6d365" />
+	<meta name="theme-color" content="#000000" />
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 	<meta name="description"
@@ -26,7 +26,7 @@
 	<meta property="og:type" content="website" />
 	<meta property="og:title" content="BRUTALIST HACKER NEWS" />
 	<meta property="og:description"
-		content="A Hacker News reader inspired by Brutalist Web Design, Cyberpunk Aesthetic, and Glitch art" />
+		content="A Hacker News reader inspired by Brutalist Web Design, Cyberpunk Aesthetics, and Glitch art" />
 	<meta property="og:image" content="https://brutalisthackernews.com/icon.png" />
 	<meta property="og:url" content="https://brutalisthackernews.com" />
 </head>
@@ -1348,7 +1348,7 @@
 
 	@media screen and (width <=1000px) {
 		.other-theme-setting {
-			max-width: 25rem;
+			max-width: calc(100% - var(--top-level-padding-side) - var(--top-level-padding-side));
 		}
 	}
 
@@ -1398,11 +1398,11 @@
 	const WHATSAPP_SHARE_URL =
 		"https://wa.me/?text=Check%20out%20this%20site!%20";
 	const REDDIT_SHARE_URL =
-		"https://reddit.com/submit?url=https://brutalisthackernews.com&title=Brutalist%20HN";
+		"https://reddit.com/submit?url=https://brutalisthackernews.com&title=Brutalist%20HN%20";
 	const TELEGRAM_URL =
 		"https://telegram.me/share/url?url=https://brutalisthackernews.com&text=Check%20out%20this%20site!";
 	const EMAIL_SHARE_URL =
-		"mailto:?subject=Check%20out%20this%20site!&body=I%20thought%20you%20might%20like%20this%20site:%20";
+		"mailto:?subject=Check%20out%20this%20site!%20&body=I%20thought%20you%20might%20like%20this%20site:%20";
 </script>
 
 <!-- Error handling -->
