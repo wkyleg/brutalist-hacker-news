@@ -14,9 +14,9 @@ This document showcases the available themes for the application. Each theme has
 To contribute a new theme, follow these steps:
 1. Fork the repository.
 2. Add your theme JSON and image preview to the \`themes\` directory.
-3. Genearte the image preview for your theme with \`generateThemeImages.js\` script.
-4. Run the \`generateThemesMD.js\` script to update the themes gallery.
-T
+3. Generate the image preview for your theme with \`npm run generate:img\` script.
+4. Run the \`npm run generate:md\` script to update the themes gallery.
+
 ## Available Themes
 `;
 
