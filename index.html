@@ -1811,6 +1811,9 @@ Other message: "${message}""`);
 		);
 	};
 
+	const shareOnFarcaster = () => 
+		window.open(`https://warpcast.com/~/compose?text=${encodeURIComponent("Check this out on https://brutalisthackernews.com")}&embeds[]=${encodeURIComponent(window.location.href)}`);
+
 	/**
 	 * Attempts to use the built-in share API, if not available, falls back to email
 	 * @returns {void}
@@ -1834,6 +1837,10 @@ Other message: "${message}""`);
 		{
 			name: "Twitter/X",
 			callback: shareOnTwitter,
+		},
+		{
+			name: "Farcaster",
+			callback: shareOnFarcaster,
 		},
 		{
 			name: "Facebook",
