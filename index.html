@@ -3022,6 +3022,11 @@ Other message: "${message}""`);
 	 * @returns {void}
 	 */
 	function useModalDragBehavior(element) {
+		if (isMobileDevice()) {
+			element.style.position = "fixed";
+			return;
+		}
+
 		let mousePosition1 = 0,
 			mousePosition2 = 0,
 			mousePosition3 = 0,
