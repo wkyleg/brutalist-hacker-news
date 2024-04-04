@@ -710,13 +710,13 @@
 	}
 
 	.type {
-		font-size: 1rem;
+		font-size: var(--size-xs);
 		display: inline-flex;
-		margin-left: 1rem;
+		margin-left: 0.5rem;
 	}
 
 	.type span {
-		height: 1.2rem;
+		height: var(--size-sm);
 		width: 0%;
 		word-break: break-all;
 		overflow: hidden;
@@ -1172,6 +1172,7 @@
 
 	.story-text {
 		font-size: var(--size-xs);
+		padding: 0 var(--size-xs);
 	}
 
 	.modal-content-post h3 {
@@ -1395,7 +1396,7 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
-		align-items: center;
+		align-items: flex-start;
 		padding: 0 var(--size-md);
 		height: 100%;
 	}
@@ -1452,7 +1453,11 @@
 		margin-top: var(--size-xs);
 		margin-bottom: var(--size-xs);
 		font-size: var(--size-sm);
+	}
 
+	.loading-comments {
+		margin: var(--size-lg) 0;
+		display: block;
 	}
 </style>
 
@@ -3167,6 +3172,27 @@ Other message: "${message}""`);
 			touchPosition2 = touchPosition4 - event.changedTouches[0].clientY;
 			touchPosition3 = event.changedTouches[0].clientX;
 			touchPosition4 = event.changedTouches[0].clientY;
+
+			// Make sure modal doesn't go above screen
+			if (element.offsetTop - touchPosition2 < 0) {
+				touchPosition2 = 0;
+			}
+
+			// Make sure modal doesn't go left of screen
+			if (element.offsetLeft - touchPosition1 < 0) {
+				touchPosition1 = 0;
+			}
+
+			// Make sure modal doesn't go right of screen
+			if (element.offsetLeft - touchPosition1 + element.offsetWidth > window.innerWidth) {
+				touchPosition1 = 0;
+			}
+
+			// Make sure modal doesn't go below screen
+			if (element.offsetTop - touchPosition2 + element.offsetHeight > window.innerHeight) {
+				touchPosition2 = 0;
+			}
+
 			element.style.top = element.offsetTop - touchPosition2 + "px";
 			element.style.left = element.offsetLeft - touchPosition1 + "px";
 		});
@@ -3194,6 +3220,27 @@ Other message: "${message}""`);
 			mousePosition2 = mousePosition4 - e.clientY;
 			mousePosition3 = e.clientX;
 			mousePosition4 = e.clientY;
+
+			// Make sure modal doesn't go above screen
+			if (element.offsetTop - mousePosition2 < 0) {
+				mousePosition2 = 0;
+			}
+
+			// Make sure modal doesn't go left of screen
+			if (element.offsetLeft - mousePosition1 < 0) {
+				mousePosition1 = 0;
+			}
+
+			// Make sure modal doesn't go right of screen
+			if (element.offsetLeft - mousePosition1 + element.offsetWidth > window.innerWidth) {
+				mousePosition1 = 0;
+			}
+
+			// Make sure modal doesn't go below screen
+			if (element.offsetTop - mousePosition2 + element.offsetHeight > window.innerHeight) {
+				mousePosition2 = 0;
+			}
+
 			element.style.top = element.offsetTop - mousePosition2 + "px";
 			element.style.left = element.offsetLeft - mousePosition1 + "px";
 		}
@@ -3947,10 +3994,10 @@ Other message: "${message}""`);
             </p>
             ${story.text
 				? `<div class="story-text">${sanitize(story.text)}</div>`
-				: ""
+				: "<div class=\"story-text\">No description, click 🖥️ above to read article. </div>"
 			}
             <div class="comments">
-              ${story.descendants ? LOADING_INDICATOR_ELEMENT_STRING : ""}
+              ${story.descendants ? LOADING_INDICATOR_ELEMENT_STRING : "<p class=\"story-text\">No comments about this item yet,  click 🔄 above to refresh comments.</p>"}
             </div>
           </section>
       </main>`;
@@ -3966,16 +4013,7 @@ Other message: "${message}""`);
 
 		modal
 			.querySelector("#open-link-button")
-			.addEventListener("click", () => {
-				if (
-					modal.querySelector(`#story-iframe-${story.id}`).style.display ===
-					"none"
-				) {
-					window.open(`${YCOMBINATOR_URL}/item?id=${story.id}`, "_blank");
-				} else {
-					window.open(story.url, "_blank");
-				}
-			});
+			.addEventListener("click", () => window.open(story.url, "_blank"));
 
 		if (story.url) {
 			modal
