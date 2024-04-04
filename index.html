@@ -34,30 +34,41 @@
 <body>
 	<header class="title-content layers glitch-slow" aria-label="Main navigation">
 		<h1 id="title" class="font glitch">hn</h1>
-		<nav id="nav-button-top" class="text-link-button" aria-label="Top Stories" title="Top Stories">
-			[&#128285;]
-		</nav>
-		<nav id="nav-button-new" class="text-link-button" aria-label="New Stories" title="New Stories">
-			[🆕]
-		</nav>
-		<nav id="nav-button-best" class="text-link-button" aria-label="Best Stories" title="Best Stories">
-			[🏆]
-		</nav>
-		<nav id="nav-button-ask" class="text-link-button" aria-label="Ask HN" title="Ask HN">
-			[?]
-		</nav>
-		<nav id="nav-button-show" class="text-link-button" aria-label="Show HN" title="Show HN">
-			[👁️]
-		</nav>
-		<nav id="nav-button-job" class="text-link-button" aria-label="Jobs" title="Jobs">
-			[$]
-		</nav>
-		<nav id="nav-button-favorites" class="text-link-button" aria-label="Saved" title="Saved">
-			[&hearts;]
-		</nav>
-		<nav id="nav-button-settings" class="text-link-button" aria-label="Settings" title="Settings">
-			[⚙]
-		</nav>
+		<div class="nav-buttons">
+			<div class="text-link-button-spacer">|</div>
+			<nav id="nav-button-top" class="text-link-button" aria-label="Top Stories" title="Top Stories">
+				&#128285;
+			</nav>
+			<div class="text-link-button-spacer">|</div>
+			<nav id="nav-button-new" class="text-link-button" aria-label="New Stories" title="New Stories">
+				🆕
+			</nav>
+			<div class="text-link-button-spacer">|</div>
+			<nav id="nav-button-best" class="text-link-button" aria-label="Best Stories" title="Best Stories">
+				🏆
+			</nav>
+			<div class="text-link-button-spacer">|</div>
+			<nav id="nav-button-ask" class="text-link-button" aria-label="Ask HN" title="Ask HN">
+				❓
+			</nav>
+			<div class="text-link-button-spacer">|</div>
+			<nav id="nav-button-show" class="text-link-button" aria-label="Show HN" title="Show HN">
+				👁️
+			</nav>
+			<div class="text-link-button-spacer">|</div>
+			<nav id="nav-button-job" class="text-link-button" aria-label="Jobs" title="Jobs">
+				💼
+			</nav>
+			<div class="text-link-button-spacer">|</div>
+			<nav id="nav-button-favorites" class="text-link-button" aria-label="Saved" title="Saved">
+				💘
+			</nav>
+			<div class="text-link-button-spacer">|</div>
+			<nav id="nav-button-settings" class="text-link-button" aria-label="Settings" title="Settings">
+				🛠️
+			</nav>
+			<div class="text-link-button-spacer">|</div>
+		</div>
 	</header>
 	<main class="main-content">
 		<section id="loading-outlet" class="use-gpu-rendering stories-loading-animation" style="display: none"
@@ -75,8 +86,7 @@
 				<div class="setting-element" id="setting--color-primary">
 					<div class="setting-name" role="label">primary</div>
 					<div class="setting-new-value-input">
-						<input type="color" id="setting-input--color-primary"
-							style="border-color: var(--color-primary)" />
+						<input type="color" id="setting-input--color-primary" />
 					</div>
 					<button class="setting-apply-button" id="apply-setting--color-primary">
 						Apply
@@ -444,8 +454,8 @@
 		--color-text-main: #2f4f4f;
 
 		/* User editable but not from theme */
-		--user-border-radius-modal: 9px;
-		--user-border-radius-button: 3px;
+		--user-border-radius-modal: 4px;
+		--user-border-radius-button: 2px;
 		--user-font: menlo, monospace;
 
 		/* Other repeated CSS utilities */
@@ -455,14 +465,14 @@
 		--bow-shadow-top-level-element: 2px 2px 8px var(--shadow-opacity-color);
 		--background-linear-gradient: linear-gradient(120deg, var(--color-accent-1) 0%, var(--color-accent-2) 100%);
 		--text-shadow-mild: 1px 1px 2px var(--shadow-opacity-color);
-		--size-xxs: 0.5rem;
-		--size-xs: 0.75rem;
+		--size-xxs: 0.382rem;
+		--size-xs: 0.618rem;
 		--size-sm: 1rem;
-		--size-md: 1.5rem;
-		--size-lg: 2.25rem;
-		--size-xl: 3rem;
-		--size-xxl: 6rem;
-		--top-level-padding-side: 1%;
+		--size-md: 1.618rem;
+		--size-lg: 2.618rem;
+		--size-xl: 4.236rem;
+		--size-xxl: 6.854rem;
+		--top-level-padding-side: var(--size-xs);
 		--modal-border-width: 3px;
 	}
 
@@ -560,10 +570,22 @@
 		font-weight: 800;
 	}
 
-	input {
+
+	input[type=text] {
+		padding: 0.25rem 0.5rem;
+		background: var(--color-light);
 		color: var(--color-text-main);
+		border: 1px solid var(--color-text-main);
+		box-shadow: 1px 1px 3px var(--color-text-main);
 		border-radius: var(--user-border-radius-button);
 	}
+
+	input[type=color] {
+		background: transparent;
+		border: 0;
+		padding: 0;
+	}
+
 
 	a {
 		text-decoration: underline;
@@ -631,7 +653,7 @@
 		font-weight: 400;
 		min-height: var(--size-sm);
 		padding: 0.25rem 0.5rem;
-		box-shadow: 1px 1px 2px var(--color-text-main);
+		box-shadow: 1px 1px 3px var(--color-text-main);
 		border-radius: var(--user-border-radius-button);
 	}
 
@@ -650,6 +672,8 @@
 		opacity: 0.5;
 		cursor: not-allowed
 	}
+
+
 
 	p {
 		margin-top: var(--size-xxs);
@@ -951,6 +975,11 @@
 		text-shadow: 2px 2px 4px var(--shadow-opacity-color);
 	}
 
+	.text-link-button-spacer {
+		margin-right: var(--size-xxs);
+		margin-left: var(--size-xxs);
+	}
+
 	@media screen and (width <=600px) {
 		.text-link-button {
 			font-size: var(--size-sm)
@@ -965,7 +994,7 @@
 	.text-link-button:hover {
 		color: var(--color-primary);
 		text-shadow: var(--text-shadow-highlight);
-		scale: 1.05;
+		scale: 1.1;
 	}
 
 	.text-link-button:active {
@@ -1035,7 +1064,7 @@
 		color: var(--color-text-main);
 		justify-content: flex-start;
 		border-bottom: var(--color-primary) 3px solid;
-		padding-left: var(--top-level-padding-side);
+		/* padding-left: var(--top-level-padding-side); */
 		animation: subtle-glow-warble 3s infinite ease-in-out;
 		width: 100%;
 	}
@@ -1046,6 +1075,27 @@
 
 	.modal-window-title:hover {
 		background-color: var(--color-secondary)
+	}
+
+	.modal-title-button {
+		width: var(--size-md);
+		height: var(--size-md);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-left: var(--size-xxs);
+		padding-left: var(--size-xxs);
+		padding-right: var(--size-xxs);
+		background: transparent;
+	}
+
+	.modal-title-button:hover {
+		background: var(--color-primary);
+		filter: grayscale(0.1) brightness(1.1);
+	}
+
+	.modal-title-button:active {
+		background: var(--color-primary);
 	}
 
 	.title-actions-modal h3 {
@@ -1166,7 +1216,7 @@
 		display: flex;
 		flex-direction: row;
 		justify-content: flex-start;
-		align-items: baseline;
+		align-items: center;
 		padding-left: var(--top-level-padding-side);
 		background: var(--color-accent-1);
 		width: 100%;
@@ -1174,12 +1224,20 @@
 		box-shadow: var(--bow-shadow-top-level-element);
 	}
 
+	.nav-buttons {
+		display: flex;
+		flex-direction: row;
+		align-items: baseline;
+		width: 100%;
+		margin-top: 3px;
+	}
+
 	.title-content:hover {
 		background: var(--color-secondary)
 	}
 
 	.title-content h1 {
-		margin: 0 var(--size-xs) 0 0
+		margin: 0 var(--size-xxs) 0 0
 	}
 
 	.main-content {
@@ -1390,8 +1448,8 @@
 	const DESKTOP_MODAL_DEFAULT_POSITION = 25;
 	const MODAL_MAXIMIZATION_THRESHOLD = 0.9;
 	const DOUBLE_TAP_THRESHOLD = 200;
-	const MODAL_ICON_IS_FAVORITED = "♥";
-	const MODAL_ICON_NOT_FAVORITED = "♡";
+	const MODAL_ICON_IS_FAVORITED = "💘";
+	const MODAL_ICON_NOT_FAVORITED = "💓";
 	const ANIMATION_CHARACTERS_STRING =
 		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+=-[]{}|;:,.<>?♥♦♣♠•◘○◆☻☺♂♀♪♫☼►◄↕‼¶§▬↨↑↓→←∟↔▲▼ァアィイゥウェエォオカガキギクゲゴサザシジスゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャユョヨラリルレロヮワヰヱヲン々〆〤￥「」『』【】〒〓─━│┃┄┅┆┇┈┉┊┋┌┍┎┏┐┑┒┓└┕┖┗┘┙┚┛├┝┞┟┠┡┢┣┤┥┦┧┨┩┪┫┬┭┮┯┰┱┲┳┴┵┶┷┸┹┺┻┼┽┾┿╀╁╂╃╄╅╆╇╈╉╊╋╌╍╎╏═║╒╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡╢╣╤╥╦╧╨╩╪╫╬§¶☊☋☌☍ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθικλμνξοπρςστυφχψω←↑→↓↔↕↖↗↘↙↚↛↜↝↞↟↠↡↢↣↤↥↦↧↨↩↪↫↬↭↮↯↰↱↲↳↴↵↶↷↸↹↺↻↼↽↾↿⇀⇁⇂⇃⇄⇅⇆⇇⇈⇉⇊⇋⇌⇍⇎⇏⇐⇑⇒⇓⇔⇕⇖⇗⇘⇙⇚⇛⇜⇝⇞⇟⇠⇡⇢⇣⇤⇥⇦⇧⇨⇩⇪⌨";
 	const LINK_SHARE_DESCRIPTION =
@@ -2667,8 +2725,8 @@ Other message: "${message}""`);
 	};
 
 	const NON_COLOR_SETTINGS_DEFAULT_VALUES = {
-		"--user-border-radius-modal": "9px",
-		"--user-border-radius-button": "3px",
+		"--user-border-radius-modal": "4px",
+		"--user-border-radius-button": "2px",
 		"--user-font": "Menlo, monospace",
 	};
 
@@ -3280,31 +3338,31 @@ Other message: "${message}""`);
 	 * @returns {string}
 	 */
 	const MODAL_CLOSE_BUTTON_STRING =
-		"<nav id=\"close-button\" class=\"text-link-button\" title=\"Close Modal\">[X]</nav>";
+		"<button id=\"close-button\" class=\"modal-title-button\" title=\"Close Modal\">❌</button>";
 
 	/**
 	 * Markup for modal maximize button
 	 * @returns {string}
 	 */
 	const MODAL_MAXIMIZE_BUTTON_STRING =
-		"<nav id=\"maximize-button\" class=\"text-link-button\" title=\"Toggle Full Screen\">[+]</nav>";
+		"<button id=\"maximize-button\" class=\"modal-title-button\" title=\"Toggle Full Screen\">➕</button>";
 
 	/**
 	 * Markup for modal open link button
 	 * @returns {string}
 	 */
 	const MODAL_OPEN_LINK_BUTTON_STRING =
-		"<nav id=\"open-link-button\" class=\"text-link-button\" title='Open In New Tab'>[⬆️]</nav>";
+		"<button id=\"open-link-button\" class=\"modal-title-button\" title='Open In New Tab'>⬆️</button>";
 
 	/**
 	 * Markup for modal share button
 	 * @returns {string}
 	 */
 	const MODAL_SHARE_BUTTON_STRING =
-		"<nav id=\"share-button\" class=\"text-link-button\" title='Share'>[📤]</nav>";
+		"<button id=\"share-button\" class=\"modal-title-button\" title='Share'>📤</button>";
 
 	const MODAL_REFRESH_BUTTON_STRING =
-		"<nav id=\"refresh-button\" class=\"text-link-button\" title='Refresh'>[🔄]</nav>";
+		"<button id=\"refresh-button\" class=\"modal-title-button\" title='Refresh'>🔄</button>";
 
 	/**
 	 * Markup for modal favorite button
@@ -3312,7 +3370,7 @@ Other message: "${message}""`);
 	 * @returns {string}
 	 */
 	const getModalFavoriteButtonString = (isFavorited) =>
-		`<nav id="favorite-button" class="text-link-button" title='Save/Unsave Story'>[${isFavorited ? MODAL_ICON_IS_FAVORITED : MODAL_ICON_NOT_FAVORITED}]</nav>`;
+		`<button id="favorite-button" class="modal-title-button" title='Save/Unsave Story'>${isFavorited ? MODAL_ICON_IS_FAVORITED : MODAL_ICON_NOT_FAVORITED}</button>`;
 
 
 	const LOADING_INDICATOR_ELEMENT_STRING = "<span id=\"loading-comments\" class=\"type\"><span>Loading...</span></span>";
@@ -3808,7 +3866,7 @@ Other message: "${message}""`);
 		${MODAL_OPEN_LINK_BUTTON_STRING}
         ${MODAL_SHARE_BUTTON_STRING}
         ${story.url
-				? "<nav id=\"toggle-url-or-post-button\" class=\"text-link-button\" title=\"Toggle Webpage Preview or Hacker News Post\"> [🖥️] </nav>"
+				? "<button id=\"toggle-url-or-post-button\" class=\"modal-title-button\" title=\"Toggle Webpage Preview or Hacker News Post\">🖥️</button>"
 				: ""
 			}
         ${isStoryFavorited(story.id)
@@ -3870,12 +3928,12 @@ Other message: "${message}""`);
 						iframe.style.display = "block";
 						post.style.display = "none";
 						modal.querySelector("#toggle-url-or-post-button").textContent =
-							"[💬]";
+							"💬";
 					} else {
 						iframe.style.display = "none";
 						post.style.display = "block";
 						modal.querySelector("#toggle-url-or-post-button").textContent =
-							"[🖥️]";
+							"🖥️";
 					}
 				});
 		}
@@ -3885,11 +3943,11 @@ Other message: "${message}""`);
 			if (isStoryFavorited(story.id)) {
 				modal.querySelector(
 					"#favorite-button"
-				).textContent = `[${MODAL_ICON_IS_FAVORITED}]`;
+				).textContent = MODAL_ICON_IS_FAVORITED;
 			} else {
 				modal.querySelector(
 					"#favorite-button"
-				).textContent = `[${MODAL_ICON_NOT_FAVORITED}]`;
+				).textContent = MODAL_ICON_NOT_FAVORITED;
 			}
 		};
 
