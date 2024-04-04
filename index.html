@@ -1084,9 +1084,11 @@
 		align-items: center;
 		justify-content: center;
 		margin-left: var(--size-xxs);
-		padding-left: var(--size-xxs);
-		padding-right: var(--size-xxs);
 		background: transparent;
+		max-width: fit-content;
+		text-align: center;
+		font-size: calc(var(--size-md) - var(--size-xxs) - var(--size-xxs));
+
 	}
 
 	.modal-title-button:hover {
@@ -1424,6 +1426,33 @@
 
 	.other-theme-setting .settings-button-row button {
 		width: 49%
+	}
+
+	.button-row {
+		display: flex;
+		width: 100%;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.button-row button {
+		flex-grow: 1;
+		margin: var(--size-xxs);
+		width: 100%;
+	}
+
+	@media screen and (width <=600px) {
+		.button-row {
+			flex-direction: column
+		}
+	}
+
+	.about-modal p {
+		margin-top: var(--size-xs);
+		margin-bottom: var(--size-xs);
+		font-size: var(--size-sm);
+
 	}
 </style>
 
@@ -2524,6 +2553,14 @@ Other message: "${message}""`);
 	};
 
 	/**
+	 * Apply a random theme to the document
+	 */
+	const applyRandomTheme = () => {
+		const randomTheme = Object.values(themes)[Math.floor(Math.random() * Object.values(themes).length)];
+		applyTheme(randomTheme);
+	};
+
+	/**
 	 * Convert RGBA color string to HEX color string
 	 * @param {string} rgba
 	 * @returns {string}
@@ -3100,7 +3137,7 @@ Other message: "${message}""`);
 		// Handle drag functionality from touch screen
 		modalTitleElement.addEventListener("touchstart", (event) => {
 			// Make sure this ignores events from nav buttons
-			if (event.target.tagName === "NAV") {
+			if (event.target.tagName === "BUTTON") {
 				// Propagate click event to button and handle normally
 				// TODO: handle this bug better, the touch event overrides button
 				// events in modals
@@ -3536,6 +3573,17 @@ Other message: "${message}""`);
 	  <main class="modal-content">
 		<div class="modal-about-site">
 			<p>
+				<strong>Navigate:</strong>
+				<a>Top</a>,
+				<a>New</a>,
+				<a>Best</a>,
+				<a>Ask</a>,
+				<a>Show</a>,
+				<a>Job</a>,
+				<a>Favorites</a>,
+				<a>Settings</a>
+			</p>
+			<p>
 			This site is an experiment with
 				<a href="https://brutalist-web.design/" title="A popular page about brutalist web design">
 					Brutalist Web Design</a>,
@@ -3543,21 +3591,32 @@ Other message: "${message}""`);
 				open web standards. You can add contribute on <a href="https://github.com/wkyleg/brutalist-hacker-news/" data-allow-external="true">Github</a>
 				or download a theme that you like.
 			</p>
-			<button id="share-website" class="button-large">📤 Share This Website</button>
+			<div class="button-row">
+				<button id="try-random-theme" class="button-large">🎨 Try Random Theme</button>
+				<button id="share-website" class="button-large">📤 Share This Website</button>
+			</div>
 		</div>
 	  </main>`;
 
-		modal.querySelector("#share-website").addEventListener("click", () => new ShareModal());
+		modal.querySelector("#share-website").addEventListener("click", ShareModal);
+		modal.querySelector("#try-random-theme").addEventListener("click", applyRandomTheme);
 
 		if (isMobileDevice()) {
-			handleModalSizing(modal, "40%", MODAL_FULL_SIZE_WITH_BORDER_COMPUTATION_WIDTH, "30%", "0");
+			handleModalSizing(modal, "66.6%", MODAL_FULL_SIZE_WITH_BORDER_COMPUTATION_WIDTH, "16.66%", "0");
 		} else {
-			handleModalSizing(modal, "33%", "33%");
+			handleModalSizing(modal, "44%", "44%");
 		}
 
 		useModalDragBehavior(modal);
 		useModalTilingBehavior(modal);
 		useModalHeaderCloseButtonBehavior(modal);
+
+		Array.from(modal.querySelectorAll("a")).forEach((link) =>
+			link.addEventListener("click", () => {
+				navigationState.update(link.textContent.toLowerCase());
+			})
+		);
+
 
 		document.body.appendChild(modal);
 		setModalOnTop(modal);
