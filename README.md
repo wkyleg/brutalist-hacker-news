@@ -2,7 +2,7 @@
 
 [https://brutalisthackernews.com](https://brutalisthackernews.com)
 
-![Preview Image](https://github.com/wkyleg/brutalist-hacker-news/blob/main/preview.png)
+![Preview Image](https://github.com/wkyleg/brutalist-hacker-news/blob/main/preview.gif)
 
 ## Introduction
 
