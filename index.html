@@ -496,8 +496,8 @@
 	}
 
 	::-webkit-scrollbar {
-		width: var(--size-lg);
-		min-width: var(--size-lg)
+		width: var(--size-sm);
+		min-width: var(--size-sm);
 	}
 
 	::-webkit-scrollbar-track {
@@ -600,7 +600,8 @@
 	iframe {
 		width: 100%;
 		height: 100%;
-		background: var(--color-light)
+		max-height: 100%;
+		background: var(--color-light);
 	}
 
 	a,
@@ -1027,7 +1028,8 @@
 		border: var(--color-primary) var(--modal-border-width) solid;
 		resize: both;
 		z-index: 15;
-		overflow: auto;
+		overflow-x: scroll;
+		overflow-y: auto;
 		transition: bottom .5s;
 		animation: fade-in .75s cubic-bezier(0.165, 0.840, 0.440, 1.000) forwards;
 		box-shadow: var(--bow-shadow-top-level-element);
@@ -1145,8 +1147,9 @@
 	.modal-content {
 		flex-grow: 1;
 		height: 100%;
-		overflow: hidden;
-		overflow-y: hidden;
+		max-width: 100%;
+		overflow-y: scroll;
+    	overflow-x: auto;
 		background: var(--color-light);
 		height: 100%;
 	}
@@ -1160,7 +1163,7 @@
 		align-items: flex-start;
 		padding: var(--size-xs);
 		font-size: var(--size-lg);
-		overflow: auto;
+		overflow: unset;
 	}
 
 	.modal-content-post-share nav {
@@ -1171,7 +1174,6 @@
 
 	.modal-content-post {
 		padding: var(--size-xs);
-		overflow-y: scroll;
 		height: 100%;
 		background: var(--color-light);
 	}
@@ -1224,8 +1226,8 @@
 	}
 
 	.add-theme-modal-content #error-outlet {
-		font-weight: bolder;
 		margin-bottom: var(--size-sm);
+		font-style: italic;
 	}
 
 
@@ -1483,6 +1485,10 @@
 	.loading-comments {
 		margin: var(--size-lg) 0;
 		display: block;
+	}
+
+	.full-width {
+		width: 100%;
 	}
 </style>
 
@@ -3670,10 +3676,11 @@ Other message: "${message}""`);
 				open web standards. You can add contribute on <a href="https://github.com/wkyleg/brutalist-hacker-news/" data-allow-external="true">Github</a>
 				or download a theme that you like.
 			</p>
-			<div class="button-row">
-				<button id="try-random-theme" class="button-large">🎨 Try Random Theme</button>
-				<button id="share-website" class="button-large">📤 Share This Website</button>
-			</div>
+				<br />
+				<button id="try-random-theme" class="button-large full-width">🎨 Try Random Theme</button>
+				<br />
+				<button id="share-website" class="button-large full-width">📤 Share This Website</button>
+			
 		</div>
 	  </main>`;
 
@@ -3683,7 +3690,7 @@ Other message: "${message}""`);
 		if (isMobileDevice()) {
 			handleModalSizing(modal, "66.6%", MODAL_FULL_SIZE_WITH_BORDER_COMPUTATION_WIDTH, "16.66%", "0");
 		} else {
-			handleModalSizing(modal, "38vh", "38vh");
+			handleModalSizing(modal, "50%", "50%");
 		}
 
 		useModalDragBehavior(modal);
@@ -4026,10 +4033,10 @@ Other message: "${message}""`);
             </p>
             ${story.text
 			? `<div class="story-text">${sanitize(story.text)}</div>`
-			: "<div class=\"story-text\">No description, click 🖥️ above to read article here or ⬆️ to read in a new tab.</div>"
+			: "<div class=\"story-text\">No description provided, click 🖥️ above to read article here or ⬆️ to read in a new tab.</div>"
 	}
             <div class="comments">
-              ${story.descendants ? LOADING_INDICATOR_ELEMENT_STRING : "<p class=\"story-text\">No comments about this item yet,  click 🔄 above to refresh comments.</p>"}
+              ${story.kids ? LOADING_INDICATOR_ELEMENT_STRING : "<p class=\"story-text\">No comments about this item yet,  click 🔄 above to refresh comments.</p>"}
             </div>
           </section>
       </main>`;
@@ -4208,7 +4215,7 @@ Other message: "${message}""`);
 		if (isMobileDevice()) {
 			handleModalSizing(modal, "40%", MODAL_FULL_SIZE_WITH_BORDER_COMPUTATION_WIDTH, "30%", "0");
 		} else {
-			handleModalSizing(modal, "38vh", "38vh");
+			handleModalSizing(modal, "50%", "50%");
 		}
 
 		useModalDragBehavior(modal);
