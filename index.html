@@ -627,6 +627,7 @@
 		overflow-wrap: break-word;
 		background: var(--color-text-main);
 		color: var(--color-light);
+		font-size: var(--size-xs);
 	}
 
 	pre {
@@ -682,7 +683,7 @@
 	p {
 		margin-top: var(--size-xxs);
 		margin-bottom: var(--size-xxs);
-		font-size: var(--size-xs);
+		font-size: var(--size-sm);
 	}
 
 	.button-large {
@@ -714,13 +715,13 @@
 	}
 
 	.type {
-		font-size: var(--size-xs);
+		font-size: var(--size-sm);
 		display: inline-flex;
 		margin-left: 0.5rem;
 	}
 
 	.type span {
-		height: var(--size-sm);
+		height: var(--size-md);
 		width: 0%;
 		word-break: break-all;
 		overflow: hidden;
@@ -1179,14 +1180,20 @@
 	}
 
 	.story-summary-statistics {
-		font-size: var(--size-xs);
+		font-size: var(--size-sm);
 		margin-bottom: var(--size-sm);
 		text-align: center;
-		margin-top: 0
+		margin-top: 0;
+		font-style: italic;
 	}
 
 	.story-text {
-		font-size: var(--size-xs);
+		font-size: var(--size-sm);
+		padding: 0 var(--size-xs);
+	}
+
+	.no-description-text {
+		font-weight: lighter;
 		padding: 0 var(--size-xs);
 	}
 
@@ -1197,7 +1204,7 @@
 
 
 	.comment {
-		font-size: var(--size-xs);
+		font-size: var(--size-sm);
 		padding: var(--size-xs);
 		margin: var(--size-sm) var(--size-xs);
 		border: var(--color-primary) 1px solid;
@@ -1210,7 +1217,7 @@
 	}
 
 	.comment-by {
-		font-size: var(--size-xs);
+		font-size: var(--size-sm);
 		font-weight: bolder;
 	}
 
@@ -4033,7 +4040,7 @@ Other message: "${message}""`);
             </p>
             ${story.text
 			? `<div class="story-text">${sanitize(story.text)}</div>`
-			: "<div class=\"story-text\">No description provided, click 🖥️ above to read article here or ⬆️ to read in a new tab.</div>"
+			: "<div class=\"no-description-text\">No description, click 🖥️ to read here or ⬆️ to read in new tab.</div>"
 	}
             <div class="comments">
               ${story.kids ? LOADING_INDICATOR_ELEMENT_STRING : "<p class=\"story-text\">No comments about this item yet,  click 🔄 above to refresh comments.</p>"}
