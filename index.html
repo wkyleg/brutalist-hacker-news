@@ -467,6 +467,7 @@
 		--bow-shadow-top-level-element: 2px 2px 8px var(--shadow-opacity-color);
 		--background-linear-gradient: linear-gradient(120deg, var(--color-accent-1) 0%, var(--color-accent-2) 100%);
 		--text-shadow-mild: 1px 1px 2px var(--shadow-opacity-color);
+		--size-3xs: 0.236rem;
 		--size-xxs: 0.382rem;
 		--size-xs: 0.618rem;
 		--size-sm: 1rem;
@@ -984,7 +985,11 @@
 
 	@media screen and (width <=600px) {
 		.text-link-button {
-			font-size: var(--size-sm)
+			font-size: var(--size-sm);
+		}
+		.text-link-button-spacer {
+			margin-right: var(--size-3xs);
+			margin-left: var(--size-3xs);
 		}
 	}
 
