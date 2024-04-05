@@ -81,8 +81,9 @@
 		<section id="job-outlet" class="use-gpu-rendering" style="display: none" aria-live="polite"></section>
 		<section id="favorites-outlet" class="use-gpu-rendering" style="display: none" aria-live="polite"></section>
 		<section id="settings-outlet" class="use-gpu-rendering" style="display: none" aria-live="polite">
+			<h3>Change Color Settings</h3>
+
 			<div class="adjust-theme-content" role="table" id="settings-content-container">
-				<h3>Change Color Settings</h3>
 				<div class="setting-element" id="setting--color-primary">
 					<div class="setting-name" role="label">primary</div>
 					<div class="setting-new-value-input">
@@ -172,7 +173,7 @@
 			</div>
 			<br />
 
-			<button id="download-theme-button" class="button-large">
+			<button id="download-theme-button" class="button-large full-width-mobile">
 				💾 Download Current Color Theme
 			</button>
 
@@ -244,19 +245,20 @@
 			<div class="added-themes setting-buttons-row" id="added-themes-outlet">
 				You have no external themes yet
 			</div>
+			<br />
 			<p>
 				Visit <a href="https://github.com/wkyleg/brutalist-hacker-news/blob/main/themes.md"
 					title="The git repository for this website" data-allow-external="true">this project's Github
 					Repo</a> to add more
 				themes, or to submit your own theme.
 			</p>
-
+			<br />
 			<div class="setting-buttons-row">
-				<button id="add-new-theme-button" class="button-large">
+				<button id="add-new-theme-button" class="button-large full-width-mobile">
 					+ Add New Theme
 				</button>
 
-				<button id="remove-added-themes-button" class="button-large" style="display:none;">
+				<button id="remove-added-themes-button" class="button-large full-width-mobile" style="display:none;">
 					🗑️ Clear Added Themes
 				</button>
 			</div>
@@ -320,10 +322,10 @@
 				You may save stories to read later
 			</p>
 			<div class="setting-buttons-row">
-				<button id="download-favorites-button" class="button-large">
+				<button id="download-favorites-button" class="button-large full-width-mobile">
 					💾 Download Saved Stories
 				</button>
-				<button id="clear-all-favorites-button" class="button-large">
+				<button id="clear-all-favorites-button" class="button-large full-width-mobile">
 					🗑️ Clear All Saved Stories
 				</button>
 			</div>
@@ -398,7 +400,7 @@
 								<li>Select 'Install Site as App'.</li>
 								<li>Enter a name for the app and confirm the installation.</li>
 							</ol>
-			</section>
+</section>
 
 			<br />
 			<br />
@@ -433,13 +435,13 @@
 			</p>
 
 			<br />
-			<button id="share-website" class="button-large">📤 Share This Website</button>
+			<button id="share-website" class="button-large full-width-mobile">📤 Share This Website</button>
 
 			<br />
 			<br />
-			</p>
-		</section>
-	</main>
+</p>
+</section>
+</main>
 </body>
 
 <style>
@@ -590,7 +592,8 @@
 	a {
 		text-decoration: underline;
 		cursor: pointer;
-		color: var(--color-text-main)
+		color: var(--color-text-main);
+		font-weight: bold;
 	}
 
 	iframe {
@@ -672,7 +675,6 @@
 		opacity: 0.5;
 		cursor: not-allowed
 	}
-
 
 
 	p {
@@ -1002,6 +1004,12 @@
 		scale: 0.95;
 	}
 
+	@media screen and (width <=600px) {
+		.full-width-mobile {
+			width: 100%
+		}
+	}
+
 	.modal {
 		display: flex;
 		flex-direction: column;
@@ -1284,6 +1292,7 @@
 
 	#settings-outlet {
 		padding-left: var(--size-xxs);
+		padding-right: var(--size-xxs);
 		padding-top: var(--size-xxs);
 		animation: fade-in .5s;
 
@@ -1301,7 +1310,9 @@
 		align-items: flex-start;
 		justify-content: left;
 		padding-top: var(--size-xxs);
-		animation: fade-in .5s
+		animation: fade-in .5s;
+		width: 25vw;
+		min-width: fit-content;
 	}
 
 	#settings-outlet p,
@@ -1315,6 +1326,7 @@
 	}
 
 	.setting-element {
+		width: 100%;
 		display: flex;
 		flex-direction: row;
 		align-items: center;
@@ -1327,7 +1339,8 @@
 	}
 
 	.setting-name {
-		min-width: var(--size-xxl)
+		min-width: var(--size-xxl);
+		flex-grow: 1;
 	}
 
 	.setting-new-value-input {
@@ -1390,6 +1403,7 @@
 
 	#theme-applied-outlet {
 		padding-left: var(--size-xxs);
+		font-weight: bold;
 	}
 
 	.modal-about-site {
@@ -1405,7 +1419,7 @@
 		display: flex;
 		flex-direction: column;
 		align-items: left;
-		max-width: 16rem;
+		max-width: 25vw;
 		margin-bottom: var(--size-sm);
 	}
 
@@ -1413,9 +1427,9 @@
 		font-weight: 700;
 	}
 
-	@media screen and (width <=1000px) {
+	@media screen and (width <=600px) {
 		.other-theme-setting {
-			max-width: calc(100% - var(--top-level-padding-side) - var(--top-level-padding-side));
+			max-width: 100%;
 		}
 	}
 
@@ -3979,30 +3993,30 @@ Other message: "${message}""`);
 		${MODAL_OPEN_LINK_BUTTON_STRING}
         ${MODAL_SHARE_BUTTON_STRING}
         ${story.url
-				? "<button id=\"toggle-url-or-post-button\" class=\"modal-title-button\" title=\"Toggle Webpage Preview or Hacker News Post\">🖥️</button>"
-				: ""
-			}
+			? "<button id=\"toggle-url-or-post-button\" class=\"modal-title-button\" title=\"Toggle Webpage Preview or Hacker News Post\">🖥️</button>"
+			: ""
+	}
         ${isStoryFavorited(story.id)
-				? getModalFavoriteButtonString(true)
-				: getModalFavoriteButtonString(false)
-			}
+			? getModalFavoriteButtonString(true)
+			: getModalFavoriteButtonString(false)
+	}
 		${MODAL_REFRESH_BUTTON_STRING}
 		</div>
       </header>
 
       <main class="modal-content">
           <iframe id="story-iframe-${story.id}" src="${story.url
-			}" style="display:none;"></iframe>
+	}" style="display:none;"></iframe>
           <section id="modal-content-post-${story.id
-			}" class="modal-content-post">
+	}" class="modal-content-post">
             ${story.title ? `<h3>${sanitize(story.title)}</h3>` : ""}
             <p class="story-summary-statistics">
               ${getStorySummaryStatisticsInnerContent(story)}
             </p>
             ${story.text
-				? `<div class="story-text">${sanitize(story.text)}</div>`
-				: "<div class=\"story-text\">No description, click 🖥️ above to read article. </div>"
-			}
+			? `<div class="story-text">${sanitize(story.text)}</div>`
+			: "<div class=\"story-text\">No description, click 🖥️ above to read article here or ⬆️ to read in a new tab.</div>"
+	}
             <div class="comments">
               ${story.descendants ? LOADING_INDICATOR_ELEMENT_STRING : "<p class=\"story-text\">No comments about this item yet,  click 🔄 above to refresh comments.</p>"}
             </div>
@@ -4255,14 +4269,14 @@ Other message: "${message}""`);
 		loadingContainer.classList.add("item-title-preview");
 
 		const render = () =>
-		(loadingContainer.innerHTML = `<span>${generateLoadingString(
-			getRandomNumberBetween(
-				LOADING_STRING_MIN_LENGTH,
-				isMobileDevice()
-					? LOADING_STRING_MAX_LENGTH_MOBILE
-					: LOADING_STRING_MAX_LENGTH_DESKTOP
-			)
-		)}</span>`);
+			(loadingContainer.innerHTML = `<span>${generateLoadingString(
+				getRandomNumberBetween(
+					LOADING_STRING_MIN_LENGTH,
+					isMobileDevice()
+						? LOADING_STRING_MAX_LENGTH_MOBILE
+						: LOADING_STRING_MAX_LENGTH_DESKTOP
+				)
+			)}</span>`);
 
 		const animationSpeed = getRandomNumberBetween(
 			LOADING_STORY_ANIMATION_REFRESH_INTERVAL_MINIMUM,
@@ -4317,33 +4331,33 @@ Other message: "${message}""`);
 			};
 
 			switch (newState) {
-				case NAVIGATION_OPTIONS.TOP:
-					API.topStories().then(renderStoriesToOutlet);
-					break;
-				case NAVIGATION_OPTIONS.NEW:
-					API.newStories().then(renderStoriesToOutlet);
-					break;
-				case NAVIGATION_OPTIONS.BEST:
-					API.bestStories().then(renderStoriesToOutlet);
-					break;
-				case NAVIGATION_OPTIONS.ASK:
-					API.askStories().then(renderStoriesToOutlet);
-					break;
-				case NAVIGATION_OPTIONS.SHOW:
-					API.showStories().then(renderStoriesToOutlet);
-					break;
-				case NAVIGATION_OPTIONS.JOB:
-					API.jobStories().then(renderStoriesToOutlet);
-					break;
-				case NAVIGATION_OPTIONS.FAVORITES:
-					renderFavorites();
-					startStoryIntersectionObservers();
-					break;
-				case NAVIGATION_OPTIONS.SETTINGS:
-					$ref("#settings-outlet").scrollIntoView({ behavior: "instant" });
-					break;
-				default:
-					onNavigationChange(NAVIGATION_OPTIONS.TOP);
+			case NAVIGATION_OPTIONS.TOP:
+				API.topStories().then(renderStoriesToOutlet);
+				break;
+			case NAVIGATION_OPTIONS.NEW:
+				API.newStories().then(renderStoriesToOutlet);
+				break;
+			case NAVIGATION_OPTIONS.BEST:
+				API.bestStories().then(renderStoriesToOutlet);
+				break;
+			case NAVIGATION_OPTIONS.ASK:
+				API.askStories().then(renderStoriesToOutlet);
+				break;
+			case NAVIGATION_OPTIONS.SHOW:
+				API.showStories().then(renderStoriesToOutlet);
+				break;
+			case NAVIGATION_OPTIONS.JOB:
+				API.jobStories().then(renderStoriesToOutlet);
+				break;
+			case NAVIGATION_OPTIONS.FAVORITES:
+				renderFavorites();
+				startStoryIntersectionObservers();
+				break;
+			case NAVIGATION_OPTIONS.SETTINGS:
+				$ref("#settings-outlet").scrollIntoView({ behavior: "instant" });
+				break;
+			default:
+				onNavigationChange(NAVIGATION_OPTIONS.TOP);
 			}
 		} catch (error) {
 			logError(error, `Error changing navigation state to ${newState}`);
