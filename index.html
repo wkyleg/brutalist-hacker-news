@@ -983,7 +983,7 @@
 		margin-left: var(--size-xxs);
 	}
 
-	@media screen and (width <=600px) {
+	@media screen and (width <=640px) {
 		.text-link-button {
 			font-size: var(--size-sm);
 		}
@@ -1009,7 +1009,7 @@
 		scale: 0.95;
 	}
 
-	@media screen and (width <=600px) {
+	@media screen and (width <=640px) {
 		.full-width-mobile {
 			width: 100%
 		}
@@ -1212,7 +1212,7 @@
 		font-weight: bolder;
 	}
 
-	@media screen and (width <600px) {
+	@media screen and (width <640px) {
 		.comment {
 			min-width: 33vw
 		}
@@ -1307,7 +1307,7 @@
 		padding-top: var(--size-xxs);
 		animation: fade-in .5s;
 
-		@media screen and (width <=600px) {
+		@media screen and (width <=640px) {
 			#settings-outlet {
 				padding-left: var(--size-xs);
 				padding-top: var(--size-xs)
@@ -1430,7 +1430,7 @@
 		display: flex;
 		flex-direction: column;
 		align-items: left;
-		max-width: 25vw;
+		max-width: 33vw;
 		margin-bottom: var(--size-sm);
 	}
 
@@ -1438,7 +1438,7 @@
 		font-weight: 700;
 	}
 
-	@media screen and (width <=600px) {
+	@media screen and (width <=640px) {
 		.other-theme-setting {
 			max-width: 100%;
 		}
@@ -1468,7 +1468,7 @@
 		width: 100%;
 	}
 
-	@media screen and (width <=600px) {
+	@media screen and (width <=640px) {
 		.button-row {
 			flex-direction: column
 		}
@@ -1496,7 +1496,7 @@
 	const LOADING_STRING_MIN_LENGTH = 5;
 	const LOADING_STRING_MAX_LENGTH_MOBILE = 25;
 	const LOADING_STRING_MAX_LENGTH_DESKTOP = 80;
-	const MOBILE_DEVICE_MAX_WIDTH = 600;
+	const MOBILE_DEVICE_MAX_WIDTH = 640;
 	const LOADING_STORY_ANIMATION_REFRESH_INTERVAL_MINIMUM = 250;
 	const LOADING_STORY_ANIMATION_REFRESH_INTERVAL_MAXIMUM = 2_000;
 	const LOADING_ANIMATION_NUMBER_OF_ROWS = 50;
@@ -3609,7 +3609,7 @@ Other message: "${message}""`);
 		if (isMobileDevice()) {
 			handleModalSizing(modal, "40%", MODAL_FULL_SIZE_WITH_BORDER_COMPUTATION_WIDTH, "30%", "0");
 		} else {
-			handleModalSizing(modal, "33%", "33%");
+			handleModalSizing(modal, "33vh", "33vh");
 		}
 
 		useModalHeaderCloseButtonBehavior(modal);
@@ -3683,7 +3683,7 @@ Other message: "${message}""`);
 		if (isMobileDevice()) {
 			handleModalSizing(modal, "66.6%", MODAL_FULL_SIZE_WITH_BORDER_COMPUTATION_WIDTH, "16.66%", "0");
 		} else {
-			handleModalSizing(modal, "44%", "44%");
+			handleModalSizing(modal, "38vh", "38vh");
 		}
 
 		useModalDragBehavior(modal);
@@ -4208,7 +4208,7 @@ Other message: "${message}""`);
 		if (isMobileDevice()) {
 			handleModalSizing(modal, "40%", MODAL_FULL_SIZE_WITH_BORDER_COMPUTATION_WIDTH, "30%", "0");
 		} else {
-			handleModalSizing(modal, "33%", "33%");
+			handleModalSizing(modal, "38vh", "38vh");
 		}
 
 		useModalDragBehavior(modal);
