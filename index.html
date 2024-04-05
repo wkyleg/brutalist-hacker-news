@@ -1219,7 +1219,13 @@
 	}
 
 	.add-theme-modal-content p {
+		font-size: var(--size-sm);
 		margin: 0;
+	}
+
+	.add-theme-modal-content #error-outlet {
+		font-weight: bolder;
+		margin-bottom: var(--size-sm);
 	}
 
 
@@ -1390,8 +1396,8 @@
 	}
 
 	.add-theme-modal-content #download-code {
-		height: var(--size-sm);
-		padding: var(--size-xxs);
+		height: var(--size-lg);
+		padding: var(--size-xs);
 		margin-top: var(--size-sm);
 		margin-bottom: var(--size-sm);
 	}
@@ -1402,8 +1408,8 @@
 	}
 
 	.add-theme-modal #add-theme-button {
-		background: var(--color-primary);
-		color: var(--color-secondary);
+		/* background: var(--color-primary);
+		color: var(--color-secondary); */
 	}
 
 	#theme-applied-outlet {
@@ -4200,7 +4206,7 @@ Other message: "${message}""`);
 	  </main>`;
 
 		if (isMobileDevice()) {
-			handleModalSizing(modal, "33%", MODAL_FULL_SIZE_WITH_BORDER_COMPUTATION_WIDTH, "33%", "0");
+			handleModalSizing(modal, "40%", MODAL_FULL_SIZE_WITH_BORDER_COMPUTATION_WIDTH, "30%", "0");
 		} else {
 			handleModalSizing(modal, "33%", "33%");
 		}
