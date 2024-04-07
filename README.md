@@ -92,7 +92,7 @@ npm run dev
 
 - When you use Vanilla JavaScript this way it where all functions are global and
   extend on browser behavior it feels a lot more like developing your application
-  as a [DSL](https://paulgraham.com/progbot.html) from the bottom up.
+  as a [DSL](https://paulgraham.com/progbot.html) from the bottom up. It's messy but it's kind of fun to build with a browser the way it was originally indented, which is really more like Self, Smalltalk, LISP, although this aproach doesn't scale very well
 
 - I'm not opposed to forking this project and creating a more workable codebase that isn't
   one file, but I would like to do so [with care](https://www.wired.com/story/virtually-amish-hacking-innovation/). It's easy to add one tool such as a build system
