@@ -15,6 +15,7 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 	<meta name="description"
 		content="Explore Hacker News in a new light with a reader inspired by Brutalist Web Design and Cyberpunk themes. Dive into the latest tech stories, discussions, and insights with ease and comfort. Perfect for those who value clarity, simplicity, and inclusivity in the stucture of webpages. Also an interesting view of brutalist and Cyberpunk aesthetics." />
+	>
 	<meta name="keywords"
 		content="Hacker News, Brutalist, Cyberpunk, Web Design, Vanilla JavaScript, Hacker News API, Brutalist Web Design, Cyberpunk Aesthetics, Hacker News Reader, Hacker News Viewer, Hacker News Webpage, Hacker News Website, Hacker News Brutalist, Hacker News Cyberpunk, Hacker News Brutalist Web Design, Hacker News Cyberpunk Aesthetics, Hacker News Brutalist Webpage, Hacker News Cyberpunk Webpage, Hacker News Brutalist Website, Hacker News Cyberpunk Website, Hacker News Brutalist Reader, Hacker News Cyberpunk Reader, Hacker News Brutalist Viewer, Hacker News Cyberpunk Viewer, Hacker News Brutalist Web Design Reader, Hacker News Cyberpunk Web Design Reader, Hacker News Brutalist Web Design Viewer, Hacker News Cyberpunk Web Design Viewer, Hacker News Brutalist Web Design Webpage, Hacker News Cyberpunk Web Design Webpage, Hacker News Brutalist Web Design Website, Hacker News Cyberpunk Web Design Website, Hacker News Brutalist Web Design Reader, Hacker News Cyberpunk Web Design Reader, Hacker News Brutalist Web Design Viewer, Hacker News Cyberpunk Web Design Viewer, Hacker News Brutalist Web Design Webpage, Hacker News Cyberpunk Web Design Webpage, Hacker News Brutalist Web Design Website, Hacker News Cyberpunk Web Design Website"
 		<meta name="twitter:card" content="https://brutalisthackernews.com/icon.png" />
@@ -32,7 +33,7 @@
 </head>
 
 <body>
-	<header class="title-content layers glitch-slow" aria-label="Main navigation">
+	<header class="title-content subtle-glow-warble" aria-label="Main navigation">
 		<h1 id="title" class="font glitch">hn</h1>
 		<div class="nav-buttons">
 			<div class="text-link-button-spacer">|</div>
@@ -400,7 +401,7 @@
 								<li>Select 'Install Site as App'.</li>
 								<li>Enter a name for the app and confirm the installation.</li>
 							</ol>
-</section>
+			</section>
 
 			<br />
 			<br />
@@ -439,9 +440,9 @@
 
 			<br />
 			<br />
-</p>
-</section>
-</main>
+			</p>
+		</section>
+	</main>
 </body>
 
 <style>
@@ -692,6 +693,7 @@
 	}
 
 	@keyframes typing {
+
 		100%,
 		90% {
 			width: 100%
@@ -699,6 +701,7 @@
 	}
 
 	@keyframes caret {
+
 		0%,
 		100% {
 			box-shadow: .66rem 0 0 transparent
@@ -1841,7 +1844,7 @@ Other message: "${message}""`);
 		);
 	};
 
-	const shareOnFarcaster = () => 
+	const shareOnFarcaster = () =>
 		window.open(`https://warpcast.com/~/compose?text=${encodeURIComponent("Check this out on https://brutalisthackernews.com")}&embeds[]=${encodeURIComponent(window.location.href)}`);
 
 	/**
@@ -4010,30 +4013,30 @@ Other message: "${message}""`);
 		${MODAL_OPEN_LINK_BUTTON_STRING}
         ${MODAL_SHARE_BUTTON_STRING}
         ${story.url
-			? "<button id=\"toggle-url-or-post-button\" class=\"modal-title-button\" title=\"Toggle Webpage Preview or Hacker News Post\">🖥️</button>"
-			: ""
-	}
+				? "<button id=\"toggle-url-or-post-button\" class=\"modal-title-button\" title=\"Toggle Webpage Preview or Hacker News Post\">🖥️</button>"
+				: ""
+			}
         ${isStoryFavorited(story.id)
-			? getModalFavoriteButtonString(true)
-			: getModalFavoriteButtonString(false)
-	}
+				? getModalFavoriteButtonString(true)
+				: getModalFavoriteButtonString(false)
+			}
 		${MODAL_REFRESH_BUTTON_STRING}
 		</div>
       </header>
 
       <main class="modal-content">
           <iframe id="story-iframe-${story.id}" src="${story.url
-	}" style="display:none;"></iframe>
+			}" style="display:none;"></iframe>
           <section id="modal-content-post-${story.id
-	}" class="modal-content-post">
+			}" class="modal-content-post">
             ${story.title ? `<h3>${sanitize(story.title)}</h3>` : ""}
             <p class="story-summary-statistics">
               ${getStorySummaryStatisticsInnerContent(story)}
             </p>
             ${story.text
-			? `<div class="story-text">${sanitize(story.text)}</div>`
-			: "<div class=\"no-description-text\">No description, click 🖥️ to read here or ⬆️ to read in new tab.</div>"
-	}
+				? `<div class="story-text">${sanitize(story.text)}</div>`
+				: "<div class=\"no-description-text\">No description, click 🖥️ to read here or ⬆️ to read in new tab.</div>"
+			}
             <div class="comments">
               ${story.kids ? LOADING_INDICATOR_ELEMENT_STRING : "<p class=\"story-text\">No comments about this item yet,  click 🔄 above to refresh comments.</p>"}
             </div>
@@ -4286,14 +4289,14 @@ Other message: "${message}""`);
 		loadingContainer.classList.add("item-title-preview");
 
 		const render = () =>
-			(loadingContainer.innerHTML = `<span>${generateLoadingString(
-				getRandomNumberBetween(
-					LOADING_STRING_MIN_LENGTH,
-					isMobileDevice()
-						? LOADING_STRING_MAX_LENGTH_MOBILE
-						: LOADING_STRING_MAX_LENGTH_DESKTOP
-				)
-			)}</span>`);
+		(loadingContainer.innerHTML = `<span>${generateLoadingString(
+			getRandomNumberBetween(
+				LOADING_STRING_MIN_LENGTH,
+				isMobileDevice()
+					? LOADING_STRING_MAX_LENGTH_MOBILE
+					: LOADING_STRING_MAX_LENGTH_DESKTOP
+			)
+		)}</span>`);
 
 		const animationSpeed = getRandomNumberBetween(
 			LOADING_STORY_ANIMATION_REFRESH_INTERVAL_MINIMUM,
@@ -4348,33 +4351,33 @@ Other message: "${message}""`);
 			};
 
 			switch (newState) {
-			case NAVIGATION_OPTIONS.TOP:
-				API.topStories().then(renderStoriesToOutlet);
-				break;
-			case NAVIGATION_OPTIONS.NEW:
-				API.newStories().then(renderStoriesToOutlet);
-				break;
-			case NAVIGATION_OPTIONS.BEST:
-				API.bestStories().then(renderStoriesToOutlet);
-				break;
-			case NAVIGATION_OPTIONS.ASK:
-				API.askStories().then(renderStoriesToOutlet);
-				break;
-			case NAVIGATION_OPTIONS.SHOW:
-				API.showStories().then(renderStoriesToOutlet);
-				break;
-			case NAVIGATION_OPTIONS.JOB:
-				API.jobStories().then(renderStoriesToOutlet);
-				break;
-			case NAVIGATION_OPTIONS.FAVORITES:
-				renderFavorites();
-				startStoryIntersectionObservers();
-				break;
-			case NAVIGATION_OPTIONS.SETTINGS:
-				$ref("#settings-outlet").scrollIntoView({ behavior: "instant" });
-				break;
-			default:
-				onNavigationChange(NAVIGATION_OPTIONS.TOP);
+				case NAVIGATION_OPTIONS.TOP:
+					API.topStories().then(renderStoriesToOutlet);
+					break;
+				case NAVIGATION_OPTIONS.NEW:
+					API.newStories().then(renderStoriesToOutlet);
+					break;
+				case NAVIGATION_OPTIONS.BEST:
+					API.bestStories().then(renderStoriesToOutlet);
+					break;
+				case NAVIGATION_OPTIONS.ASK:
+					API.askStories().then(renderStoriesToOutlet);
+					break;
+				case NAVIGATION_OPTIONS.SHOW:
+					API.showStories().then(renderStoriesToOutlet);
+					break;
+				case NAVIGATION_OPTIONS.JOB:
+					API.jobStories().then(renderStoriesToOutlet);
+					break;
+				case NAVIGATION_OPTIONS.FAVORITES:
+					renderFavorites();
+					startStoryIntersectionObservers();
+					break;
+				case NAVIGATION_OPTIONS.SETTINGS:
+					$ref("#settings-outlet").scrollIntoView({ behavior: "instant" });
+					break;
+				default:
+					onNavigationChange(NAVIGATION_OPTIONS.TOP);
 			}
 		} catch (error) {
 			logError(error, `Error changing navigation state to ${newState}`);
