@@ -41,7 +41,7 @@ Contributions are welcome, such as new features, themes, or bug fixes.
 Clone the repository:
 
 ```sh
-git clonehttps://github.com/wkyleg/brutalist-hacker-news.git
+git clone https://github.com/wkyleg/brutalist-hacker-news.git
 ```
 
 Navigate to the project directory:
@@ -73,7 +73,7 @@ npm run dev
 
 ## Reflections on process
 
-- CSS incompatibilities were probably the most painful part of building this, as they can vary substantially across browsers, especially concerning mobile scrolling behavior.[Ionic Framework](https://github.com/ionic-team/ionic-framework/tree/main/core/src/css) has some good reset properties that I used for inspiration.
+- CSS incompatibilities were probably the most painful part of building this, as they can vary substantially across browsers, especially concerning mobile scrolling behavior. [Ionic Framework](https://github.com/ionic-team/ionic-framework/tree/main/core/src/css) has some useful reset properties that I used for inspiration.
 
 - I'm not really a fan of the emojis in the UI, but they were the only option that
   didn't involve adding a icon library. They look weird, but at least in a way that might
@@ -92,7 +92,7 @@ npm run dev
   is really much better than is given credit for, but one needs to think much more like
   a LISP programmer.
 
-- When one uses Vanilla JavaScript in this way, with which all functions are global and extend browser behavior, it feels a lot more like developing your application as a [DSL](https://paulgraham.com/progbot.html) from the bottom up." It's messy but it's kind of fun to build with a browser the way it was originally indented, which is really more like Self, Smalltalk, or LISP, although this approach doesn't scale very well
+- When one uses Vanilla JavaScript in this way, with which all functions are global and extend browser behavior, it feels a lot more like developing your application as a [DSL](https://paulgraham.com/progbot.html) from the bottom up. It's messy but it's kind of fun to build with a browser the way it was originally indented, which is really more like Self, Smalltalk, or LISP, although this approach doesn't scale very well
 
 - I'm not opposed to forking this project and creating a more workable codebase that isn't
   one file, but I would like to do so [with care](https://www.wired.com/story/virtually-amish-hacking-innovation/). It's easy to add one tool such as a build system
