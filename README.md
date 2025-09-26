@@ -1,7 +1,3 @@
-Got it — since I can’t open your repo directly from that link, I’ll work from the exact README text you pasted. Here’s a corrected version with **minimal changes** (spelling, grammar, and usage only). Formatting, structure, and style are preserved exactly.
-
----
-
 # Brutalist Hacker News
 
 [https://brutalisthackernews.com](https://brutalisthackernews.com)
